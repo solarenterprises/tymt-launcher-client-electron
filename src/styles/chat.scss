@@ -1,0 +1,389 @@
+$Angle-Small: 16px;
+$bg-stroke-white-20-modal-stroke: rgba(255, 255, 255, 0.2);
+$Main-Red-Red: #ef4444;
+$Main-Red: #ef4444;
+
+// Chatmain modal components
+
+.modal_content {
+  width: 250px;
+  // height: 158px;
+  position: fixed;
+  top: 50%;
+  right: -30px;
+  transform: translate(-50%, -50%);
+  border-radius: var(--Angle-Small, #{$Angle-Small});
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--bg-stroke-white-20-modal-stroke, #{$bg-stroke-white-20-modal-stroke});
+  background: rgba(11, 11, 11, 0.4);
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal_content_chatroom {
+  width: 250px;
+  // height: 158px;
+  position: fixed;
+  top: 50%;
+  left: 230px;
+  transform: translate(-50%, -50%);
+  border-radius: var(--Angle-Small, #{$Angle-Small});
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--bg-stroke-white-20-modal-stroke, #{$bg-stroke-white-20-modal-stroke});
+  background: rgba(11, 11, 11, 0.4);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.modal_content_center {
+  // width: 250px;
+  // height: 158px;
+  border-radius: var(--Angle-Small, #{$Angle-Small});
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--bg-stroke-white-20-modal-stroke, #{$bg-stroke-white-20-modal-stroke});
+  background: rgba(11, 11, 11, 0.4);
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal_btn_left {
+  &.MuiButtonBase-root {
+    border: 1px solid var(--Main-Red-Red, #{$Main-Red-Red});
+    border-radius: var(--Angle-Small, #{$Angle-Small});
+    text-transform: none;
+    padding: 10px 18px;
+    height: 46px;
+    border-radius: 16px;
+    background-color: transparent;
+    box-shadow: none;
+    &:hover {
+      border-color: #ef4444;
+      background-color: #ef4444;
+    }
+
+    &:active {
+      background-color: #ef4444;
+      box-shadow: 1px 1px #ef44445f;
+    }
+  }
+}
+
+.modal_btn_right {
+  &.MuiButtonBase-root {
+    background: var(--Main-Red, #{$Main-Red});
+    border-radius: var(--Angle-Small, #{$Angle-Small});
+    text-transform: none;
+    padding: 10px 18px;
+    &:hover {
+      background-color: #992727;
+    }
+    &.Mui-disabled {
+      background-color: #2a2525;
+      color: #7c7c7c;
+    }
+  }
+}
+
+.context_menu_middle {
+  border: 1px solid rgba(58, 58, 58, 0.5);
+  border-bottom: none;
+  padding: 4px 16px 4px 16px;
+  width: 100%;
+  backdrop-filter: blur(20px);
+  background: rgba(11, 11, 11, 0.4);
+  &:hover {
+    background: var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.1));
+  }
+  &:active {
+    background: var(--bg-stroke-white-10-stroke-default, rgba(255, 255, 255, 0.1));
+  }
+}
+
+.context_menu_bottom {
+  border-bottom-right-radius: 16px;
+  border-bottom-left-radius: 16px;
+  border: 1px solid rgba(58, 58, 58, 0.5);
+  padding: 4px 16px 7px 16px;
+  width: 100%;
+  background: rgba(11, 11, 11, 0.4);
+  backdrop-filter: blur(20px);
+  &:hover {
+    background: var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.1));
+  }
+  &:active {
+    background: var(--bg-stroke-white-10-stroke-default, rgba(255, 255, 255, 0.1));
+  }
+}
+
+.context_menu_up {
+  border-top-right-radius: 16px;
+  border-top-left-radius: 16px;
+  border: 1px solid rgba(58, 58, 58, 0.5);
+  border-bottom: none;
+  padding: 7px 16px 4px 16px;
+  width: 100%;
+  background: rgba(11, 11, 11, 0.4);
+  backdrop-filter: blur(20px);
+  &:hover {
+    background: var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.1));
+  }
+  &:active {
+    background: var(--bg-stroke-white-10-stroke-default, rgba(255, 255, 255, 0.1));
+  }
+}
+
+.context_menu_single {
+  border-radius: 16px;
+  border: 1px solid rgba(58, 58, 58, 0.5);
+  padding: 7px 16px 7px 16px;
+  width: 100%;
+  background: rgba(11, 11, 11, 0.4);
+  backdrop-filter: blur(20px);
+  &:hover {
+    background: var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.1));
+  }
+  &:active {
+    background: var(--bg-stroke-white-10-stroke-default, rgba(255, 255, 255, 0.1));
+  }
+}
+
+//Chatting inputfield components
+
+.send_button {
+  &.MuiButtonBase-root {
+    margin-left: 10px;
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 52px;
+    background: #ef4444;
+    transition: opacity 0.5s ease, transform 0.1s ease;
+    transform: scale(1);
+    &:hover {
+      background: #992727;
+    }
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+}
+
+.upload_button {
+  &.MuiButtonBase-root {
+    margin-left: 10px;
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 52px;
+    background: #52e1f2;
+    transition: opacity 0.5s ease, transform 0.1s ease;
+    transform: scale(1);
+    &:hover {
+      background: #0d99ff;
+    }
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+}
+
+.context_menu {
+  position: fixed;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.modal_btn_left_fr {
+  &.MuiButtonBase-root {
+    border: 1px solid var(--Main-Red-Red, #{$Main-Red-Red});
+    border-radius: var(--Angle-Small, #{$Angle-Small});
+    text-transform: none;
+    padding: 10px 18px;
+    height: 38px;
+    border-radius: 16px;
+    background-color: transparent;
+    box-shadow: none;
+    &:hover {
+      border-color: #ef4444;
+      background-color: #ef4444;
+    }
+
+    &:active {
+      background-color: #ef4444;
+      box-shadow: 1px 1px #ef44445f;
+    }
+  }
+}
+
+.unread-dot {
+  padding: 3px 6px 3px 6px;
+  border-radius: 100px;
+  background-color: var(--Main-Blue, #48c5d3);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+}
+
+.backIcon {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.bubblecontainer {
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+  margin-top: 10px;
+}
+
+.bubble {
+  padding: 10px 14px 6px 14px;
+  background-color: #58914e;
+  overflow: hidden;
+  white-space: normal;
+  word-wrap: break-word;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  z-index: 50;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.bubble-partner {
+  padding: 10px 14px 6px 14px;
+  background-color: #72916a;
+  overflow: hidden;
+  white-space: normal;
+  word-wrap: break-word;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  z-index: 50;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.bubble-image {
+  overflow: hidden;
+  white-space: normal;
+  word-wrap: break-word;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  z-index: 50;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.br-20 {
+  border-radius: 20px;
+}
+
+.br-20-20-0-20 {
+  border-radius: 20px 20px 0px 20px;
+}
+
+.br-20-20-20-0 {
+  border-radius: 20px 20px 20px 0px;
+}
+
+.bubble-middle {
+  border-radius: 20px;
+}
+
+.timestamp-inbubble {
+  display: block;
+  margin-top: 5px;
+  margin-right: 5px;
+  right: 3px;
+  bottom: 5px;
+}
+
+.scroll_bar_chatbox {
+  width: 101%;
+  flex-grow: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  margin-bottom: 0px;
+  height: 100%;
+  padding-right: 10px;
+  scroll-behavior: smooth;
+  &::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 100px;
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: 100px;
+    background: #888;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
+.infinitescroll {
+  scrollbar-width: thin;
+}
+
+.date_field {
+  .MuiInputBase-root {
+    font-family: "Cobe";
+    color: white;
+  }
+
+  .MuiInputBase-root::before {
+    border-bottom: 1px solid #7c7c7c;
+  }
+
+  .MuiInputBase-root::after {
+    border-bottom: 2px solid #afafaf;
+  }
+
+  label.Mui-focused {
+    font-family: "Cobe";
+    color: #afafaf !important;
+  }
+
+  .MuiInputLabel-root {
+    font-family: "Cobe";
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #afafaf;
+    padding: 5px;
+    top: -10px;
+  }
+}
