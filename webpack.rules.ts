@@ -36,4 +36,11 @@ export const rules: Required<ModuleOptions>["rules"] = [
       "sass-loader", // Compiles Sass to CSS
     ],
   },
+  {
+    test: /\.(png|jpe?g|gif|svg)$/i,
+    type: "asset",
+    generator: {
+      filename: "images/[name].[hash:7].[ext]",
+    },
+  },
 ];
