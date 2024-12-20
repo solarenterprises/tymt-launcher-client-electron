@@ -20,7 +20,7 @@ const Welcome = () => {
 
   const handlePlayGuest = () => {};
   const handleImportWallet = () => {
-    // navigate("/non-custodial/login/2");
+    navigate("/non-custodial-login-2");
   };
 
   return (
