@@ -1,3 +1,5 @@
+// This page is for importing the passphrase
+
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -51,6 +53,7 @@ const NonCustodialLogIn2 = () => {
     }),
     onSubmit: async () => {
       try {
+        
       } catch (err) {
         // console.log("Failed at NonCustodialLogin2: ", err);
         // setLoading(false);
