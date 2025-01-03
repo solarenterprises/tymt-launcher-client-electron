@@ -10,10 +10,15 @@ import Big from "big.js";
 // import { getSupportChainByName, getTokenPriceByCmc } from "../helper/WalletHelper";
 // import { ChainNames } from "../../consts/Chains";
 
-import { CONFIG_NETWORK_NAME } from "../config/MainConfig";
+import { CONFIG_NETWORK_NAME } from "../../config/MainConfig";
 
 export class Solar {
-  static async getAddress(mnemonic: string): Promise<string> {
+  static async generateMnemonic(): Promise<string> {
+    const passphrase = generateMnemonic();
+    return passphrase;
+  }
+
+  static async getAddressFromMnemonic(mnemonic: string): Promise<string> {
     Managers.configManager.setFromPreset(CONFIG_NETWORK_NAME === "mainnet" ? "mainnet" : "testnet");
     return Identities.Address.fromPassphrase(mnemonic.normalize("NFD"));
   }
