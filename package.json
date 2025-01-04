@@ -64,6 +64,7 @@
     "bip39": "^3.1.0",
     "bitcoin-address-validation": "^2.2.3",
     "bitcoinjs-lib": "^6.1.7",
+    "browserify-sign": "^4.2.3",
     "bs58": "^6.0.0",
     "bstring": "^0.3.9",
     "buffer": "^6.0.3",
@@ -79,8 +80,9 @@
     "global": "^4.4.0",
     "i18next": "^24.2.0",
     "jotai": "^2.10.4",
-    "multichain-crypto-wallet": "^0.2.8",
     "multicoin-address-validator": "^0.5.22",
+    "os-browserify": "^0.3.0",
+    "process": "^0.11.10",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-i18next": "^15.2.0",
@@ -89,6 +91,8 @@
     "stream-browserify": "^3.0.0",
     "tiny-secp256k1": "^2.2.3",
     "url-browserify": "^1.3.0",
+    "vm": "^0.1.0",
+    "vm-browserify": "^1.1.2",
     "yup": "^1.6.1"
   }
 }

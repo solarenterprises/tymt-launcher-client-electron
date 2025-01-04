@@ -43,4 +43,8 @@ export const rules: Required<ModuleOptions>["rules"] = [
       filename: "images/[name].[hash:7].[ext]",
     },
   },
+  {
+    test: /\.wasm$/,
+    type: "webassembly/async", // Set WebAssembly type
+  },
 ];
