@@ -10,6 +10,7 @@ import Welcome from "./pages/welcome/Welcome";
 import NonCustodialLogIn2 from "./pages/account/non-custodial/NonCustodialLogIn2";
 import NonCustodialSignUp2 from "./pages/account/non-custodial/NonCustodialSignUp2";
 import NonCustodialSignUp3 from "./pages/account/non-custodial/NonCustodialSignUp3";
+import NonCustodialSignUp4 from "./pages/account/non-custodial/NonCustodialSignUp4";
 
 import { Buffer } from "buffer";
 window.Buffer = Buffer;
@@ -26,6 +27,7 @@ root.render(
         <Route path="/non-custodial-login-2" element={<NonCustodialLogIn2 />} />
         <Route path="/non-custodial-signup-2" element={<NonCustodialSignUp2 />} />
         <Route path="/non-custodial-signup-3" element={<NonCustodialSignUp3 />} />
+        <Route path="/non-custodial-signup-4" element={<NonCustodialSignUp4 />} />
       </Routes>
     </HashRouter>
   </React.StrictMode>
