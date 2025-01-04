@@ -18,7 +18,7 @@ export class Solar {
     return passphrase;
   }
 
-  static async getAddressFromMnemonic(mnemonic: string): Promise<string> {
+  static async getAddress(mnemonic: string): Promise<string> {
     Managers.configManager.setFromPreset(CONFIG_NETWORK_NAME === "mainnet" ? "mainnet" : "testnet");
     return Identities.Address.fromPassphrase(mnemonic.normalize("NFD"));
   }

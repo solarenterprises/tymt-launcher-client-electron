@@ -103,7 +103,7 @@ const NonCustodialSignUp2 = () => {
           </motion.div>
         </Grid>
       </Grid>
-      <PassphraseModal open={open} setOpen={setOpen} />
+      <PassphraseModal open={open} setOpen={setOpen} passphrase={passphrase} />
     </>
   );
 };

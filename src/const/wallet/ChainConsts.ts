@@ -1,12 +1,12 @@
-import SolarIcon from "../assets/chain/Solar.svg";
-import ArbitrumIcon from "../assets/chain/Arbitrum.svg";
-import AvalancheIcon from "../assets/chain/Avalanche.svg";
-import BinanceIcon from "../assets/chain/Binance.svg";
-import BitcoinIcon from "../assets/chain/Bitcoin.svg";
-import EthereumIcon from "../assets/chain/Ethereum.svg";
-import OptimismIcon from "../assets/chain/Optimism.svg";
-import PolygonIcon from "../assets/chain/Polygon.svg";
-import SolanaIcon from "../assets/chain/Solana.svg";
+import SolarIcon from "../../assets/chain/Solar.svg";
+import ArbitrumIcon from "../../assets/chain/Arbitrum.svg";
+import AvalancheIcon from "../../assets/chain/Avalanche.svg";
+import BinanceIcon from "../../assets/chain/Binance.svg";
+import BitcoinIcon from "../../assets/chain/Bitcoin.svg";
+import EthereumIcon from "../../assets/chain/Ethereum.svg";
+import OptimismIcon from "../../assets/chain/Optimism.svg";
+import PolygonIcon from "../../assets/chain/Polygon.svg";
+import SolanaIcon from "../../assets/chain/Solana.svg";
 
 import { ISupportChain } from "../../types/wallet/ChainTypes";
 
@@ -46,11 +46,23 @@ export class CONST_CHAIN_NAMES {
   static SOLAR = "Solar Blockchain";
 }
 
+export class CONST_CHAIN_SYMBOLS {
+  static ETHEREUM = "ETH";
+  static BINANCE = "BNB";
+  static POLYGON = "MATIC";
+  static AVALANCHE = "AVAX";
+  static ARBITRUM = "ARBETH";
+  static OPTIMISM = "OETH";
+  static BITCOIN = "BTC";
+  static SOLANA = "SOL";
+  static SOLAR = "SXP";
+}
+
 export const CONST_SUPPORT_CHAINS: ISupportChain[] = [
   {
     native: {
       address: "",
-      symbol: "SXP",
+      symbol: CONST_CHAIN_SYMBOLS.SOLAR,
       name: CONST_CHAIN_NAMES.SOLAR,
       key: "sxp",
       decimals: 8,
@@ -64,7 +76,7 @@ export const CONST_SUPPORT_CHAINS: ISupportChain[] = [
   {
     native: {
       address: "",
-      symbol: "BNB",
+      symbol: CONST_CHAIN_SYMBOLS.BINANCE,
       name: CONST_CHAIN_NAMES.BINANCE,
       key: "smartchain",
       decimals: 18,
@@ -79,7 +91,7 @@ export const CONST_SUPPORT_CHAINS: ISupportChain[] = [
   {
     native: {
       address: "",
-      symbol: "ETH",
+      symbol: CONST_CHAIN_SYMBOLS.ETHEREUM,
       name: CONST_CHAIN_NAMES.ETHEREUM,
       key: "ethereum",
       decimals: 18,
@@ -94,7 +106,7 @@ export const CONST_SUPPORT_CHAINS: ISupportChain[] = [
   {
     native: {
       address: "",
-      symbol: "BTC",
+      symbol: CONST_CHAIN_SYMBOLS.BITCOIN,
       name: CONST_CHAIN_NAMES.BITCOIN,
       key: "bitcoin",
       decimals: 8,
@@ -109,7 +121,7 @@ export const CONST_SUPPORT_CHAINS: ISupportChain[] = [
   {
     native: {
       address: "",
-      symbol: "SOL",
+      symbol: CONST_CHAIN_SYMBOLS.SOLANA,
       name: CONST_CHAIN_NAMES.SOLANA,
       key: "solana",
       decimals: 9,
@@ -124,7 +136,7 @@ export const CONST_SUPPORT_CHAINS: ISupportChain[] = [
   {
     native: {
       address: "",
-      symbol: "MATIC",
+      symbol: CONST_CHAIN_SYMBOLS.POLYGON,
       name: CONST_CHAIN_NAMES.POLYGON,
       key: "polygon",
       decimals: 18,
@@ -139,7 +151,7 @@ export const CONST_SUPPORT_CHAINS: ISupportChain[] = [
   {
     native: {
       address: "",
-      symbol: "AVAX",
+      symbol: CONST_CHAIN_SYMBOLS.AVALANCHE,
       name: CONST_CHAIN_NAMES.AVALANCHE,
       key: "avalanchec",
       decimals: 18,
@@ -154,7 +166,7 @@ export const CONST_SUPPORT_CHAINS: ISupportChain[] = [
   {
     native: {
       address: "",
-      symbol: "ARBETH",
+      symbol: CONST_CHAIN_SYMBOLS.ARBITRUM,
       name: CONST_CHAIN_NAMES.ARBITRUM,
       key: "arbitrum",
       decimals: 18,
@@ -169,7 +181,7 @@ export const CONST_SUPPORT_CHAINS: ISupportChain[] = [
   {
     native: {
       address: "",
-      symbol: "OETH",
+      symbol: CONST_CHAIN_SYMBOLS.OPTIMISM,
       name: CONST_CHAIN_NAMES.OPTIMISM,
       key: "optimism",
       decimals: 18,
