@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 
@@ -19,8 +19,10 @@ import tymt3 from "../../../assets/account/tymt3.png";
 
 const NonCustodialSignUp2 = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
 
+  const { password } = location.state || {};
   const [open, setOpen] = useState(false);
   const [length, setLength] = useState<number>(12);
   const [passphrase, setPassphrase] = useState<string>(getMnemonic(12));
@@ -103,7 +105,7 @@ const NonCustodialSignUp2 = () => {
           </motion.div>
         </Grid>
       </Grid>
-      <PassphraseModal open={open} setOpen={setOpen} passphrase={passphrase} />
+      <PassphraseModal open={open} setOpen={setOpen} passphrase={passphrase} password={password} />
     </>
   );
 };

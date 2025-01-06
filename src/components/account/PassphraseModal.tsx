@@ -12,9 +12,10 @@ export interface IPropsPassphraseModal {
   open: boolean;
   setOpen: (_: boolean) => void;
   passphrase: string;
+  password: string;
 }
 
-const PassphraseModal = ({ open, setOpen, passphrase }: IPropsPassphraseModal) => {
+const PassphraseModal = ({ open, setOpen, passphrase, password }: IPropsPassphraseModal) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const modalStyle = {
@@ -74,7 +75,7 @@ const PassphraseModal = ({ open, setOpen, passphrase }: IPropsPassphraseModal) =
             <Box
               onClick={() =>
                 navigate("/non-custodial-signup-3", {
-                  state: { passphrase: passphrase }, // Pass the passphrase here
+                  state: { passphrase: passphrase, password: password }, // Pass the passphrase here
                 })
               }
               className="action-btn fs-18-light blue center-align"

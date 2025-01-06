@@ -3,7 +3,7 @@ import { BIP32Factory } from "bip32";
 import { payments, networks, Psbt } from "bitcoinjs-lib";
 import axios from "axios";
 import { validate } from "bitcoin-address-validation";
-import * as ecc from "tiny-secp256k1";
+import * as eccModule from "tiny-secp256k1";
 
 import { CONST_CHAIN_NAMES } from "../../const/wallet/ChainConsts";
 import { CONFIG_BTC_API_URL, CONFIG_NETWORK_NAME } from "../../config/MainConfig";
@@ -12,6 +12,8 @@ import tymtStorage from "../storage/tymtStorage";
 export class Bitcoin {
   static async getKeyPair(mnemonic: string): Promise<any> {
     const seed = await mnemonicToSeed(mnemonic);
+    //@ts-ignore
+    const ecc = await eccModule.default;
     const bip32 = BIP32Factory(ecc);
     const root = bip32.fromSeed(seed);
     let child;

@@ -46,8 +46,6 @@ export const getWalletAddressesFromPassphrase = async (_passphrase: string) => {
       solar: solarAddr,
     };
 
-    // console.log("getWalletAddressFromPassphrase", res);
-
     return res;
   } catch (err) {
     console.error("Failed to getWalletAddressesFromPassphrase: ", err);

@@ -1,10 +1,7 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-// import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-
-// import "../../global.css";
 
 import { Grid, Box, Stack } from "@mui/material";
 
@@ -14,47 +11,17 @@ import AccountNextButton from "../../components/account/AccountNextButton";
 import Stepper from "../../components/account/Stepper";
 import WalletList from "../../components/account/WalletList";
 
-// import AuthAPI from "../../lib/api/AuthAPI";
-
-// import { encrypt, getKeccak256Hash } from "../../lib/api/Encrypt";
-// import {
-//   getNonCustodySignInToken,
-//   getReqBodyNonCustodyBeforeSignIn,
-//   getReqBodyNonCustodySignIn,
-//   getReqBodyNonCustodySignUp,
-// } from "../../lib/helper/AuthAPIHelper";
-
-// import { AppDispatch } from "../../store";
-// import { addAccountList } from "../../features/account/AccountListSlice";
-// import { getTempAccount } from "../../features/account/TempAccountSlice";
-// import { setWallet } from "../../features/wallet/WalletSlice";
-// import { getMachineId } from "../../features/account/MachineIdSlice";
-// import { setAccount } from "../../features/account/AccountSlice";
-// import { getSaltToken, setSaltToken } from "../../features/account/SaltTokenSlice";
-// import { addWalletList } from "../../features/wallet/WalletListSlice";
-// import { getTempWallet } from "../../features/wallet/TempWalletSlice";
-// import { setLogin } from "../../features/account/LoginSlice";
-
 import { IWalletAddresses } from "../../types/wallet/WalletTypes";
 
 import tymt2 from "../../assets/account/tymt2.png";
 
-// import { IWallet } from "../../types/walletTypes";
-// import { ISaltToken, IMachineId, IAccount } from "../../types/accountTypes";
-// import { INonCustodySignUpReq } from "../../types/AuthAPITypes";
-// import { fetchMyInfoAsync } from "../../features/account/MyInfoSlice";
-// import { generateSocketHash } from "../../features/chat/SocketHashApi";
-// import { setMnemonic } from "../../features/account/MnemonicSlice";
-// import { setSocketHash } from "../../features/chat/SocketHashSlice";
-// import { getRsaKeyPairAsync } from "../../features/chat/RsaSlice";
-// import UserAPI from "../../lib/api/UserAPI";
-// import { IReqUpdateUser } from "../../types/UserAPITypes";
-
 const ConfirmInformation = () => {
+  const location = useLocation();
   const navigate = useNavigate();
-  // const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
   const { mode } = useParams();
+
+  const { passphrase, password, nickname, walletAddresses } = location.state || {};
 
   // const tempAccountStore: IAccount = useSelector(getTempAccount);
   // const tempWalletStore: IWallet = useSelector(getTempWallet);
@@ -81,17 +48,6 @@ const ConfirmInformation = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const displayWallet: IWalletAddresses = {
-    arbitrum: "string",
-    avalanche: "string",
-    bitcoin: "string",
-    binance: "string",
-    ethereum: "string",
-    optimism: "string",
-    polygon: "string",
-    solana: "string",
-    solar: "string",
-  };
   // const displayWallet: IWallet = useMemo(() => {
   //   if (mode === "signup" || mode === "guest") return tempWalletStore;
   // }, [tempWalletStore]);
@@ -207,7 +163,7 @@ const ConfirmInformation = () => {
                       <AccountHeader title={t("ncca-49_confirm-information")} text={t("ncca-50_welcome-to-kingdom")} />
                     </Grid>
                     <Grid item xs={12} mt={"48px"}>
-                      <WalletList wallet={displayWallet} />
+                      <WalletList wallet={walletAddresses} />
                     </Grid>
                     <Grid item xs={12} mt={"40px"}>
                       <AccountNextButton text={t("ncca-51_confirm")} onClick={handleConfirmClick} disabled={loading} loading={loading} />
