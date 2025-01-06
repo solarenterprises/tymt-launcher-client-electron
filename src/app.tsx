@@ -11,6 +11,7 @@ import NonCustodialLogIn2 from "./pages/account/non-custodial/NonCustodialLogIn2
 import NonCustodialSignUp2 from "./pages/account/non-custodial/NonCustodialSignUp2";
 import NonCustodialSignUp3 from "./pages/account/non-custodial/NonCustodialSignUp3";
 import NonCustodialSignUp4 from "./pages/account/non-custodial/NonCustodialSignUp4";
+import NonCustodialImport1 from "./pages/account/non-custodial/NonCustodialImport1";
 import ConfirmInformation from "./pages/account/ConfirmInformation";
 
 import { Buffer } from "buffer";
@@ -29,6 +30,7 @@ root.render(
         <Route path="/non-custodial-signup-2" element={<NonCustodialSignUp2 />} />
         <Route path="/non-custodial-signup-3" element={<NonCustodialSignUp3 />} />
         <Route path="/non-custodial-signup-4" element={<NonCustodialSignUp4 />} />
+        <Route path="/non-custodial-import-1" element={<NonCustodialImport1 />} />
         <Route path="/confirm-information/:mode" element={<ConfirmInformation />} />
       </Routes>
     </HashRouter>

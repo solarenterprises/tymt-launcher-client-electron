@@ -53,7 +53,7 @@ const NonCustodialLogIn2 = () => {
     }),
     onSubmit: async () => {
       try {
-        
+        navigate("/non-custodial-import-1");
       } catch (err) {
         // console.log("Failed at NonCustodialLogin2: ", err);
         // setLoading(false);
