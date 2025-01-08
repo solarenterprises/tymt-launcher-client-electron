@@ -19,7 +19,7 @@ export const CONFIG_SOL_SCAN = process.env.APP_NETWORK_NAME === "mainnet" ? proc
 
 export const CONFIG_BSC_API_URL = process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_BSC_API_URL : process.env.APP_TESTNET_BSC_API_URL;
 export const CONFIG_ETH_API_URL = process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_ETH_API_URL : process.env.APP_TESTNET_ETH_API_URL;
-export const CONFIG_POL_AIP_URL = process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_POL_API_URL : process.env.APP_TESTNET_POL_API_URL;
+export const CONFIG_POL_API_URL = process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_POL_API_URL : process.env.APP_TESTNET_POL_API_URL;
 export const CONFIG_OP_API_URL = process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_OP_API_URL : process.env.APP_TESTNET_OP_API_URL;
 export const CONFIG_ARB_API_URL = process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_ARB_API_URL : process.env.APP_TESTNET_ARB_API_URL;
 export const CONFIG_AVAX_API_URL = process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_AVAX_API_URL : process.env.APP_TESTNET_AVAX_API_URL;

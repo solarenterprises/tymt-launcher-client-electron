@@ -2,10 +2,10 @@ import { ethers } from "ethers";
 import * as ethereumjsWallet from "ethereumjs-wallet";
 import * as bip39 from "bip39";
 
-import { CONFIG_POL_API_KEY, CONFIG_POL_AIP_URL, CONFIG_POL_RPC_URL, CONFIG_NETWORK_NAME } from "../../config/MainConfig";
+// import { CONFIG_POL_API_KEY, CONFIG_POL_AIP_URL, CONFIG_POL_RPC_URL, CONFIG_NETWORK_NAME } from "../../config/MainConfig";
 
-import { ISupportToken } from "../../types/wallet/ChainTypes";
-import { IBalance } from "../../types/wallet/WalletTypes";
+// import { ISupportToken } from "../../types/wallet/ChainTypes";
+// import { IBalance } from "../../types/wallet/WalletTypes";
 
 export class Polygon {
   static async getWalletFromMnemonic(mnemonic: string): Promise<any> {
