@@ -113,7 +113,12 @@ const NonCustodialSignUp4 = () => {
                         )}
                       </Grid>
                       <Grid item xs={12} mt={"48px"}>
-                        <AccountNextButton isSubmit={true} text={t("ncca-44_verify-and-complete")} disabled={formik.errors.nickname ? true : false} />
+                        <AccountNextButton
+                          isSubmit={true}
+                          text={t("ncca-44_verify-and-complete")}
+                          disabled={formik.errors.nickname ? true : false}
+                          loading={loading}
+                        />
                       </Grid>
                     </form>
                   </Grid>
