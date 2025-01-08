@@ -8,8 +8,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { motion } from "framer-motion";
 
-// import "../../../global.css";
-
 import { Grid, Box, Stack } from "@mui/material";
 
 import Back from "../../../components/account/Back";
@@ -23,10 +21,9 @@ import { getAccountList } from "../../../store/AccountListSlice";
 
 import { IAccountList } from "../../../types/AccountTypes";
 
-import tymt2 from "../../../assets/account/tymt2.png";
+import { checkMnemonic } from "../../../lib/helper/WalletHelper";
 
-// import { checkMnemonic, getWalletAddressFromPassphrase } from "../../../lib/helper/WalletHelper";
-// import { getRsaKeyPair } from "../../../features/chat/RsaApi";
+import tymt2 from "../../../assets/account/tymt2.png";
 
 const NonCustodialLogIn2 = () => {
   const navigate = useNavigate();
@@ -53,16 +50,17 @@ const NonCustodialLogIn2 = () => {
           }
         )
         .test("validation", "Invalid Mnemonic", (value) => {
-          // return checkMnemonic(value);
-          return true;
+          return checkMnemonic(value);
         }),
     }),
     onSubmit: async () => {
       try {
+        setLoading(true);
         navigate("/non-custodial-import-1");
+        setLoading(false);
       } catch (err) {
-        // console.log("Failed at NonCustodialLogin2: ", err);
-        // setLoading(false);
+        console.error("Failed to onSubmit at NonCustodialLogin2: ", err);
+        setLoading(false);
       }
     },
   });

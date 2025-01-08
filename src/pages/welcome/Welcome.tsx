@@ -1,5 +1,7 @@
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 
 import { Grid, Box, Stack, Divider } from "@mui/material";
@@ -10,6 +12,15 @@ import CreateAccountForm from "../../components/account/CreateAccountForm";
 import AuthIconButtons from "../../components/account/AuthIconButtons";
 import OrLine from "../../components/account/OrLine";
 
+import { addAccountList, getAccountList } from "../../store/AccountListSlice";
+import { setAccount } from "../../store/AccountSlice";
+
+import { getWalletAddressesFromPassphrase, getMnemonic } from "../../lib/helper/WalletHelper";
+import { getKeccak256Hash, encrypt } from "../../lib/helper/EncryptHelper";
+
+import { IAccount, IAccountList } from "../../types/AccountTypes";
+import { IWalletAddresses } from "../../types/wallet/WalletTypes";
+
 import tymt1 from "../../assets/account/tymt1.png";
 import GuestIcon from "../../assets/account/Guest.svg";
 import ImportIcon from "../../assets/account/Import.svg";
@@ -17,8 +28,70 @@ import ImportIcon from "../../assets/account/Import.svg";
 const Welcome = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handlePlayGuest = () => {};
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const accountListStore: IAccountList = useSelector(getAccountList);
+
+  const hasGuest: boolean = useMemo(
+    () => accountListStore?.list?.some((one) => one?.nickName === "Guest" && one?.password === getKeccak256Hash("")),
+    [accountListStore]
+  );
+
+  const handlePlayGuest = async () => {
+    try {
+      if (hasGuest) {
+        // const noti: INotificationParams = {
+        //   status: "warning",
+        //   title: "Warning",
+        //   message: "You already have a Guest account!",
+        //   link: null,
+        //   translate: true,
+        // };
+        // emit(TauriEventNames.NOTIFICATION, noti);
+        // navigate("/start");
+        return;
+      }
+
+      setLoading(true);
+
+      const newPassphrase: string = getMnemonic(12);
+      const newWalletAddress: IWalletAddresses = await getWalletAddressesFromPassphrase(newPassphrase);
+      const newPassword: string = "";
+      const encryptedPassword: string = getKeccak256Hash(newPassword);
+      const encryptedPassphrase: string = await encrypt(newPassphrase, newPassword);
+      const newRsaPubKey: string = "";
+      // const newRsaPubKey: string = (await getRsaKeyPair(newPassphrase))?.publicKey;
+
+      let newAccount: IAccount = {
+        uid: "",
+        avatar: "",
+        nickName: "Guest",
+        password: encryptedPassword,
+        sxpAddress: newWalletAddress?.solar,
+        mnemonic: encryptedPassphrase,
+        rsaPubKey: newRsaPubKey,
+      };
+
+      // const body0: INonCustodySignUpReq = getReqBodyNonCustodySignUp(newAccount, newWalletAddress, newPassphrase);
+      // const res0 = await AuthAPI.nonCustodySignUp(body0);
+      // newAccount = {
+      //   ...newAccount,
+      //   uid: res0?.data?._id,
+      // };
+
+      dispatch(setAccount(newAccount));
+      dispatch(addAccountList(newAccount));
+
+      navigate("/home");
+      setLoading(false);
+    } catch (err) {
+      console.error("Failed to handlePlayGuest at Welcome.tsx: ", err);
+      setLoading(false);
+    }
+  };
+
   const handleImportWallet = () => {
     navigate("/non-custodial-login-2");
   };

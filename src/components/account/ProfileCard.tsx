@@ -26,8 +26,9 @@ const ProfileCard = ({ account }: IPropsProfileCard) => {
   const isGuest: boolean = useMemo(() => account?.nickName === "Guest" && account?.password === getKeccak256Hash(""), [account]);
 
   const handleClick = useCallback(() => {
+    dispatch(setAccount(account));
+
     if (account?.uid !== accountStore?.uid) {
-      dispatch(setAccount(account));
       // dispatch(setLogin(false));
     }
   }, [accountStore]);
