@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 // import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +17,9 @@ import InputText from "../../../components/account/InputText";
 import AccountNextButton from "../../../components/account/AccountNextButton";
 import Stepper from "../../../components/account/Stepper";
 
+import { getAccountList } from "../../../store/AccountListSlice";
+
+import { IAccountList } from "../../../types/AccountTypes";
 // import { AppDispatch } from "../../../store";
 // import { getTempAccount, setTempAccount } from "../../../features/account/TempAccountSlice";
 // import { setAccount } from "../../../features/account/AccountSlice";
@@ -46,6 +50,8 @@ const NonCustodialImport1 = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   // const dispatch = useDispatch<AppDispatch>();
+
+  const accountListStore: IAccountList = useSelector(getAccountList);
 
   // const tempAccountStore: IAccount = useSelector(getTempAccount);
   // const tempWalletStore: IWallet = useSelector(getTempWallet);
@@ -167,9 +173,9 @@ const NonCustodialImport1 = () => {
     },
   });
 
-  const handleBackClick = () => {
-    navigate("/start");
-  };
+  const handleBackClick = useCallback(() => {
+    accountListStore?.list?.length ? navigate("/non-custodial-login-1") : navigate("/welcome");
+  }, [accountListStore]);
 
   return (
     <>

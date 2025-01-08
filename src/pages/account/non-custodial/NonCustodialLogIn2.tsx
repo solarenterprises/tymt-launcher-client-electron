@@ -1,8 +1,9 @@
 // This page is for importing the passphrase
 
+import { useState, useCallback } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -19,6 +20,10 @@ import AccountNextButton from "../../../components/account/AccountNextButton";
 import Stepper from "../../../components/account/Stepper";
 import MnemonicRevealPad from "../../../components/account/MnemonicRevealPad";
 
+import { getAccountList } from "../../../store/AccountListSlice";
+
+import { IAccountList } from "../../../types/AccountTypes";
+
 import tymt2 from "../../../assets/account/tymt2.png";
 
 // import { checkMnemonic, getWalletAddressFromPassphrase } from "../../../lib/helper/WalletHelper";
@@ -29,6 +34,8 @@ const NonCustodialLogIn2 = () => {
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState<boolean>(false);
+
+  const accountListStore: IAccountList = useSelector(getAccountList);
 
   const formik = useFormik({
     initialValues: {
@@ -61,9 +68,9 @@ const NonCustodialLogIn2 = () => {
     },
   });
 
-  const handleBackClick = () => {
-    navigate("/start");
-  };
+  const handleBackClick = useCallback(() => {
+    accountListStore?.list?.length ? navigate("/non-custodial-login-1") : navigate("/welcome");
+  }, [accountListStore]);
 
   const handlePasteClick = async () => {
     try {
