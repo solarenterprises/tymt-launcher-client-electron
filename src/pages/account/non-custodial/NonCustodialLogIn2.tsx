@@ -4,7 +4,6 @@ import { useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { motion } from "framer-motion";
@@ -74,7 +73,11 @@ const NonCustodialLogIn2 = () => {
 
   const handlePasteClick = async () => {
     try {
-    } catch (error) {}
+      const mnemonic = await navigator.clipboard.readText();
+      formik.setFieldValue("mnemonic", mnemonic);
+    } catch (err) {
+      console.error("Failed to handlePasteClick: ", err);
+    }
   };
 
   return (

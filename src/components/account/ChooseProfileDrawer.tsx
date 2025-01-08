@@ -41,7 +41,7 @@ const ChooseProfileDrawer = ({ view, setView }: props) => {
   };
 
   const handleAddNewProfileButtonClick = () => {
-    navigate("/non-custodial/login/2");
+    navigate("/non-custodial-login-2");
   };
 
   return (
@@ -54,6 +54,15 @@ const ChooseProfileDrawer = ({ view, setView }: props) => {
       slotProps={{
         backdrop: {
           onClick: toggleDrawer("right", false),
+        },
+      }}
+      sx={{
+        "& .MuiBox-root": {
+          overflow: "auto", // Enable scrolling
+          scrollbarWidth: "none", // Firefox
+          "&::-webkit-scrollbar": {
+            display: "none", // Chrome, Safari
+          },
         },
       }}
     >
