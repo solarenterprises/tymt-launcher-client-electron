@@ -1,14 +1,12 @@
 // This page is for importing the passphrase
 
+import { useState, useCallback } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
-
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { motion } from "framer-motion";
-
-// import "../../../global.css";
 
 import { Grid, Box, Stack } from "@mui/material";
 
@@ -19,16 +17,21 @@ import AccountNextButton from "../../../components/account/AccountNextButton";
 import Stepper from "../../../components/account/Stepper";
 import MnemonicRevealPad from "../../../components/account/MnemonicRevealPad";
 
-import tymt2 from "../../../assets/account/tymt2.png";
+import { getAccountList } from "../../../store/AccountListSlice";
 
-// import { checkMnemonic, getWalletAddressFromPassphrase } from "../../../lib/helper/WalletHelper";
-// import { getRsaKeyPair } from "../../../features/chat/RsaApi";
+import { IAccountList } from "../../../types/AccountTypes";
+
+import { checkMnemonic } from "../../../lib/helper/WalletHelper";
+
+import tymt2 from "../../../assets/account/tymt2.png";
 
 const NonCustodialLogIn2 = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState<boolean>(false);
+
+  const accountListStore: IAccountList = useSelector(getAccountList);
 
   const formik = useFormik({
     initialValues: {
@@ -47,27 +50,33 @@ const NonCustodialLogIn2 = () => {
           }
         )
         .test("validation", "Invalid Mnemonic", (value) => {
-          // return checkMnemonic(value);
-          return true;
+          return checkMnemonic(value);
         }),
     }),
     onSubmit: async () => {
       try {
-        navigate("/non-custodial-import-1");
+        setLoading(true);
+        const passphrase: string = formik.values.mnemonic;
+        navigate("/non-custodial-import-1", { state: { passphrase: passphrase } });
+        setLoading(false);
       } catch (err) {
-        // console.log("Failed at NonCustodialLogin2: ", err);
-        // setLoading(false);
+        console.error("Failed to onSubmit at NonCustodialLogin2: ", err);
+        setLoading(false);
       }
     },
   });
 
-  const handleBackClick = () => {
-    navigate("/start");
-  };
+  const handleBackClick = useCallback(() => {
+    accountListStore?.list?.length ? navigate("/non-custodial-login-1") : navigate("/welcome");
+  }, [accountListStore]);
 
   const handlePasteClick = async () => {
     try {
-    } catch (error) {}
+      const mnemonic = await navigator.clipboard.readText();
+      formik.setFieldValue("mnemonic", mnemonic);
+    } catch (err) {
+      console.error("Failed to handlePasteClick: ", err);
+    }
   };
 
   return (

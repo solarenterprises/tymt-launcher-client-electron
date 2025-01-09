@@ -23,6 +23,7 @@ export const rendererConfig: Configuration = {
       // assert: require.resolve("assert/"),
       os: require.resolve("os-browserify/browser"),
       vm: require.resolve("vm-browserify"),
+      path: require.resolve("path-browserify"),
       // process: require.resolve("process/browser"),
     },
     alias: {

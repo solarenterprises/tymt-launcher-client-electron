@@ -33,6 +33,7 @@ const InputText = ({ id, label, type, name, setValue, value, onChange, onBlur, e
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [capsLockOn, setCapsLockOn] = useState<boolean>(false);
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();

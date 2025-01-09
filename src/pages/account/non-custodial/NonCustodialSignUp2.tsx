@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 
 import { Grid, Box, Stack } from "@mui/material";
@@ -13,7 +14,11 @@ import MnemonicComboBox from "../../../components/account/MnemonicComboBox";
 import MnemonicPad from "../../../components/account/MnemonicPad";
 import PassphraseModal from "../../../components/account/PassphraseModal";
 
+import { getAccountList } from "../../../store/AccountListSlice";
+
 import { getMnemonic } from "../../../lib/helper/WalletHelper";
+
+import { IAccountList } from "../../../types/AccountTypes";
 
 import tymt3 from "../../../assets/account/tymt3.png";
 
@@ -27,13 +32,15 @@ const NonCustodialSignUp2 = () => {
   const [length, setLength] = useState<number>(12);
   const [passphrase, setPassphrase] = useState<string>(getMnemonic(12));
 
+  const accountListStore: IAccountList = useSelector(getAccountList);
+
   useEffect(() => {
     setPassphrase(getMnemonic(length));
   }, [length]);
 
-  const handleBackClick = () => {
-    navigate("/start");
-  };
+  const handleBackClick = useCallback(() => {
+    accountListStore?.list?.length ? navigate("/non-custodial-login-1") : navigate("/welcome");
+  }, [accountListStore]);
 
   const handleNextClick = useCallback(async () => {
     try {

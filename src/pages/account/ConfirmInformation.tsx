@@ -1,6 +1,7 @@
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 
 import { Grid, Box, Stack } from "@mui/material";
@@ -11,17 +12,34 @@ import AccountNextButton from "../../components/account/AccountNextButton";
 import Stepper from "../../components/account/Stepper";
 import WalletList from "../../components/account/WalletList";
 
+import { setAccount } from "../../store/AccountSlice";
+import { addAccountList, getAccountList } from "../../store/AccountListSlice";
+
+import { getKeccak256Hash } from "../../lib/helper/EncryptHelper";
+import { encrypt } from "../../lib/helper/EncryptHelper";
+
 import { IWalletAddresses } from "../../types/wallet/WalletTypes";
+import { IAccount, IAccountList } from "../../types/AccountTypes";
 
 import tymt2 from "../../assets/account/tymt2.png";
+
+export interface ILocationStateConfirmInformation {
+  passphrase: string;
+  password: string;
+  nickname: string;
+  walletAddresses: IWalletAddresses;
+}
 
 const ConfirmInformation = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const { mode } = useParams();
 
-  const { passphrase, password, nickname, walletAddresses } = location.state || {};
+  const { passphrase, password, nickname, walletAddresses } = (location.state as ILocationStateConfirmInformation) || {};
+
+  const accountListStore: IAccountList = useSelector(getAccountList);
 
   // const tempAccountStore: IAccount = useSelector(getTempAccount);
   // const tempWalletStore: IWallet = useSelector(getTempWallet);
@@ -52,30 +70,34 @@ const ConfirmInformation = () => {
   //   if (mode === "signup" || mode === "guest") return tempWalletStore;
   // }, [tempWalletStore]);
 
-  const handleBackClick = () => {
-    navigate("/start");
-  };
+  const handleBackClick = useCallback(() => {
+    accountListStore?.list?.length ? navigate("/non-custodial-login-1") : navigate("/welcome");
+  }, [accountListStore]);
 
   const handleSignUp = async () => {
-    // try {
-    //   let newAccount: IAccount = {
-    //     ...tempAccountStoreRef.current,
-    //     password: getKeccak256Hash(tempAccountStoreRef.current?.password),
-    //     mnemonic: await encrypt(tempAccountStoreRef.current?.mnemonic, tempAccountStoreRef.current?.password),
-    //   };
-    //   const body: INonCustodySignUpReq = getReqBodyNonCustodySignUp(newAccount, tempWalletStoreRef.current, tempAccountStoreRef.current?.mnemonic);
-    //   const res = await AuthAPI.nonCustodySignUp(body);
-    //   newAccount = {
-    //     ...newAccount,
-    //     uid: res?.data?._id,
-    //   };
-    //   dispatch(setAccount(newAccount));
-    //   dispatch(addAccountList(newAccount));
-    //   dispatch(setWallet(tempWalletStoreRef.current));
-    //   dispatch(addWalletList(tempWalletStoreRef.current));
-    // } catch (err) {
-    //   // console.log("Failed to handleSignUp: ", err);
-    // }
+    try {
+      let newAccount: IAccount = {
+        uid: "",
+        avatar: "",
+        nickName: nickname,
+        sxpAddress: walletAddresses.solar,
+        rsaPubKey: "",
+        password: getKeccak256Hash(password),
+        mnemonic: await encrypt(passphrase, password),
+      };
+      // const body: INonCustodySignUpReq = getReqBodyNonCustodySignUp(newAccount, tempWalletStoreRef.current, tempAccountStoreRef.current?.mnemonic);
+      // const res = await AuthAPI.nonCustodySignUp(body);
+      // newAccount = {
+      //   ...newAccount,
+      //   uid: res?.data?._id,
+      // };
+      dispatch(setAccount(newAccount));
+      dispatch(addAccountList(newAccount));
+      // dispatch(setWallet(tempWalletStoreRef.current));
+      // dispatch(addWalletList(tempWalletStoreRef.current));
+    } catch (err) {
+      console.error("Failed to handleSignUp: ", err);
+    }
   };
 
   const handleGuestComplete = async () => {

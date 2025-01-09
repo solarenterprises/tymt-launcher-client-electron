@@ -1,5 +1,6 @@
 import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 // import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
@@ -16,6 +17,9 @@ import InputText from "../../../components/account/InputText";
 import AccountNextButton from "../../../components/account/AccountNextButton";
 import Stepper from "../../../components/account/Stepper";
 
+import { getAccountList } from "../../../store/AccountListSlice";
+
+import { IAccountList } from "../../../types/AccountTypes";
 // import { AppDispatch } from "../../../store";
 // import { getTempAccount, setTempAccount } from "../../../features/account/TempAccountSlice";
 // import { setAccount } from "../../../features/account/AccountSlice";
@@ -42,10 +46,19 @@ import tymt3 from "../../../assets/account/tymt3.png";
 // import { setSocketHash } from "../../../features/chat/SocketHashSlice";
 // import { getRsaKeyPairAsync } from "../../../features/chat/RsaSlice";
 
+export interface ILocationStateNonCustodialImport1 {
+  passphrase: string;
+}
+
 const NonCustodialImport1 = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
   // const dispatch = useDispatch<AppDispatch>();
+
+  const { passphrase } = (location.state as ILocationStateNonCustodialImport1) || {};
+
+  const accountListStore: IAccountList = useSelector(getAccountList);
 
   // const tempAccountStore: IAccount = useSelector(getTempAccount);
   // const tempWalletStore: IWallet = useSelector(getTempWallet);
@@ -160,16 +173,17 @@ const NonCustodialImport1 = () => {
         //   await handleImport(newNickName, newPassword, newUid);
         //   await handleLogin();
         // }
-        navigate("/non-custodial-signup-4");
+
+        navigate("/non-custodial-signup-4", { state: { passphrase: passphrase, password: newPassword } });
       } catch (err) {
-        // console.log("Failed at NonCustodialImport1: ", err);
+        console.error("Failed to onSubmit at NonCustodialImport1: ", err);
       }
     },
   });
 
-  const handleBackClick = () => {
-    navigate("/start");
-  };
+  const handleBackClick = useCallback(() => {
+    accountListStore?.list?.length ? navigate("/non-custodial-login-1") : navigate("/welcome");
+  }, [accountListStore]);
 
   return (
     <>
