@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 
 import { Grid, Box, Stack } from "@mui/material";
@@ -11,6 +12,10 @@ import AccountNextButton from "../../../components/account/AccountNextButton";
 import Stepper from "../../../components/account/Stepper";
 import MnemonicRandomPad from "../../../components/account/MnemonicRandomPad";
 import MnemonicConfirm from "../../../components/account/MnemonicConfirm";
+
+import { getAccountList } from "../../../store/AccountListSlice";
+
+import { IAccountList } from "../../../types/AccountTypes";
 
 import tymt3 from "../../../assets/account/tymt3.png";
 
@@ -25,15 +30,17 @@ const NonCustodialSignUp3 = () => {
   const [confirmedPassphrase, setConfirmedPassphrase] = useState<string[]>(["", "", ""]);
   const [selectedInput, setSelectedInput] = useState<number>(1);
 
+  const accountListStore: IAccountList = useSelector(getAccountList);
+
   const splitPassphrase = useMemo<string[]>(() => passphrase?.split(" ") ?? [], [passphrase]);
   const passphraseIsConfirmed = useMemo<boolean>(
     () => confirmedPassphrase[0] === splitPassphrase[2] && confirmedPassphrase[1] === splitPassphrase[5] && confirmedPassphrase[2] === splitPassphrase[8],
     [passphrase, confirmedPassphrase]
   );
 
-  const handleBackClick = () => {
-    navigate("/start");
-  };
+  const handleBackClick = useCallback(() => {
+    accountListStore?.list?.length ? navigate("/non-custodial-login-1") : navigate("/welcome");
+  }, [accountListStore]);
 
   const handleNextClick = useCallback(async () => {
     try {

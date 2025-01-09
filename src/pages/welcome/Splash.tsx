@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 
 import { Box, LinearProgress } from "@mui/material";
+
+import { getAccountList } from "../../store/AccountListSlice";
+
+import { IAccountList } from "../../types/AccountTypes";
 
 import SplashLogo from "../../assets/welcome/SplashLogo.svg";
 
@@ -11,12 +15,13 @@ const Splash = () => {
   const navigate = useNavigate();
   const [progress, setProgress] = useState<number>(0);
 
+  const accountListStore: IAccountList = useSelector(getAccountList);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setProgress((oldProgress) => {
         if (oldProgress >= 100) {
-          // navigate("/get-started");
-          navigate("/start");
+          accountListStore?.list?.length ? navigate("/non-custodial-login-1") : navigate("/welcome");
         }
         const diff = Math.random() * 10;
         return Math.min(oldProgress + diff, 100);
@@ -26,7 +31,7 @@ const Splash = () => {
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [accountListStore]);
 
   return (
     <>
