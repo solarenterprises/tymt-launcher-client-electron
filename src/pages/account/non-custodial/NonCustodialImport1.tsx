@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 // import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
@@ -46,10 +46,17 @@ import tymt3 from "../../../assets/account/tymt3.png";
 // import { setSocketHash } from "../../../features/chat/SocketHashSlice";
 // import { getRsaKeyPairAsync } from "../../../features/chat/RsaSlice";
 
+export interface ILocationStateNonCustodialImport1 {
+  passphrase: string;
+}
+
 const NonCustodialImport1 = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
   // const dispatch = useDispatch<AppDispatch>();
+
+  const { passphrase } = (location.state as ILocationStateNonCustodialImport1) || {};
 
   const accountListStore: IAccountList = useSelector(getAccountList);
 
@@ -166,9 +173,10 @@ const NonCustodialImport1 = () => {
         //   await handleImport(newNickName, newPassword, newUid);
         //   await handleLogin();
         // }
-        navigate("/non-custodial-signup-4");
+
+        navigate("/non-custodial-signup-4", { state: { passphrase: passphrase, password: newPassword } });
       } catch (err) {
-        // console.log("Failed at NonCustodialImport1: ", err);
+        console.error("Failed to onSubmit at NonCustodialImport1: ", err);
       }
     },
   });

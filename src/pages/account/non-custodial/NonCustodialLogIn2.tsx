@@ -56,7 +56,8 @@ const NonCustodialLogIn2 = () => {
     onSubmit: async () => {
       try {
         setLoading(true);
-        navigate("/non-custodial-import-1");
+        const passphrase: string = formik.values.mnemonic;
+        navigate("/non-custodial-import-1", { state: { passphrase: passphrase } });
         setLoading(false);
       } catch (err) {
         console.error("Failed to onSubmit at NonCustodialLogin2: ", err);

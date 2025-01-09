@@ -23,7 +23,7 @@ import { IAccount, IAccountList } from "../../types/AccountTypes";
 
 import tymt2 from "../../assets/account/tymt2.png";
 
-export interface IConfirmInformationLocationState {
+export interface ILocationStateConfirmInformation {
   passphrase: string;
   password: string;
   nickname: string;
@@ -37,7 +37,7 @@ const ConfirmInformation = () => {
   const { t } = useTranslation();
   const { mode } = useParams();
 
-  const { passphrase, password, nickname, walletAddresses } = (location.state as IConfirmInformationLocationState) || {};
+  const { passphrase, password, nickname, walletAddresses } = (location.state as ILocationStateConfirmInformation) || {};
 
   const accountListStore: IAccountList = useSelector(getAccountList);
 
