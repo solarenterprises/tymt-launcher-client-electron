@@ -4,8 +4,8 @@ import * as bip39 from "bip39";
 
 import { CONFIG_BSC_API_KEY, CONFIG_BSC_API_URL, CONFIG_BSC_RPC_URL, CONFIG_NETWORK_NAME } from "../../config/MainConfig";
 
-import { ISupportToken } from "../../types/wallet/ChainTypes";
-import { IBalance } from "../../types/wallet/WalletTypes";
+import { ISupportToken } from "../../types/ChainTypes";
+import { IBalance } from "../../types/WalletTypes";
 
 export class BSC {
   static async getWalletFromMnemonic(mnemonic: string): Promise<any> {

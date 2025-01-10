@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 
 import WalletBar from "./WalletBar";
 
-import { IWalletAddresses } from "../../types/wallet/WalletTypes";
+import { IWalletAddresses } from "../../types/WalletTypes";
 
 import solar from "../../assets/chain/Solar.svg";
 import binance from "../../assets/chain/Binance.svg";

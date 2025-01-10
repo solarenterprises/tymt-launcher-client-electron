@@ -5,8 +5,8 @@ import * as bip39 from "bip39";
 import { CONFIG_ARB_API_KEY, CONFIG_ARB_API_URL, CONFIG_ARB_RPC_URL } from "../../config/MainConfig";
 import { CONFIG_NETWORK_NAME } from "../../config/MainConfig";
 
-import { ISupportToken } from "../../types/wallet/ChainTypes";
-import { IBalance } from "../../types/wallet/WalletTypes";
+import { ISupportToken } from "../../types/ChainTypes";
+import { IBalance } from "../../types/WalletTypes";
 
 export class Arbitrum {
   static async getWalletFromMnemonic(mnemonic: string): Promise<any> {

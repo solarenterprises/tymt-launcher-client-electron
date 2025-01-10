@@ -5,7 +5,7 @@ import axios from "axios";
 import { validate } from "bitcoin-address-validation";
 import * as eccModule from "tiny-secp256k1";
 
-import { CONST_CHAIN_NAMES } from "../../const/wallet/ChainConsts";
+import { CONST_CHAIN_NAMES } from "../../const/ChainConsts";
 import { CONFIG_BTC_API_URL, CONFIG_NETWORK_NAME } from "../../config/MainConfig";
 import tymtStorage from "../storage/tymtStorage";
 

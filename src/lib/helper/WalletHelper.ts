@@ -2,7 +2,7 @@ import * as bip39 from "bip39";
 
 import tymtCore from "../core/tymtCore";
 
-import { IWalletAddresses } from "../../types/wallet/WalletTypes";
+import { IWalletAddresses } from "../../types/WalletTypes";
 
 export const checkMnemonic = (_mnemonic: string) => {
   if (_mnemonic.split(" ").length == 24) {

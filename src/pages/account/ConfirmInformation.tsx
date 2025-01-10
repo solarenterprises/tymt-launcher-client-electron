@@ -18,7 +18,7 @@ import { addAccountList, getAccountList } from "../../store/AccountListSlice";
 import { getKeccak256Hash } from "../../lib/helper/EncryptHelper";
 import { encrypt } from "../../lib/helper/EncryptHelper";
 
-import { IWalletAddresses } from "../../types/wallet/WalletTypes";
+import { IWalletAddresses } from "../../types/WalletTypes";
 import { IAccount, IAccountList } from "../../types/AccountTypes";
 
 import tymt2 from "../../assets/account/tymt2.png";

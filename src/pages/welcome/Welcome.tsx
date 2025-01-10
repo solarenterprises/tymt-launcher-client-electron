@@ -19,7 +19,7 @@ import { getWalletAddressesFromPassphrase, getMnemonic } from "../../lib/helper/
 import { getKeccak256Hash, encrypt } from "../../lib/helper/EncryptHelper";
 
 import { IAccount, IAccountList } from "../../types/AccountTypes";
-import { IWalletAddresses } from "../../types/wallet/WalletTypes";
+import { IWalletAddresses } from "../../types/WalletTypes";
 
 import tymt1 from "../../assets/account/tymt1.png";
 import GuestIcon from "../../assets/account/Guest.svg";

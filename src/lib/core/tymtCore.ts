@@ -8,8 +8,8 @@ import Arbitrum from "../wallet/Arbitrum";
 import Bitcoin from "../wallet/Bitcoin";
 import Optimism from "../wallet/Optimism";
 
-import { CONST_CHAIN_NAMES } from "../../const/wallet/ChainConsts";
-import { CONST_CHAIN_SYMBOLS } from "../../const/wallet/ChainConsts";
+import { CONST_CHAIN_NAMES } from "../../const/ChainConsts";
+import { CONST_CHAIN_SYMBOLS } from "../../const/ChainConsts";
 
 // export type BlockchainKey = "solar" | "bsc" | "eth" | "solana" | "polygon" | "avalanche" | "arbitrum" | "btc" | "op";
 
