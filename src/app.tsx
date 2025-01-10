@@ -22,6 +22,7 @@ import ConfirmInformation from "./pages/account/ConfirmInformation";
 
 //Wallet
 import Wallet from "./pages/wallet/Wallet";
+import WalletVote from "./pages/wallet/WalletVote";
 //~Wallet
 
 import { Buffer } from "buffer";
@@ -44,6 +45,7 @@ root.render(
           <Route path="/non-custodial-import-1" element={<NonCustodialImport1 />} />
           <Route path="/confirm-information/:mode" element={<ConfirmInformation />} />
           <Route path="/wallet" element={<Wallet />} />
+          <Route path="/wallet/vote" element={<WalletVote />} />
         </Routes>
       </HashRouter>
     </StoreProvider>

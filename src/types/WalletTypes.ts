@@ -14,3 +14,7 @@ export interface IBalance {
   symbol: string;
   balance: number;
 }
+
+export interface IVotingData {
+  [key: string]: number;
+}

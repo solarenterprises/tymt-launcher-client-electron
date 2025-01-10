@@ -7,8 +7,14 @@ import accountListReducer from "./store/AccountListSlice";
 // ~Auth
 
 // Wallet
+import walletReducer from "./store/WalletSlice";
 import currentCurrencyReducer from "./store/CurrentCurrencySlice";
-//~Wallet
+import reserveListReducer from "./store/ReserveListSlice";
+// ~Wallet
+
+// Setting
+import walletSettingReducer from "./store/WalletSettingSlice";
+// ~Setting
 
 // const blacklistActionTypes = ["intercomsupport/setChatMounted", "intercomsupport/setMountedTrue", "intercomsupport/setMountedFalse"];
 const blacklistActionTypes: string[] = [];
@@ -26,9 +32,15 @@ const store = configureStore({
     accountList: accountListReducer,
     // ~Auth
 
-    //Wallet
+    // Wallet
+    wallet: walletReducer,
     currentCurrency: currentCurrencyReducer,
-    //~Wallet
+    reserveList: reserveListReducer,
+    // ~Wallet
+
+    // Setting
+    walletSetting: walletSettingReducer,
+    // ~Setting
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(stateSyncMiddleware),
 });

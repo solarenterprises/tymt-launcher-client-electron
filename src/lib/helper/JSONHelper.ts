@@ -1,3 +1,5 @@
+import { IVotingData } from "../../types/WalletTypes";
+
 export const compareJSONStructure = (json1: any, json2: any) => {
   // Get keys of both JSON objects
   const keys1 = Object.keys(json1);
@@ -27,5 +29,17 @@ export const compareJSONStructure = (json1: any, json2: any) => {
     // }
   }
 
+  return true;
+};
+
+export const compareDictionaries = (dict1: IVotingData, dict2: IVotingData) => {
+  if (Object.keys(dict1).length !== Object.keys(dict2).length) {
+    return false;
+  }
+  for (let key in dict1) {
+    if (dict1[key] !== dict2[key]) {
+      return false;
+    }
+  }
   return true;
 };
