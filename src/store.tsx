@@ -6,6 +6,10 @@ import accountReducer from "./store/AccountSlice";
 import accountListReducer from "./store/AccountListSlice";
 // ~Auth
 
+// Wallet
+import currentCurrencyReducer from "./store/CurrentCurrencySlice";
+//~Wallet
+
 // const blacklistActionTypes = ["intercomsupport/setChatMounted", "intercomsupport/setMountedTrue", "intercomsupport/setMountedFalse"];
 const blacklistActionTypes: string[] = [];
 
@@ -21,6 +25,10 @@ const store = configureStore({
     account: accountReducer,
     accountList: accountListReducer,
     // ~Auth
+
+    //Wallet
+    currentCurrency: currentCurrencyReducer,
+    //~Wallet
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(stateSyncMiddleware),
 });

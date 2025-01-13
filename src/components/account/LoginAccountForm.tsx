@@ -84,6 +84,7 @@ const LoginAccountForm = () => {
         // await dispatch(fetchMyInfoAsync(uid));
         // dispatch(setLogin(true));
         // navigate("/home");
+        navigate("/wallet");
       } catch (err) {
         // console.log("Failed at handleGuestLogin: ", err);
       }

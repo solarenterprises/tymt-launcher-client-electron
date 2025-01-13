@@ -8,6 +8,7 @@ import store from "./store";
 import "./locale/i18n";
 import "./styles/app.scss";
 
+//Auth
 import Splash from "./pages/welcome/Splash";
 import Welcome from "./pages/welcome/Welcome";
 import NonCustodialLogin1 from "./pages/account/non-custodial/NonCustodialLogin1";
@@ -17,6 +18,11 @@ import NonCustodialSignUp3 from "./pages/account/non-custodial/NonCustodialSignU
 import NonCustodialSignUp4 from "./pages/account/non-custodial/NonCustodialSignUp4";
 import NonCustodialImport1 from "./pages/account/non-custodial/NonCustodialImport1";
 import ConfirmInformation from "./pages/account/ConfirmInformation";
+// ~Auth
+
+//Wallet
+import Wallet from "./pages/wallet/Wallet";
+//~Wallet
 
 import { Buffer } from "buffer";
 window.Buffer = Buffer;
@@ -37,6 +43,7 @@ root.render(
           <Route path="/non-custodial-signup-4" element={<NonCustodialSignUp4 />} />
           <Route path="/non-custodial-import-1" element={<NonCustodialImport1 />} />
           <Route path="/confirm-information/:mode" element={<ConfirmInformation />} />
+          <Route path="/wallet" element={<Wallet />} />
         </Routes>
       </HashRouter>
     </StoreProvider>

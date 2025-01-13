@@ -6,17 +6,10 @@ import { useTranslation } from "react-i18next";
 const supportChains: any[] = [];
 // import { currencySymbols } from "../../const/wallet/SupportCurrency";
 
-import {
-  SwipeableDrawer,
-  Box,
-  Stack,
-  Divider,
-  IconButton,
-  Button,
-} from "@mui/material";
+import { SwipeableDrawer, Box, Stack, Divider, IconButton, Button } from "@mui/material";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 
-import Loading from "../Loading";
+import Loading from "../home/Loading";
 
 import SettingStyle from "../../styles/SettingStyle";
 
@@ -63,20 +56,13 @@ const ChooseChainDrawer = ({ view, setView }: IPropsChooseChainDrawer) => {
   // const [loading, setLoading] = useState<boolean>(false);
   const [state, setState] = useState({ right: false });
 
-  const toggleDrawer =
-    (anchor: Anchor, open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event &&
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return;
-      }
+  const toggleDrawer = (anchor: Anchor, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    if (event && event.type === "keydown" && ((event as React.KeyboardEvent).key === "Tab" || (event as React.KeyboardEvent).key === "Shift")) {
+      return;
+    }
 
-      setState({ ...state, [anchor]: open });
-    };
+    setState({ ...state, [anchor]: open });
+  };
 
   return (
     <SwipeableDrawer
@@ -94,19 +80,10 @@ const ChooseChainDrawer = ({ view, setView }: IPropsChooseChainDrawer) => {
     >
       {false && <Loading />}
       <Box key={`1-box`} className={classname.collaps_pan}>
-        <img
-          src={closeImg}
-          className={classname.close_icon}
-          onClick={() => setView(false)}
-        />
+        <img src={closeImg} className={classname.close_icon} onClick={() => setView(false)} />
       </Box>
       <Box key={`2-box`} className={classname.setting_pan}>
-        <Stack
-          direction={"row"}
-          alignItems={"center"}
-          spacing={"16px"}
-          padding={"18px 16px"}
-        >
+        <Stack direction={"row"} alignItems={"center"} spacing={"16px"} padding={"18px 16px"}>
           <IconButton
             className="icon-button"
             sx={{
@@ -129,36 +106,18 @@ const ChooseChainDrawer = ({ view, setView }: IPropsChooseChainDrawer) => {
         {supportChains?.map((supportChain, index) => (
           <div key={`${supportChain?.chain?.symbol}-${index}-${index}`}>
             <Button
-              className={`common-btn ${
-                currentChainStore?.chain === supportChain?.chain?.name
-                  ? "active"
-                  : null
-              }`}
+              className={`common-btn ${currentChainStore?.chain === supportChain?.chain?.name ? "active" : null}`}
               onClick={() => {
                 // dispatch(setCurrentChain(supportChain?.chain?.name));
               }}
               fullWidth
             >
-              <Stack
-                direction={"row"}
-                alignItems={"center"}
-                justifyContent={"space-between"}
-                padding={"12px 16px"}
-              >
+              <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"} padding={"12px 16px"}>
                 <Stack direction={"row"} alignItems={"center"} spacing={"16px"}>
-                  <Box
-                    component={"img"}
-                    src={supportChain?.chain?.logo}
-                    width="32px"
-                    height="32px"
-                  />
+                  <Box component={"img"} src={supportChain?.chain?.logo} width="32px" height="32px" />
                   <Stack>
-                    <Box className="fs-18-regular white">
-                      {supportChain?.chain?.name}
-                    </Box>
-                    <Box className="fs-12-regular blue">
-                      {/* {getCurrentChainWalletAddress(walletStore, supportChain?.chain?.name)} */}
-                    </Box>
+                    <Box className="fs-18-regular white">{supportChain?.chain?.name}</Box>
+                    <Box className="fs-12-regular blue">{/* {getCurrentChainWalletAddress(walletStore, supportChain?.chain?.name)} */}</Box>
                   </Stack>
                 </Stack>
                 <Stack>

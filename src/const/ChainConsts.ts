@@ -1,14 +1,14 @@
-import SolarIcon from "../../assets/chain/Solar.svg";
-import ArbitrumIcon from "../../assets/chain/Arbitrum.svg";
-import AvalancheIcon from "../../assets/chain/Avalanche.svg";
-import BinanceIcon from "../../assets/chain/Binance.svg";
-import BitcoinIcon from "../../assets/chain/Bitcoin.svg";
-import EthereumIcon from "../../assets/chain/Ethereum.svg";
-import OptimismIcon from "../../assets/chain/Optimism.svg";
-import PolygonIcon from "../../assets/chain/Polygon.svg";
-import SolanaIcon from "../../assets/chain/Solana.svg";
+import SolarIcon from "../assets/chain/Solar.svg";
+import ArbitrumIcon from "../assets/chain/Arbitrum.svg";
+import AvalancheIcon from "../assets/chain/Avalanche.svg";
+import BinanceIcon from "../assets/chain/Binance.svg";
+import BitcoinIcon from "../assets/chain/Bitcoin.svg";
+import EthereumIcon from "../assets/chain/Ethereum.svg";
+import OptimismIcon from "../assets/chain/Optimism.svg";
+import PolygonIcon from "../assets/chain/Polygon.svg";
+import SolanaIcon from "../assets/chain/Solana.svg";
 
-import { ISupportChain } from "../../types/wallet/ChainTypes";
+import { ISupportChain } from "../types/ChainTypes";
 
 export class CONST_CHAIN_IDS {
   static ETHEREUM = 1;

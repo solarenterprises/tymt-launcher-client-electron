@@ -4,8 +4,8 @@ import * as bip39 from "bip39";
 
 import { CONFIG_NETWORK_NAME, CONFIG_OP_API_KEY, CONFIG_OP_API_URL, CONFIG_POL_RPC_URL } from "../../config/MainConfig";
 
-import { ISupportToken } from "../../types/wallet/ChainTypes";
-import { IBalance } from "../../types/wallet/WalletTypes";
+import { ISupportToken } from "../../types/ChainTypes";
+import { IBalance } from "../../types/WalletTypes";
 
 export class Optimism {
   static async getWalletFromMnemonic(mnemonic: string): Promise<any> {

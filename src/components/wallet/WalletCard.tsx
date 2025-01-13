@@ -88,16 +88,14 @@ const WalletCard = ({ supportChain, index }: IPropsWalletCard) => {
       >
         <Stack direction={"row"} gap={3} justifyContent={"space-between"} width={"100%"}>
           <Stack direction={"row"} justifyContent={"flex-start"} gap={"16px"}>
-            <Box component={"img"} src={supportChain?.chain?.logo} width={"40px"} height={"40px"} />
+            <Box component={"img"} src={supportChain?.native?.logo} width={"40px"} height={"40px"} />
             <Stack gap={1}>
-              <Box className={"fs-h3 white t-left"}>{supportChain?.chain?.name}</Box>
+              <Box className={"fs-h3 white t-left"}>{supportChain?.native?.name}</Box>
               <Box className={"fs-18-regular white"}>
-                {supportChain?.chain?.symbol}
+                {supportChain?.native?.symbol}
                 {/* {` ${formatBalance(balance, 4)}`} */}
               </Box>
-              <Box className={"fs-16-regular light t-left"}>
-                {/* {`${symbol} ${formatBalance(Number(price ?? 0) * Number(balance ?? 0) * reserve)}`} */}
-              </Box>
+              <Box className={"fs-16-regular light t-left"}>{/* {`${symbol} ${formatBalance(Number(price ?? 0) * Number(balance ?? 0) * reserve)}`} */}</Box>
             </Stack>
           </Stack>
           <Box

@@ -5,8 +5,8 @@ import * as bip39 from "bip39";
 import { CONFIG_AVAX_API_URL, CONFIG_AVAX_RPC_URL, CONFIG_NETWORK_NAME } from "../../config/MainConfig";
 import tymtStorage from "../storage/tymtStorage";
 
-import { ISupportToken } from "../../types/wallet/ChainTypes";
-import { IBalance } from "../../types/wallet/WalletTypes";
+import { ISupportToken } from "../../types/ChainTypes";
+import { IBalance } from "../../types/WalletTypes";
 
 export class Avalanche {
   static async getWalletFromMnemonic(mnemonic: string): Promise<any> {
