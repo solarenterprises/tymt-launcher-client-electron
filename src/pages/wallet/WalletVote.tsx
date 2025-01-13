@@ -78,7 +78,12 @@ const WalletVote = () => {
     try {
       setCurrentPage(1);
 
-      const [res1, res2, res3, res4] = await Promise.all([Solar.get53Delegates(1), Solar.getVotingData(""), Solar.getAllDelegates(), Solar.getBlockchain()]);
+      const [res1, res2, res3, res4] = await Promise.all([
+        Solar.get53Delegates(1),
+        Solar.getVotingData("DFxj4wCxTSJtgxR7CAnTpWFPZwfGYgvZ1Q"),
+        Solar.getAllDelegates(),
+        Solar.getBlockchain(),
+      ]);
 
       setData(res1.data.data);
       setTotalPage(res1.data.meta.pageCount);

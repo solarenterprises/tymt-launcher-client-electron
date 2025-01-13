@@ -83,11 +83,15 @@ export class Solar {
   }
 
   static async getVotingData(address: string) {
-    const query2 = {
-      page: 1,
-      limit: 1,
-    };
-    return this.getData(query2, `wallets/${address}/votes`);
+    try {
+      const query2 = {
+        page: 1,
+        limit: 1,
+      };
+      return this.getData(query2, `wallets/${address}/votes`);
+    } catch (err) {
+      console.error("Failed to getVotingData: ", err);
+    }
   }
 
   static getCurrentNonce(address: string) {

@@ -25,7 +25,7 @@ export const translateString = async (origin: string) => {
     }
     return translatedMessage;
   } catch (err) {
-    console.error("Failed to translateString at TranslateAPI: ", origin, err);
+    console.error("Failed to translateString at TranslateAPI: ", err);
     return "";
   }
 };
