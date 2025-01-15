@@ -21,7 +21,7 @@ const Splash = () => {
     const timer = setInterval(() => {
       setProgress((oldProgress) => {
         if (oldProgress >= 100) {
-          accountListStore?.list?.length ? navigate("/non-custodial-login-1") : navigate("/welcome");
+          return oldProgress;
         }
         const diff = Math.random() * 10;
         return Math.min(oldProgress + diff, 100);
@@ -31,7 +31,15 @@ const Splash = () => {
     return () => {
       clearInterval(timer);
     };
-  }, [accountListStore]);
+  }, []);
+
+  useEffect(() => {
+    if (progress >= 100) {
+      accountListStore?.list?.length
+        ? navigate("/non-custodial-login-1")
+        : navigate("/welcome");
+    }
+  }, [accountListStore, progress]);
 
   return (
     <>
