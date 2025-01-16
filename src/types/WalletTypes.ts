@@ -14,3 +14,15 @@ export interface IBalance {
   symbol: string;
   balance: number;
 }
+
+export interface IBalanceList {
+  list: IBalance[];
+}
+
+export interface IVotingData {
+  [key: string]: number;
+}
+
+export interface ICurrentToken {
+  token: string;
+}

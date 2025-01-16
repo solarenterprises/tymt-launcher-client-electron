@@ -11,3 +11,8 @@ export interface IAccount {
 export interface IAccountList {
   list: IAccount[];
 }
+
+export interface ISaltToken {
+  salt: string;
+  token: string;
+}

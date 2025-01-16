@@ -74,7 +74,8 @@ export class Bitcoin {
           return 0;
         }
       }
-    } catch {
+    } catch (err) {
+      console.error("Failed to Bitcoin getBalance: ", err);
       return 0;
     }
   }

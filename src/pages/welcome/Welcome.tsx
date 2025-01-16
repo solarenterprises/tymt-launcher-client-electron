@@ -14,6 +14,7 @@ import OrLine from "../../components/account/OrLine";
 
 import { addAccountList, getAccountList } from "../../store/AccountListSlice";
 import { setAccount } from "../../store/AccountSlice";
+import { setWallet } from "../../store/WalletSlice";
 
 import { getWalletAddressesFromPassphrase, getMnemonic } from "../../lib/helper/WalletHelper";
 import { getKeccak256Hash, encrypt } from "../../lib/helper/EncryptHelper";
@@ -83,8 +84,11 @@ const Welcome = () => {
 
       dispatch(setAccount(newAccount));
       dispatch(addAccountList(newAccount));
+      dispatch(setWallet(newWalletAddress));
 
-      navigate("/home");
+      // navigate("/home");
+      navigate("/wallet");
+
       setLoading(false);
     } catch (err) {
       console.error("Failed to handlePlayGuest at Welcome.tsx: ", err);

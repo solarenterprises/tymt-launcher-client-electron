@@ -25,3 +25,7 @@ export interface ISupportChain {
   native: ISupportNative;
   tokens: ISupportToken[];
 }
+
+export interface ICurrentChain {
+  chain: string;
+}
