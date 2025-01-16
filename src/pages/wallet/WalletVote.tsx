@@ -3,39 +3,35 @@ import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import numeral from "numeral";
 
-// import { currencySymbols } from "../../consts/SupportCurrency";
-// import { ChainNames } from "../../consts/Chains";
-
 // import { useNotification } from "../../providers/NotificationProvider";
 
 import { Grid, Box, Divider, Stack, Button, Pagination, IconButton, Tooltip } from "@mui/material";
 
 import { CONST_CURRENCY_SYMBOLS } from "../../const/CurrencyConsts";
+import { CONST_CHAIN_NAMES } from "../../const/ChainConsts";
 
 import AnimatedComponent from "../../components/home/AnimatedComponent";
 import PasswordModal from "../../components/modal/PasswordModal";
 import InputVoteBox from "../../components/wallet/InputVoteBox";
 
-// import { getWallet } from "../../features/wallet/WalletSlice";
 // import { getCurrencyList } from "../../features/wallet/CurrencyListSlice";
-// import { getCurrentCurrency } from "../../features/wallet/CurrentCurrencySlice";
-// import { getPriceList } from "../../features/wallet/PriceListSlice";
-// import { getBalanceList } from "../../features/wallet/BalanceListSlice";
 
-// import SolarAPI from "../../lib/api/SolarAPI";
 import Solar from "../../lib/wallet/Solar";
 
 import { getCurrentCurrency } from "../../store/CurrentCurrencySlice";
 import { getWallet } from "../../store/WalletSlice";
 import { getReserveList } from "../../store/ReserveListSlice";
+import { getPriceList } from "../../store/PriceListSlice";
+import { getBalanceList } from "../../store/BalanceListSlice";
+
 // import { formatDecimal } from "../../lib/helper";
-// import { translateString } from "../../lib/api/Translate";
 // import { openLink } from "../../lib/helper/DownloadHelper";
-// import { getNativeTokenBalanceByChainName, getNativeTokenPriceByChainName } from "../../lib/helper/WalletHelper";
 import { translateString } from "../../lib/helper/TranslateHelper";
 import { compareDictionaries } from "../../lib/helper/JSONHelper";
+import { getNativeTokenBalanceByChainName, getNativeTokenPriceByChainName } from "../../lib/helper/WalletHelper";
 
-import { IVotingData, IWalletAddresses } from "../../types/WalletTypes";
+import { IPriceList } from "../../types/PriceTypes";
+import { IVotingData, IWalletAddresses, IBalanceList } from "../../types/WalletTypes";
 import { ICurrentCurrency, IReserveList } from "../../types/CurrencyTypes";
 
 import accountIcon from "../../assets/wallet/Account.svg";
@@ -51,13 +47,13 @@ const WalletVote = () => {
   const walletStore: IWalletAddresses = useSelector(getWallet);
   const reserveListStore: IReserveList = useSelector(getReserveList);
   // const currencyListStore: ICurrencyList = useSelector(getCurrencyList);
-  // const priceListStore: IPriceList = useSelector(getPriceList);
-  // const balanceListStore: IBalanceList = useSelector(getBalanceList);
+  const priceListStore: IPriceList = useSelector(getPriceList);
+  const balanceListStore: IBalanceList = useSelector(getBalanceList);
 
   const reserve: number = useMemo(() => reserveListStore?.list?.find((one) => one?.currency === currentCurrencyStore?.currency)?.reserve, [reserveListStore]);
   const currency: string = useMemo(() => CONST_CURRENCY_SYMBOLS[currentCurrencyStore?.currency] ?? "N/A", [currentCurrencyStore]);
-  // const sxpPrice = useMemo(() => getNativeTokenPriceByChainName(priceListStore, ChainNames?.SOLAR), [priceListStore]);
-  // const sxpBalance = useMemo(() => getNativeTokenBalanceByChainName(balanceListStore, ChainNames?.SOLAR), [balanceListStore]);
+  const sxpPrice = useMemo(() => getNativeTokenPriceByChainName(priceListStore, CONST_CHAIN_NAMES?.SOLAR), [priceListStore]);
+  const sxpBalance = useMemo(() => getNativeTokenBalanceByChainName(balanceListStore, CONST_CHAIN_NAMES?.SOLAR), [balanceListStore]);
 
   const [data, setData] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
@@ -170,7 +166,7 @@ const WalletVote = () => {
           setTotalVoted(newTotalVoted);
           setTotalRewards(newTotalRewards);
         } catch (err) {
-          // console.error("Failed to setInterval 120*1e3: ", err);
+          console.error("Failed to setInterval 120*1e3: ", err);
           error = true;
         }
       }
@@ -195,8 +191,8 @@ const WalletVote = () => {
                 <Box className="fs-18-regular light">{t("set-4_balance")}</Box>
                 <Stack direction={"row"} spacing={"4px"} alignItems={"center"}>
                   <Box component={"img"} src={solarIcon} width={"24px"} height={"24px"} />
-                  {/* <Box className="fs-32-italic white">{numeral(sxpBalance).format("0,0.0000")}</Box> */}
-                  <Box className="fs-32-italic white">{numeral(0).format("0,0.0000")}</Box>
+                  <Box className="fs-32-italic white">{numeral(sxpBalance).format("0,0.0000")}</Box>
+                  {/* <Box className="fs-32-italic white">{numeral(0).format("0,0.0000")}</Box> */}
                 </Stack>
               </Stack>
             </Stack>
@@ -224,8 +220,8 @@ const WalletVote = () => {
             <Stack padding={"24px 40px"}>
               <Box className="fs-16-regular light t-center">{t("wal-18_total-voted")}</Box>
               <Box className="fs-34-bold white t-center">{`${numeral(totalVoted).format("0,0")} SXP`}</Box>
-              {/* <Box className="fs-18-regular light t-center">{`${currency} ${numeral(totalVoted * Number(sxpPrice) * Number(reserve)).format("0,0")}`}</Box> */}
-              <Box className="fs-18-regular light t-center">{`${currency} ${numeral(0).format("0,0")}`}</Box>
+              <Box className="fs-18-regular light t-center">{`${currency} ${numeral(totalVoted * Number(sxpPrice) * Number(reserve)).format("0,0")}`}</Box>
+              {/* <Box className="fs-18-regular light t-center">{`${currency} ${numeral(0).format("0,0")}`}</Box> */}
             </Stack>
             <Stack padding={"32px 24px"}>
               <Box
@@ -238,8 +234,8 @@ const WalletVote = () => {
             <Stack padding={"24px 40px"}>
               <Box className="fs-16-regular light t-center">{t("wal-19_total-rewards")}</Box>
               <Box className="fs-34-bold beach t-center">{`+${numeral(totalRewards).format("0,0")} SXP`}</Box>
-              {/* <Box className="fs-18-regular light t-center">{`+${currency} ${numeral(totalRewards * Number(sxpPrice) * Number(reserve)).format("0,0")}`}</Box> */}
-              <Box className="fs-18-regular light t-center">{`+${currency} ${numeral(0).format("0,0")}`}</Box>
+              <Box className="fs-18-regular light t-center">{`+${currency} ${numeral(totalRewards * Number(sxpPrice) * Number(reserve)).format("0,0")}`}</Box>
+              {/* <Box className="fs-18-regular light t-center">{`+${currency} ${numeral(0).format("0,0")}`}</Box> */}
             </Stack>
             <Stack padding={"32px 24px"}>
               <Box
@@ -251,8 +247,8 @@ const WalletVote = () => {
             </Stack>
             <Stack padding={"24px 40px"}>
               <Box className="fs-16-regular light t-center">{t("wal-51_sxp-price")}</Box>
-              {/* <Box className="fs-34-bold white t-center">{`${currency} ${numeral(Number(sxpPrice) * Number(reserve)).format("0,0.00")}`}</Box> */}
-              <Box className="fs-34-bold white t-center">{`${currency} ${numeral(0).format("0,0.00")}`}</Box>
+              <Box className="fs-34-bold white t-center">{`${currency} ${numeral(Number(sxpPrice) * Number(reserve)).format("0,0.00")}`}</Box>
+              {/* <Box className="fs-34-bold white t-center">{`${currency} ${numeral(0).format("0,0.00")}`}</Box> */}
             </Stack>
           </Grid>
           <Grid item xs={12}>
@@ -427,8 +423,8 @@ const WalletVote = () => {
                             <Stack>
                               <Box className="fs-18-regular white t-left">{`${numeral(item.forged.total ?? 0).format("0,0")} SXP`}</Box>
                               <Box className="fs-12-regular light t-left">
-                                {/* {`${numeral((item.forged.total * Number(sxpPrice) * Number(reserve)) / 1e8).format("0,0.00")} ${currency}`} */}
-                                {`${numeral(0).format("0,0.00")} ${currency}`}
+                                {`${numeral((item.forged.total * Number(sxpPrice) * Number(reserve)) / 1e8).format("0,0.00")} ${currency}`}
+                                {/* {`${numeral(0).format("0,0.00")} ${currency}`} */}
                               </Box>
                             </Stack>
                           </Stack>

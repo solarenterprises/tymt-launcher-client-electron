@@ -22,3 +22,7 @@ export interface IBalanceList {
 export interface IVotingData {
   [key: string]: number;
 }
+
+export interface ICurrentToken {
+  token: string;
+}

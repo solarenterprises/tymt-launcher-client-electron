@@ -131,6 +131,11 @@ export class Solar {
       return 0;
     }
   }
+
+  static validateAddress(address: string): boolean {
+    Managers.configManager.setFromPreset(CONFIG_NETWORK_NAME === "mainnet" ? "mainnet" : "testnet");
+    return Identities.Address.validate(address);
+  }
 }
 
 export default Solar;

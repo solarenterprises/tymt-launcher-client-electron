@@ -5,6 +5,8 @@ import { CONST_CHAIN_NAMES, CONST_SUPPORT_CHAINS } from "../../const/ChainConsts
 import tymtCore from "../core/tymtCore";
 
 import { IWalletAddresses } from "../../types/WalletTypes";
+import { IPriceList } from "../../types/PriceTypes";
+import { IBalanceList } from "../../types/WalletTypes";
 
 export const checkMnemonic = (_mnemonic: string) => {
   if (_mnemonic.split(" ").length == 24) {
@@ -129,5 +131,60 @@ export const getSupportTokensByChainName = (chainName: string) => {
     return res;
   } catch (err) {
     console.error("Failed to getSupportTokensByChainName: ", err);
+  }
+};
+
+export const getTokenPriceByCmc = (priceListStore: IPriceList, cmc: string) => {
+  try {
+    const res = priceListStore?.list?.find((one) => one?.cmc === cmc)?.price;
+    return res;
+  } catch (err) {
+    console.error("Failed to getCurrentChainNativeTokenPrice: ", err);
+  }
+};
+
+export const getTokenBalanceBySymbol = (balanceListStore: IBalanceList, symbol: string) => {
+  try {
+    const res = balanceListStore?.list?.find((one) => one?.symbol === symbol)?.balance;
+    return res;
+  } catch (err) {
+    console.error("Failed to getTokenBalanceBySymbol: ", err);
+  }
+};
+
+export const getNativeTokenPriceByChainName = (priceListStore: IPriceList, chainName: string) => {
+  try {
+    const supportChain = getSupportChainByName(chainName);
+    const cmc = supportChain?.native?.cmc;
+    const res = getTokenPriceByCmc(priceListStore, cmc);
+    return res;
+  } catch (err) {
+    console.error("Failed to getNativeSymbolByChainName: ", err);
+  }
+};
+
+export const getNativeTokenBalanceByChainName = (balanceListStore: IBalanceList, chainName: string) => {
+  try {
+    const supportChain = getSupportChainByName(chainName);
+    const symbol = supportChain?.native?.symbol;
+    const res = getTokenBalanceBySymbol(balanceListStore, symbol);
+    return res;
+  } catch (err) {
+    console.error("Failed to getNativeSymbolByChainName: ", err);
+  }
+};
+
+export const getSupportNativeOrTokenBySymbol = (tokenSymbol: string) => {
+  try {
+    const res_1 = CONST_SUPPORT_CHAINS?.find((chain) => chain?.native?.symbol === tokenSymbol)?.native;
+    if (res_1) return res_1;
+    for (const chain of CONST_SUPPORT_CHAINS) {
+      const token = chain?.tokens?.find((token) => token?.symbol === tokenSymbol);
+      if (token) {
+        return token;
+      }
+    }
+  } catch (err) {
+    console.error("Failed to getSupportNativeOrTokenBySymbol: ", err);
   }
 };
