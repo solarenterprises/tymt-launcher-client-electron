@@ -23,6 +23,47 @@ export class BSC {
     const wallet = await BSC.getWalletFromMnemonic(mnemonic.normalize("NFD"));
     return wallet.address;
   }
+
+  static async getBalance(addr: string): Promise<number> {
+    try {
+      const result = (await (await fetch(`${CONFIG_BSC_API_URL}?module=account&action=balance&address=${addr}&apikey=${CONFIG_BSC_API_KEY}`)).json()).result;
+      return (result as number) / 1e9 / 1e9;
+    } catch (err) {
+      console.error("Failed to BSC getBalance: ", err);
+      return 0;
+    }
+  }
+
+  static async getTokenBalance(addr: string, tokens: ISupportToken[]): Promise<IBalance[]> {
+    try {
+      let result: IBalance[] = [];
+      for (let i = 0; i < tokens.length; i++) {
+        if (CONFIG_NETWORK_NAME === "testnet") {
+          result.push({
+            symbol: tokens[i].symbol,
+            balance: 0.0,
+          });
+        } else {
+          result.push({
+            symbol: tokens[i].symbol,
+            balance:
+              ((
+                await (
+                  await fetch(
+                    `${CONFIG_BSC_API_URL}?module=account&action=tokenbalance&contractAddress=${tokens[i].address}&address=${addr}&apikey=${CONFIG_BSC_API_KEY}`
+                  )
+                ).json()
+              ).result as number) /
+              10 ** (tokens[i].decimals as number),
+          });
+        }
+      }
+      return result;
+    } catch (err) {
+      console.error("Failed to BSC getTokenBalance: ", err);
+      return [];
+    }
+  }
 }
 
 export default BSC;

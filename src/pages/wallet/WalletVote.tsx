@@ -26,6 +26,8 @@ import InputVoteBox from "../../components/wallet/InputVoteBox";
 import Solar from "../../lib/wallet/Solar";
 
 import { getCurrentCurrency } from "../../store/CurrentCurrencySlice";
+import { getWallet } from "../../store/WalletSlice";
+import { getReserveList } from "../../store/ReserveListSlice";
 // import { formatDecimal } from "../../lib/helper";
 // import { translateString } from "../../lib/api/Translate";
 // import { openLink } from "../../lib/helper/DownloadHelper";
@@ -33,8 +35,8 @@ import { getCurrentCurrency } from "../../store/CurrentCurrencySlice";
 import { translateString } from "../../lib/helper/TranslateHelper";
 import { compareDictionaries } from "../../lib/helper/JSONHelper";
 
-import { IVotingData } from "../../types/WalletTypes";
-import { ICurrentCurrency } from "../../types/CurrencyTypes";
+import { IVotingData, IWalletAddresses } from "../../types/WalletTypes";
+import { ICurrentCurrency, IReserveList } from "../../types/CurrencyTypes";
 
 import accountIcon from "../../assets/wallet/Account.svg";
 import solarIcon from "../../assets/chain/Solar.svg";
@@ -46,16 +48,13 @@ const WalletVote = () => {
   const { t } = useTranslation();
 
   const currentCurrencyStore: ICurrentCurrency = useSelector(getCurrentCurrency);
+  const walletStore: IWalletAddresses = useSelector(getWallet);
+  const reserveListStore: IReserveList = useSelector(getReserveList);
   // const currencyListStore: ICurrencyList = useSelector(getCurrencyList);
-  // const currentCurrencyStore: ICurrentCurrency = useSelector(getCurrentCurrency);
-  // const walletStore: IWallet = useSelector(getWallet);
   // const priceListStore: IPriceList = useSelector(getPriceList);
   // const balanceListStore: IBalanceList = useSelector(getBalanceList);
 
-  // const reserve: number = useMemo(
-  //   () => currencyListStore?.list?.find((one) => one?.name === currentCurrencyStore?.currency)?.reserve,
-  //   [currencyListStore, currentCurrencyStore]
-  // );
+  const reserve: number = useMemo(() => reserveListStore?.list?.find((one) => one?.currency === currentCurrencyStore?.currency)?.reserve, [reserveListStore]);
   const currency: string = useMemo(() => CONST_CURRENCY_SYMBOLS[currentCurrencyStore?.currency] ?? "N/A", [currentCurrencyStore]);
   // const sxpPrice = useMemo(() => getNativeTokenPriceByChainName(priceListStore, ChainNames?.SOLAR), [priceListStore]);
   // const sxpBalance = useMemo(() => getNativeTokenBalanceByChainName(balanceListStore, ChainNames?.SOLAR), [balanceListStore]);
@@ -80,7 +79,7 @@ const WalletVote = () => {
 
       const [res1, res2, res3, res4] = await Promise.all([
         Solar.get53Delegates(1),
-        Solar.getVotingData("DFxj4wCxTSJtgxR7CAnTpWFPZwfGYgvZ1Q"),
+        Solar.getVotingData(walletStore?.solar),
         Solar.getAllDelegates(),
         Solar.getBlockchain(),
       ]);

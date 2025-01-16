@@ -1,5 +1,7 @@
 import * as bip39 from "bip39";
 
+import { CONST_CHAIN_NAMES, CONST_SUPPORT_CHAINS } from "../../const/ChainConsts";
+
 import tymtCore from "../core/tymtCore";
 
 import { IWalletAddresses } from "../../types/WalletTypes";
@@ -61,5 +63,71 @@ export const getWalletAddressesFromPassphrase = async (_passphrase: string) => {
     return res;
   } catch (err) {
     console.error("Failed to getWalletAddressesFromPassphrase: ", err);
+  }
+};
+
+export const getCurrentChainWalletAddress = (walletStore: IWalletAddresses, chainName: string) => {
+  try {
+    let res: string = "";
+    switch (chainName) {
+      case CONST_CHAIN_NAMES.ARBITRUM:
+        res = walletStore?.arbitrum;
+        break;
+      case CONST_CHAIN_NAMES.AVALANCHE:
+        res = walletStore?.avalanche;
+        break;
+      case CONST_CHAIN_NAMES.BINANCE:
+        res = walletStore?.binance;
+        break;
+      case CONST_CHAIN_NAMES.BITCOIN:
+        res = walletStore?.bitcoin;
+        break;
+      case CONST_CHAIN_NAMES.ETHEREUM:
+        res = walletStore?.ethereum;
+        break;
+      case CONST_CHAIN_NAMES.OPTIMISM:
+        res = walletStore?.optimism;
+        break;
+      case CONST_CHAIN_NAMES.POLYGON:
+        res = walletStore?.polygon;
+        break;
+      case CONST_CHAIN_NAMES.SOLANA:
+        res = walletStore?.solana;
+        break;
+      case CONST_CHAIN_NAMES.SOLAR:
+        res = walletStore?.solar;
+        break;
+    }
+    return res;
+  } catch (err) {
+    console.error("Failed to getCurrentChainWalletAddress: ", err);
+  }
+};
+
+export const getSupportChainByName = (chainName: string) => {
+  try {
+    const res = CONST_SUPPORT_CHAINS?.find((one) => one?.native?.name === chainName);
+    return res;
+  } catch (err) {
+    console.error("Failed to getSupportChainByName: ", err);
+  }
+};
+
+export const getNativeSymbolByChainName = (chainName: string) => {
+  try {
+    const supportChain = getSupportChainByName(chainName);
+    const res = supportChain?.native?.symbol;
+    return res;
+  } catch (err) {
+    console.error("Failed to getNativeSymbolByChainName: ", err);
+  }
+};
+
+export const getSupportTokensByChainName = (chainName: string) => {
+  try {
+    const res = getSupportChainByName(chainName)?.tokens;
+    return res;
+  } catch (err) {
+    console.error("Failed to getSupportTokensByChainName: ", err);
   }
 };

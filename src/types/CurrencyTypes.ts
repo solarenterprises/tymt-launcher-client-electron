@@ -17,8 +17,3 @@ export interface IReserveList {
   list: IReserve[];
 }
 
-export interface ICurrencyAPIFetchReserveListResponse {
-  _id: string;
-  currency_id: string;
-  rate: Number;
-}

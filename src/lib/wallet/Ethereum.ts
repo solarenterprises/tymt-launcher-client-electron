@@ -35,20 +35,62 @@ export class Ethereum {
       const wallet = await Ethereum.getWalletFromMnemonic(passphrase);
       const signature = await wallet.signMessage(message);
       return signature;
-    } catch (error) {
-      // console.error("Error signing message:", error);
-      throw error;
+    } catch (err) {
+      console.error("Failed Ethereum signMessage: ", err);
+      throw err;
     }
   }
 
   static async verifyMessage(message: string, signature: string, address: string): Promise<boolean> {
     try {
       const recoveredAddress = ethers.verifyMessage(message, signature);
-      // console.log(recoveredAddress);
       return recoveredAddress === address;
-    } catch (error) {
-      // console.error("Error verifying message:", error);
+    } catch (err) {
+      console.error("Failed Ethereum verifyMessage: ", err);
       return false;
+    }
+  }
+
+  static async getBalance(addr: string): Promise<number> {
+    try {
+      // if (net_name === "testnet") return 0;
+      const result = (await (await fetch(`${CONFIG_ETH_API_URL}?module=account&action=balance&address=${addr}&tag=latest&apikey=${CONFIG_ETH_API_KEY}`)).json())
+        .result;
+      return (result as number) / 1e9 / 1e9;
+    } catch (err) {
+      console.error("Failed Ethereum getBalance: ", err);
+      return 0;
+    }
+  }
+
+  static async getTokenBalance(addr: string, tokens: ISupportToken[]): Promise<IBalance[]> {
+    try {
+      let result: IBalance[] = [];
+      for (let i = 0; i < tokens.length; i++) {
+        if (CONFIG_NETWORK_NAME === "testnet") {
+          result.push({
+            symbol: tokens[i].symbol,
+            balance: 0,
+          });
+        } else {
+          result.push({
+            symbol: tokens[i].symbol,
+            balance:
+              ((
+                await (
+                  await fetch(
+                    `${CONFIG_ETH_API_URL}?module=account&action=tokenbalance&contractaddress=${tokens[i].address}&address=${addr}&tag=latest&apikey=${CONFIG_ETH_API_KEY}`
+                  )
+                ).json()
+              ).result as number) /
+              10 ** (tokens[i].decimals as number),
+          });
+        }
+      }
+      return result;
+    } catch (err) {
+      console.error("Failed to ETHEREUM getTokenBalance: ", err);
+      return [];
     }
   }
 }

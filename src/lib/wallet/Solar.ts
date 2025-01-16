@@ -123,6 +123,14 @@ export class Solar {
     let res = this.addTxToQueue(JSON.stringify({ transactions: [txJson] }), CONFIG_SOLAR_API_URL ?? "");
     return res;
   }
+
+  static async getBalance(addr: string): Promise<number> {
+    try {
+      return ((await (await fetch(`${CONFIG_SOLAR_API_URL}/wallets/${addr}`)).json()).data.balance as number) / 1e8;
+    } catch {
+      return 0;
+    }
+  }
 }
 
 export default Solar;

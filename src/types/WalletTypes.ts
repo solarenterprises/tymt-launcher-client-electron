@@ -15,6 +15,10 @@ export interface IBalance {
   balance: number;
 }
 
+export interface IBalanceList {
+  list: IBalance[];
+}
+
 export interface IVotingData {
   [key: string]: number;
 }

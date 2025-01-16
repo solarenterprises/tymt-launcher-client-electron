@@ -23,6 +23,48 @@ export class Optimism {
     const wallet = await Optimism.getWalletFromMnemonic(mnemonic.normalize("NFD"));
     return wallet.address;
   }
+
+  static async getBalance(addr: string): Promise<number> {
+    try {
+      if (CONFIG_NETWORK_NAME === "testnet") return 0;
+      const result = (await (await fetch(`${CONFIG_OP_API_URL}?module=account&action=balance&address=${addr}&tag=latest&apikey=${CONFIG_OP_API_KEY}`)).json())
+        .result;
+      return (result as number) / 1e9 / 1e9;
+    } catch {
+      return 0;
+    }
+  }
+
+  static async getTokenBalance(addr: string, tokens: ISupportToken[]): Promise<IBalance[]> {
+    try {
+      let result: IBalance[] = [];
+      for (let i = 0; i < tokens.length; i++) {
+        if (CONFIG_NETWORK_NAME === "testnet") {
+          result.push({
+            symbol: tokens[i].symbol,
+            balance: 0,
+          });
+        } else {
+          result.push({
+            symbol: tokens[i].symbol,
+            balance:
+              ((
+                await (
+                  await fetch(
+                    `${CONFIG_OP_API_URL}?module=account&action=tokenbalance&contractAddress=${tokens[i].address}&address=${addr}&tag=latest&apikey=${CONFIG_OP_API_KEY}`
+                  )
+                ).json()
+              ).result as number) /
+              10 ** (tokens[i].decimals as number),
+          });
+        }
+      }
+      return result;
+    } catch (err) {
+      console.error("Failed to OPTIMISM getTokenBalance: ", err);
+      return [];
+    }
+  }
 }
 
 export default Optimism;

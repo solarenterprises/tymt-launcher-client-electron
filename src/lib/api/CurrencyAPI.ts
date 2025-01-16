@@ -3,7 +3,8 @@ import axios from "axios";
 import { CONST_SUPPORT_CURRENCIES } from "../../const/CurrencyConsts";
 import { CONFIG_TYMT_BACKEND_URL } from "../../config/MainConfig";
 
-import { IReserve, ICurrencyAPIFetchReserveListResponse } from "../../types/CurrencyTypes";
+import { IReserve } from "../../types/CurrencyTypes";
+import { ICurrencyAPIFetchReserveListResponse } from "../../types/APITypes/CurrencyAPITypes";
 
 export class CurrencyAPI {
   static async fetchReserveList() {
