@@ -11,8 +11,6 @@ import { Grid, Box, Stack, Tooltip } from "@mui/material";
 
 import InstallButton from "../store/InstallButton";
 
-import "../../fonts/Cobe/Cobe-Regular.ttf";
-
 import homeStyles from "../../styles/homeStyles";
 import districteffect from "../../assets/main/DistrictEffect.svg";
 import districteffect1 from "../../assets/main/DistrictEffect1.svg";
@@ -77,9 +75,7 @@ const District53intro = ({ setImage }: props) => {
                 border: "1px solid rgb(71, 76, 76)",
               }}
             >
-              <Box className="fs-12-regular white">
-                {t("hom-25_click-to-learn")}
-              </Box>
+              <Box className="fs-12-regular white">{t("hom-25_click-to-learn")}</Box>
             </Stack>
           }
           PopperProps={{
@@ -119,12 +115,7 @@ const District53intro = ({ setImage }: props) => {
           {t("hom-6_intro")}
         </Box>
         <Grid item xs={12}>
-          <Stack
-            direction={"row"}
-            alignItems={"start"}
-            spacing={2}
-            marginTop={"16px"}
-          >
+          <Stack direction={"row"} alignItems={"start"} spacing={2} marginTop={"16px"}>
             <Grid
               item
               xs={12}

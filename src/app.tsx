@@ -8,7 +8,7 @@ import store from "./store";
 import "./locale/i18n";
 import "./styles/app.scss";
 
-//Auth
+// Auth
 import Splash from "./pages/welcome/Splash";
 import Welcome from "./pages/welcome/Welcome";
 import NonCustodialLogin1 from "./pages/account/non-custodial/NonCustodialLogin1";
@@ -19,6 +19,10 @@ import NonCustodialSignUp4 from "./pages/account/non-custodial/NonCustodialSignU
 import NonCustodialImport1 from "./pages/account/non-custodial/NonCustodialImport1";
 import ConfirmInformation from "./pages/account/ConfirmInformation";
 // ~Auth
+
+// Home
+import Homepage from "./pages/main/Homepage";
+// ~Home
 
 //Wallet
 import Wallet from "./pages/wallet/Wallet";
@@ -44,6 +48,7 @@ root.render(
           <Route path="/non-custodial-signup-4" element={<NonCustodialSignUp4 />} />
           <Route path="/non-custodial-import-1" element={<NonCustodialImport1 />} />
           <Route path="/confirm-information/:mode" element={<ConfirmInformation />} />
+          <Route path="/home" element={<Homepage />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/wallet/vote" element={<WalletVote />} />
         </Routes>

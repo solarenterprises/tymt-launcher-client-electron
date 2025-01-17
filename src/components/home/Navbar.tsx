@@ -5,21 +5,13 @@ import { useCallback, useMemo, useState } from "react";
 // import { debounce } from "lodash";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import {
-  Grid,
-  Button,
-  TextField,
-  InputAdornment,
-  Stack,
-  Box,
-  Tooltip,
-} from "@mui/material";
+import { Grid, Button, TextField, InputAdornment, Stack, Box, Tooltip } from "@mui/material";
 
 // import Chatindex from "../../pages/chat";
 // import Alertindex from "../../pages/alert";
 import Settings from "../../pages/settings";
-import ComingModal from "../modals/ComingModal";
-import CardModal from "../modals/CardModal";
+import ComingModal from "../modal/ComingModal";
+import CardModal from "../modal/CardModal";
 
 // import { selectNotification } from "../../features/settings/NotificationSlice";
 // import { getAlertList } from "../../features/alert/AlertListSlice";
@@ -148,37 +140,15 @@ const Navbar = () => {
 
   return (
     <>
-      <Grid
-        item
-        width={"95%"}
-        className="navbar"
-        container
-        sx={{ backdropFilter: "blur(30px)" }}
-      >
+      <Grid item width={"95%"} className="navbar" container sx={{ backdropFilter: "blur(30px)" }}>
         {currentlogo.isDrawerExpanded === true && (
-          <img
-            src={newlogo}
-            alt={"tymtlogo-1"}
-            loading="lazy"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/home")}
-          />
+          <img src={newlogo} alt={"tymtlogo-1"} loading="lazy" style={{ cursor: "pointer" }} onClick={() => navigate("/home")} />
         )}
         {currentlogo.isDrawerExpanded === false && (
-          <img
-            src={newlogohead}
-            alt={"tymtlogo-2"}
-            loading="lazy"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/home")}
-          />
+          <img src={newlogohead} alt={"tymtlogo-2"} loading="lazy" style={{ cursor: "pointer" }} onClick={() => navigate("/home")} />
         )}
 
-        <Stack
-          flexDirection={"row"}
-          alignItems={"center"}
-          sx={{ position: "fixed", left: "20%" }}
-        >
+        <Stack flexDirection={"row"} alignItems={"center"} sx={{ position: "fixed", left: "20%" }}>
           {location.pathname.indexOf("home") === -1 && (
             <Back
               onClick={() => {
@@ -209,19 +179,8 @@ const Navbar = () => {
                           navigate(`/store`);
                         }}
                       >
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M17 7L7 17M7 7L17 17"
-                            stroke="white"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M17 7L7 17M7 7L17 17" stroke="white" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </Button>
                     )}
@@ -308,9 +267,7 @@ const Navbar = () => {
                   border: "1px solid rgb(71, 76, 76)",
                 }}
               >
-                <Box className="fs-16-regular white">
-                  {t("tol-8_solar-card")}
-                </Box>
+                <Box className="fs-16-regular white">{t("tol-8_solar-card")}</Box>
               </Stack>
             }
             PopperProps={{
@@ -525,43 +482,14 @@ const Navbar = () => {
               </svg>
             </Button>
           </Tooltip>
-          <Button
-            className="button_navbar_profile"
-            onClick={() => setShowSetting(!showSetting)}
-          >
-            <Stack
-              direction={"row"}
-              alignItems={"center"}
-              marginLeft={"0px"}
-              justifyContent={"left"}
-              spacing={"8px"}
-              height={"32px"}
-            >
-              <Avatar
-                url={myInfoStore?.avatar}
-                size={32}
-                ischain={true}
-                onlineStatus={true}
-                status={!notification?.alert ? "donotdisturb" : "online"}
-              />
-              <Stack
-                direction={"column"}
-                width={"110px"}
-                alignItems={"flex-start"}
-              >
+          <Button className="button_navbar_profile" onClick={() => setShowSetting(!showSetting)}>
+            <Stack direction={"row"} alignItems={"center"} marginLeft={"0px"} justifyContent={"left"} spacing={"8px"} height={"32px"}>
+              <Avatar url={myInfoStore?.avatar} size={32} ischain={true} onlineStatus={true} status={!notification?.alert ? "donotdisturb" : "online"} />
+              <Stack direction={"column"} width={"110px"} alignItems={"flex-start"}>
                 <Box className={"fs-16-regular white"}>
-                  {myInfoStore?.nickName?.length > 11
-                    ? `${myInfoStore?.nickName?.substring(0, 10)}...`
-                    : myInfoStore?.nickName}
+                  {myInfoStore?.nickName?.length > 11 ? `${myInfoStore?.nickName?.substring(0, 10)}...` : myInfoStore?.nickName}
                 </Box>
-                <Box
-                  className={"fs-14-regular light"}
-                >{`${currentWallet?.substring(
-                  0,
-                  5
-                )}...${currentWallet?.substring(
-                  currentWallet?.length - 4
-                )}`}</Box>
+                <Box className={"fs-14-regular light"}>{`${currentWallet?.substring(0, 5)}...${currentWallet?.substring(currentWallet?.length - 4)}`}</Box>
               </Stack>
             </Stack>
           </Button>

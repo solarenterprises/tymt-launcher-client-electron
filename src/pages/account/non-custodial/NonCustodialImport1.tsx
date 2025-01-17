@@ -60,8 +60,6 @@ const NonCustodialImport1 = () => {
 
   const accountListStore: IAccountList = useSelector(getAccountList);
 
-  // const tempAccountStore: IAccount = useSelector(getTempAccount);
-  // const tempWalletStore: IWallet = useSelector(getTempWallet);
   // const saltTokenStore: ISaltToken = useSelector(getSaltToken);
   // const machineIdStore: IMachineId = useSelector(getMachineId);
 

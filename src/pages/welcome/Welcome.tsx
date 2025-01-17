@@ -51,7 +51,7 @@ const Welcome = () => {
         //   translate: true,
         // };
         // emit(TauriEventNames.NOTIFICATION, noti);
-        // navigate("/start");
+        navigate("/non-custodial-login-2");
         return;
       }
 
@@ -86,8 +86,7 @@ const Welcome = () => {
       dispatch(addAccountList(newAccount));
       dispatch(setWallet(newWalletAddress));
 
-      // navigate("/home");
-      navigate("/wallet");
+      navigate("/home");
 
       setLoading(false);
     } catch (err) {
