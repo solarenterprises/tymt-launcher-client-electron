@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,8 @@ import InputText from "./InputText";
 import { getKeccak256Hash } from "../../lib/helper/EncryptHelper";
 
 import { IAccount } from "../../types/AccountTypes";
+import { downloadFileToAppDir } from "../../lib/helper/DownloadHelper";
+import { District53 } from "../../lib/game/district 53/District53";
 
 // import AuthAPI from "../../lib/api/AuthAPI";
 
@@ -58,7 +60,11 @@ const LoginAccountForm = () => {
   // }, [machineIdStore]);
 
   const isGuest: boolean = useMemo(() => {
-    if (accountStore?.nickName === "Guest" && accountStore?.password === getKeccak256Hash("")) return true;
+    if (
+      accountStore?.nickName === "Guest" &&
+      accountStore?.password === getKeccak256Hash("")
+    )
+      return true;
     return false;
   }, [accountStore]);
 
@@ -103,20 +109,24 @@ const LoginAccountForm = () => {
         .test("equals", t("cca-60_wrong-password"), (value) => {
           return getKeccak256Hash(value) === accountStoreRef?.current?.password;
         })
-        .test("password-requirements", t("cca-66_password-must-be"), (value) => {
-          if (!value) {
-            return false;
+        .test(
+          "password-requirements",
+          t("cca-66_password-must-be"),
+          (value) => {
+            if (!value) {
+              return false;
+            }
+            const checks = [
+              /[a-z]/.test(value), // Check for lowercase letter
+              /[A-Z]/.test(value), // Check for uppercase letter
+              /\d/.test(value), // Check for digit
+              /^[^\s'";\\]+$/.test(value), // Exclude spaces, single quotes, double quotes, semicolons, and backslashes
+              value.length >= 8, // Check for minimum length
+            ];
+            const passedConditions = checks.filter(Boolean).length;
+            return passedConditions >= 4;
           }
-          const checks = [
-            /[a-z]/.test(value), // Check for lowercase letter
-            /[A-Z]/.test(value), // Check for uppercase letter
-            /\d/.test(value), // Check for digit
-            /^[^\s'";\\]+$/.test(value), // Exclude spaces, single quotes, double quotes, semicolons, and backslashes
-            value.length >= 8, // Check for minimum length
-          ];
-          const passedConditions = checks.filter(Boolean).length;
-          return passedConditions >= 4;
-        })
+        )
         .required(t("cca-63_required")),
     }),
     onSubmit: async () => {
@@ -148,6 +158,24 @@ const LoginAccountForm = () => {
     },
   });
 
+  const [downloadProgress, setDownloadProgress] = useState(0);
+  const [downloadSuccess, setDownloadSuccess] = useState(undefined);
+
+  useEffect(() => {
+    window.electronAPI.onDownloadProgress((progress: number) => {
+      console.log({ progress });
+      setDownloadProgress(progress);
+    });
+    window.electronAPI.onDownloadComplete(() => {
+      alert("success");
+      setDownloadSuccess(true);
+    });
+    window.electronAPI.onDownloadFailed(() => {
+      alert("failed");
+      setDownloadSuccess(false);
+    });
+  }, []);
+
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
@@ -163,14 +191,51 @@ const LoginAccountForm = () => {
                   value={formik.values.password}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.touched.password && formik.errors.password ? true : false}
+                  error={
+                    formik.touched.password && formik.errors.password
+                      ? true
+                      : false
+                  }
                 />
-                {formik.touched.password && formik.errors.password && <Box className={"fs-16-regular red"}>{formik.errors.password}</Box>}
+                {formik.touched.password && formik.errors.password && (
+                  <Box className={"fs-16-regular red"}>
+                    {formik.errors.password}
+                  </Box>
+                )}
               </Stack>
-              <AccountNextButton isSubmit={true} text={t("ncca-7_next")} disabled={formik.touched.password && formik.errors.password ? true : false} />
+              <AccountNextButton
+                isSubmit={true}
+                text={t("ncca-7_next")}
+                disabled={
+                  formik.touched.password && formik.errors.password
+                    ? true
+                    : false
+                }
+              />
+              <AccountNextButton
+                isSubmit={false}
+                text={
+                  downloadProgress !== 0
+                    ? `Downloading... (${downloadProgress.toFixed(2)}%)`
+                    : downloadSuccess === undefined
+                    ? "Download Test"
+                    : downloadSuccess === true
+                    ? "Download Success"
+                    : "Download Failed"
+                }
+                onClick={() => {
+                  downloadFileToAppDir(District53);
+                }}
+                disabled={downloadProgress > 0 && downloadProgress < 100}
+              />
             </>
           )}
-          {isGuest && <AccountNextButton text={t("ncca-7_next")} onClick={handleGuestLogin} />}
+          {isGuest && (
+            <AccountNextButton
+              text={t("ncca-7_next")}
+              onClick={handleGuestLogin}
+            />
+          )}
         </Stack>
       </form>
     </>

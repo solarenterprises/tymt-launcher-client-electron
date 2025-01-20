@@ -8,3 +8,24 @@ import { contextBridge, ipcRenderer } from "electron";
 contextBridge.exposeInMainWorld("envVars", {
   getEnvVars: ipcRenderer.invoke("getEnvVars"),
 });
+
+contextBridge.exposeInMainWorld("electronAPI", {
+  // system info
+  getPlatform: () => ipcRenderer.invoke("getPlatform"),
+  getArch: () => ipcRenderer.invoke("getArch"),
+
+  // get path
+  getAppPath: () => ipcRenderer.invoke("getAppPath"),
+
+  // download file
+  downloadFile: (downloadLink: string, downloadPath: string) =>
+    ipcRenderer.invoke("download-file", { downloadLink, downloadPath }),
+  onDownloadProgress: (callback: (progress: number) => void) =>
+    ipcRenderer.on("download-progress", (event, progress) =>
+      callback(progress)
+    ),
+  onDownloadComplete: (callback: () => void) =>
+    ipcRenderer.on("download-complete", () => callback()),
+  onDownloadFailed: (callback: () => void) =>
+    ipcRenderer.on("download-failed", () => callback()),
+});
