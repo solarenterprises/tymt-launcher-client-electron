@@ -9,3 +9,7 @@ export interface IWalletSetting {
   feeLevel: string;
   feeUSD: string;
 }
+
+export interface INotificationSetting {
+  status: string; // active, idle, do-not-disturb
+}

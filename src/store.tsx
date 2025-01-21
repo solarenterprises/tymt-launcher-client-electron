@@ -10,14 +10,16 @@ import mnemonicReducer from "./store/MnemonicSlice";
 
 // Wallet
 import walletReducer from "./store/WalletSlice";
-import currentCurrencyReducer from "./store/CurrentCurrencySlice";
 import reserveListReducer from "./store/ReserveListSlice";
 import balanceReducer from "./store/BalanceListSlice";
 import priceReducer from "./store/PriceListSlice";
+import currentCurrencyReducer from "./store/CurrentCurrencySlice";
+import currentChainReducer from "./store/CurrentChainSlice";
 // ~Wallet
 
 // Setting
 import walletSettingReducer from "./store/WalletSettingSlice";
+import notificationSettingReducer from "./store/NotificationSettingSlice";
 // ~Setting
 
 // const blacklistActionTypes = ["intercomsupport/setChatMounted", "intercomsupport/setMountedTrue", "intercomsupport/setMountedFalse"];
@@ -40,14 +42,16 @@ const store = configureStore({
 
     // Wallet
     wallet: walletReducer,
-    currentCurrency: currentCurrencyReducer,
     reserveList: reserveListReducer,
     balanceList: balanceReducer,
     priceList: priceReducer,
+    currentCurrency: currentCurrencyReducer,
+    currentChain: currentChainReducer,
     // ~Wallet
 
     // Setting
     walletSetting: walletSettingReducer,
+    notificationSetting: notificationSettingReducer,
     // ~Setting
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(stateSyncMiddleware),

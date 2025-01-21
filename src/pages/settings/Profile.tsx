@@ -54,10 +54,7 @@ const Profile = ({ view, setView }: propsType) => {
     .required(t("cca-63_required"))
     .min(3, t("ncca-59_too-short"))
     .max(50, t("ncca-60_too-long"))
-    .matches(
-      /^[a-zA-Z0-9_ !@#$%^&*()\-+=,.?]+$/,
-      t("ncca-61_invalid-characters")
-    );
+    .matches(/^[a-zA-Z0-9_ !@#$%^&*()\-+=,.?]+$/, t("ncca-61_invalid-characters"));
 
   // const updateAccount = useCallback(async () => {
   //   try {
@@ -146,72 +143,32 @@ const Profile = ({ view, setView }: propsType) => {
             // onChange={uploadImg}
             style={{ display: "none" }}
           />
-          <Stack
-            flexDirection={"row"}
-            justifyContent={"flex-start"}
-            gap={"10px"}
-            alignItems={"center"}
-            textAlign={"center"}
-            sx={{ padding: "20px" }}
-          >
-            <Button
-              className={"setting-back-button"}
-              onClick={() => setView("general")}
-            >
+          <Stack flexDirection={"row"} justifyContent={"flex-start"} gap={"10px"} alignItems={"center"} textAlign={"center"} sx={{ padding: "20px" }}>
+            <Button className={"setting-back-button"} onClick={() => setView("general")}>
               <Box component={"img"} src={backIcon}></Box>
             </Button>
             <Box className="fs-h3 white">{t("set-10_profile")}</Box>
           </Stack>
           <Divider variant="middle" sx={{ backgroundColor: "#FFFFFF1A" }} />
           <Stack direction={"column"}>
-            <Stack
-              direction={"row"}
-              justifyContent={"space-between"}
-              textAlign={"center"}
-              padding={"30px"}
-            >
-              <Stack
-                direction={"row"}
-                justifyContent={"center"}
-                textAlign={"right"}
-                alignItems={"center"}
-                gap={"10px"}
-              >
+            <Stack direction={"row"} justifyContent={"space-between"} textAlign={"center"} padding={"30px"}>
+              <Stack direction={"row"} justifyContent={"center"} textAlign={"right"} alignItems={"center"} gap={"10px"}>
                 <Box className="center-align">
                   {/* <img src={avatar} /> */}
-                  <Avatar
-                    onlineStatus={true}
-                    // url={myInfoStore?.avatar}
-                    size={92}
-                    // status={
-                    //   !notificationStore.alert ? "donotdisturb" : "online"
-                    // }
-                  />
+                  <Avatar onlineStatus={true} url="" size={92} status="active" />
                 </Box>
                 <Box className="fs-h5 white">{t("set-68_change-avatar")}</Box>
               </Stack>
               <Box className="center-align">
-                <Box
-                  sx={{ display: "flex" }}
-                  className="common-btn"
-                  onClick={UploadFile}
-                >
-                  <Tooltip
-                    title={t("set-82_edit")}
-                    classes={{ tooltip: classname.tooltip }}
-                  >
+                <Box sx={{ display: "flex" }} className="common-btn" onClick={UploadFile}>
+                  <Tooltip title={t("set-82_edit")} classes={{ tooltip: classname.tooltip }}>
                     <img src={editIcon} style={{ cursor: "pointer" }} />
                   </Tooltip>
                 </Box>
               </Box>
             </Stack>
             <Divider variant="middle" sx={{ backgroundColor: "#FFFFFF1A" }} />
-            <Stack
-              direction={"column"}
-              justifyContent={"flex-start"}
-              textAlign={"center"}
-              padding={"20px"}
-            >
+            <Stack direction={"column"} justifyContent={"flex-start"} textAlign={"center"} padding={"20px"}>
               <Box className="fs-h4 white">
                 <InputText
                   id="change-nickname"
@@ -230,11 +187,7 @@ const Profile = ({ view, setView }: propsType) => {
                 {t("set-70_nickname-detail")}
               </Box>
             </Stack>
-            <Box
-              padding={"20px"}
-              width={"90%"}
-              sx={{ position: "absolute", bottom: "30px" }}
-            >
+            <Box padding={"20px"} width={"90%"} sx={{ position: "absolute", bottom: "30px" }}>
               <Button
                 fullWidth
                 className={classname.action_button}
