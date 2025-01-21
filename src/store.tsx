@@ -4,6 +4,8 @@ import { createStateSyncMiddleware, initMessageListener } from "redux-state-sync
 // Auth
 import accountReducer from "./store/AccountSlice";
 import accountListReducer from "./store/AccountListSlice";
+import loginReducer from "./store/LoginSlice";
+import mnemonicReducer from "./store/MnemonicSlice";
 // ~Auth
 
 // Wallet
@@ -32,6 +34,8 @@ const store = configureStore({
     // Auth
     account: accountReducer,
     accountList: accountListReducer,
+    login: loginReducer,
+    mnemonic: mnemonicReducer,
     // ~Auth
 
     // Wallet

@@ -8,11 +8,11 @@ import CompleteButton from "./CompleteButton";
 // import Avatar from "../home/Avatar";
 
 import { getAccount, setAccount } from "../../store/AccountSlice";
+import { setLogin } from "../../store/LoginSlice";
 
 import { getKeccak256Hash } from "../../lib/helper/EncryptHelper";
 
 import { IAccount } from "../../types/AccountTypes";
-// import { setLogin } from "../../features/account/LoginSlice";
 
 export interface IPropsProfileCard {
   account: IAccount;
@@ -27,9 +27,8 @@ const ProfileCard = ({ account }: IPropsProfileCard) => {
 
   const handleClick = useCallback(() => {
     dispatch(setAccount(account));
-
     if (account?.uid !== accountStore?.uid) {
-      // dispatch(setLogin(false));
+      dispatch(setLogin(false));
     }
   }, [accountStore]);
 

@@ -45,8 +45,8 @@ root.render(
           <Route path="/non-custodial-login-2" element={<NonCustodialLogIn2 />} />
           <Route path="/non-custodial-signup-2" element={<NonCustodialSignUp2 />} />
           <Route path="/non-custodial-signup-3" element={<NonCustodialSignUp3 />} />
-          <Route path="/non-custodial-signup-4" element={<NonCustodialSignUp4 />} />
-          <Route path="/non-custodial-import-1" element={<NonCustodialImport1 />} />
+          <Route path="/non-custodial-signup-4/:mode" element={<NonCustodialSignUp4 />} />
+          <Route path="/non-custodial-import-1/:mode" element={<NonCustodialImport1 />} />
           <Route path="/confirm-information/:mode" element={<ConfirmInformation />} />
           <Route path="/home" element={<Homepage />} />
           <Route path="/wallet" element={<Wallet />} />

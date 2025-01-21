@@ -16,3 +16,11 @@ export interface ISaltToken {
   salt: string;
   token: string;
 }
+
+export interface IMnemonic {
+  mnemonic: string;
+}
+
+export interface ILogin {
+  isLoggedIn: boolean;
+}
