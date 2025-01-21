@@ -242,7 +242,15 @@ ipcMain.handle("getPlatform", async () => process.platform);
 
 ipcMain.handle("getArch", async () => process.arch);
 
-ipcMain.handle("getAppPath", () => app.getPath("appData"));
+ipcMain.handle("getAppPath", () => {
+  const appPath = `${app.getPath("appData")}/tymtLauncher`;
+
+  if (!fs.existsSync(appPath)) {
+    fs.mkdirSync(appPath, { recursive: true });
+  }
+
+  return appPath;
+});
 
 ipcMain.handle(
   "download-file",
