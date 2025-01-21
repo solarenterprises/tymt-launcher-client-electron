@@ -37,7 +37,7 @@ const ComingGameCard = ({ game }: IPropsComingGameCard) => {
             },
           }}
           onClick={() => {
-            navigate(`/coming/${game._id}`);
+            navigate(`/game/${game._id}`);
           }}
         >
           <Box

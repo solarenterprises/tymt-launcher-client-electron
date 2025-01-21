@@ -1,6 +1,6 @@
 import { Box, Stack, Modal, Fade } from "@mui/material";
 import closeIcon from "../../assets/setting/XIcon.svg";
-import logo from "../../assets/main/FoxheadComingsoon.png";
+import logo from "../../assets/main/FoxHeadComingSoon.png";
 // import { openLink } from "../../lib/helper/DownloadHelper";
 import { useTranslation } from "react-i18next";
 

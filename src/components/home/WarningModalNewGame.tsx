@@ -8,7 +8,7 @@ import { Box, Stack, Modal, Fade } from "@mui/material";
 type IGame = any;
 
 import closeIcon from "../../assets/setting/XIcon.svg";
-import logo from "../../assets/main/FoxheadComingsoon.png";
+import logo from "../../assets/main/FoxHeadComingSoon.png";
 // import { emit } from "@tauri-apps/api/event";
 // import { TauriEventNames } from "../../consts/TauriEventNames";
 // import { INotificationParams } from "../../types/NotificationTypes";

@@ -9,7 +9,7 @@ import Releasebtn from "../../components/store/Releasebtn";
 import Platformbtn from "../../components/store/Platformbtn";
 import Genrebtn from "../../components/store/Genre";
 import Rankingbtn from "../../components/store/Ranking";
-import StoreGameItems from "../../components/store/StoreGameItems";
+import StoreGameItems from "../../components/game/StoreGameItems";
 import TypeBtn from "../../components/store/TypeBtn";
 
 const Store = () => {

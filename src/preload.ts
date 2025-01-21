@@ -3,8 +3,8 @@
 
 import { contextBridge, ipcRenderer } from "electron";
 
-// Expose a method to receive the environment variable
-
-contextBridge.exposeInMainWorld("envVars", {
-  getEnvVars: ipcRenderer.invoke("getEnvVars"),
+contextBridge.exposeInMainWorld("electronAPI", {
+  onCpuInfo: (callback: (cpuInfo: { arch: string; type: string }) => void) => {
+    ipcRenderer.on("cpu-info", (_, cpuInfo) => callback(cpuInfo));
+  },
 });

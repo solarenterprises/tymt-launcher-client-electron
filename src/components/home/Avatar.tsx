@@ -1,18 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-// import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 
-// import { tymt_avatar_url } from "../../configs";
+import { CONFIG_TYMT_AVATAR_URL } from "../../config/MainConfig";
 
 import { Tooltip, Stack, Box } from "@mui/material";
 
-// import { ICurrentChatroomMember } from "../../features/chat/CurrentChatroomMembersSlice";
-// import { getRenderTime, IRenderTime } from "../../features/account/RenderTimeSlice";
-// import { getCurrentChain } from "../../features/wallet/CurrentChainSlice";
+import { getCurrentChain } from "../../store/CurrentChainSlice";
 
-// import UserAPI from "../../lib/api/UserAPI";
+import { getSupportChainByName } from "../../lib/helper/WalletHelper";
 
-// import { getSupportChainByName } from "../../lib/helper/WalletHelper";
+import { ICurrentChain } from "../../types/ChainTypes";
 
 import onlineframe from "../../assets/chat/OnlineFrame.svg";
 import offlineframe from "../../assets/chat/OfflineFrame.svg";
@@ -20,17 +18,20 @@ import donotdisturbframe from "../../assets/chat/DoNotDisturbFrame.svg";
 import mask from "../../assets/account/Mask.png";
 import accountIcon from "../../assets/wallet/Account.svg";
 
-// import { ICurrentChain, ISupportChain } from "../../types/walletTypes";
+export interface IPropsAvatar {
+  url: string;
+  size: number;
+  onlineStatus: boolean;
+  status: string;
+  isChain?: boolean;
+  userid?: string;
+}
 
-const Avatar = ({ size, url, userid, onlineStatus, ischain, status }: any) => {
+const Avatar = ({ size, url, userid, onlineStatus, isChain, status }: IPropsAvatar) => {
   const { t } = useTranslation();
 
-  // const renderTimeStore: IRenderTime = useSelector(getRenderTime);
-  // const currentChainStore: ICurrentChain = useSelector(getCurrentChain);
-
-  // const currentSupportChain: ISupportChain = useMemo(() => getSupportChainByName(currentChainStore?.chain), [currentChainStore]);
-
-  // const [user, setUser] = useState<ICurrentChatroomMember>();
+  const currentChainStore: ICurrentChain = useSelector(getCurrentChain);
+  const currentSupportChain = useMemo(() => getSupportChainByName(currentChainStore?.chain), [currentChainStore]);
 
   useEffect(() => {
     // if (userid) {
@@ -61,9 +62,9 @@ const Avatar = ({ size, url, userid, onlineStatus, ischain, status }: any) => {
             }}
           >
             <Box className="fs-16-regular white">
-              {onlineStatus && status === "online"
+              {onlineStatus && status === "active"
                 ? t("tol-4_online")
-                : onlineStatus && status === "donotdisturb"
+                : onlineStatus && status === "do-not-disturb"
                 ? t("tol-6_donotdisturb")
                 : onlineStatus && status === undefined
                 ? t("tol-4_online")
@@ -114,7 +115,7 @@ const Avatar = ({ size, url, userid, onlineStatus, ischain, status }: any) => {
           )}
           {onlineStatus === true && (
             <img
-              src={status === "donotdisturb" ? donotdisturbframe : onlineframe}
+              src={status === "do-not-disturb" ? donotdisturbframe : onlineframe}
               style={{
                 position: "absolute",
                 width: "100%",
@@ -127,10 +128,9 @@ const Avatar = ({ size, url, userid, onlineStatus, ischain, status }: any) => {
               }}
             />
           )}
-          {ischain && (
+          {isChain && (
             <img
-              // src={currentSupportChain?.chain?.logo}
-              src=""
+              src={currentSupportChain?.native?.logo}
               style={{
                 position: "absolute",
                 width: "18px",
@@ -143,11 +143,6 @@ const Avatar = ({ size, url, userid, onlineStatus, ischain, status }: any) => {
           )}
           <Box
             component={"img"}
-            // src={
-            //   userid
-            //     ? `${tymt_avatar_url}/public/upload/avatars/${user?.avatar ? user?.avatar : "default.png"}?${renderTimeStore.renderTime}`
-            //     : `${tymt_avatar_url}/public/upload/avatars/${url ? url : "default.png"}?${renderTimeStore.renderTime}`
-            // }
             src=""
             sx={{
               position: "absolute",

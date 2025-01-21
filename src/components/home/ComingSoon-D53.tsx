@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Grid, Box } from "@mui/material";
-import foxhead from "../../assets/main/FoxheadComingsoon.png";
+import foxhead from "../../assets/main/FoxHeadComingSoon.png";
 import ellipse from "../../assets/main/Ellipse.svg";
 
 import ComingGameCard from "./ComingGameCard";

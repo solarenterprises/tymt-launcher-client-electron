@@ -1,46 +1,25 @@
-import { useNavigate, useLocation } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { useCallback, useMemo, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { debounce } from "lodash";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import {
-  Grid,
-  Button,
-  TextField,
-  InputAdornment,
-  Stack,
-  Box,
-  Tooltip,
-} from "@mui/material";
+import { Grid, Button, TextField, InputAdornment, Stack, Box, Tooltip } from "@mui/material";
 
-// import Chatindex from "../../pages/chat";
-// import Alertindex from "../../pages/alert";
-import Settings from "../../pages/settings";
-import ComingModal from "../modals/ComingModal";
-import CardModal from "../modals/CardModal";
-
-// import { selectNotification } from "../../features/settings/NotificationSlice";
-// import { getAlertList } from "../../features/alert/AlertListSlice";
-// import { getMyInfo } from "../../features/account/MyInfoSlice";
-// import { getCurrentChain } from "../../features/wallet/CurrentChainSlice";
-// import { getWallet } from "../../features/wallet/WalletSlice";
-
-// import { getCurrentLogo } from "../../features/home/Tymtlogo";
-// import { getCurrentPage, setCurrentPage } from "../../features/home/Navigation";
-
-// import { IAlertList } from "../../types/alertTypes";
-// import { IMyInfo } from "../../types/chatTypes";
-// import { notificationType } from "../../types/settingTypes";
-// import { PaginationType } from "../../types/homeTypes";
-// import { TymtlogoType } from "../../types/homeTypes";
-// import { ICurrentChain, IWallet } from "../../types/walletTypes";
-
-// import { getCurrentChainWalletAddress } from "../../lib/helper/WalletHelper";
-
-import Back from "./Back";
 import Avatar from "./Avatar";
+import Back from "./Back";
+import Settings from "../../pages/settings";
+import ComingModal from "../modal/ComingModal";
+import CardModal from "../modal/CardModal";
+
+import { getAccount } from "../../store/AccountSlice";
+import { getWallet } from "../../store/WalletSlice";
+import { getNotificationSetting } from "../../store/NotificationSettingSlice";
+
+import { IAccount } from "../../types/AccountTypes";
+import { IWalletAddresses } from "../../types/WalletTypes";
+import { INotificationSetting } from "../../types/SettingTypes";
+
 import newlogo from "../../assets/main/NewLogo.png";
 import newlogohead from "../../assets/main/NewLogoHead.png";
 import searchlg from "../../assets/main/SearchLg.svg";
@@ -61,16 +40,9 @@ const theme = createTheme({
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  // const notification: notificationType = useSelector(selectNotification);
-  const notification = { alert: "" };
-  // const currentpage: PaginationType = useSelector(getCurrentPage);
-  // const currentlogo: TymtlogoType = useSelector(getCurrentLogo);
   const currentlogo = { isDrawerExpanded: true };
-  // const alertListStore: IAlertList = useSelector(getAlertList);
-  // const myInfoStore: IMyInfo = useSelector(getMyInfo);
   const myInfoStore = {
     userid: "123",
     username: "test",
@@ -80,11 +52,10 @@ const Navbar = () => {
     status: "active",
     nickName: "test",
   };
-  // const walletStore: IWallet = useSelector(getWallet);
-  // const currentChainStore: ICurrentChain = useSelector(getCurrentChain);
 
-  // const currentWallet = useMemo(() => getCurrentChainWalletAddress(walletStore, currentChainStore?.chain), [walletStore, currentChainStore]);
-  const currentWallet = "0x0000000000000000000000000000000000000000";
+  const accountStore: IAccount = useSelector(getAccount);
+  const walletStore: IWalletAddresses = useSelector(getWallet);
+  const notificationSettingStore: INotificationSetting = useSelector(getNotificationSetting);
 
   const [showSetting, setShowSetting] = useState(false);
   const [showChat, setShowChat] = useState(false);
@@ -92,15 +63,6 @@ const Navbar = () => {
   const [value, setValue] = useState<string>("");
   const [cardModalOpen, setCardModalOpen] = useState<boolean>(false);
   const [coming, setComing] = useState<boolean>(false);
-
-  // const handleChange = useCallback(
-  //   (value) => {
-  //     navigate(`/store?key=${value}`);
-  //   },
-  //   [setValue, navigate]
-  // );
-
-  // const debouncedChangeHandler = useCallback(debounce(handleChange, 1000), [handleChange]);
 
   const setView = useCallback(
     (view: boolean) => {
@@ -139,46 +101,18 @@ const Navbar = () => {
   const handleAlarmLeave = (event: any) => {
     event.currentTarget.querySelector("path").setAttribute("stroke", "#AFAFAF");
   };
-  const handleMessageEnter = (event: any) => {
-    event.currentTarget.querySelector("path").setAttribute("stroke", "white");
-  };
-  const handleMessageLeave = (event: any) => {
-    event.currentTarget.querySelector("path").setAttribute("stroke", "#AFAFAF");
-  };
 
   return (
     <>
-      <Grid
-        item
-        width={"95%"}
-        className="navbar"
-        container
-        sx={{ backdropFilter: "blur(30px)" }}
-      >
+      <Grid item width={"95%"} className="navbar" container sx={{ backdropFilter: "blur(30px)" }}>
         {currentlogo.isDrawerExpanded === true && (
-          <img
-            src={newlogo}
-            alt={"tymtlogo-1"}
-            loading="lazy"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/home")}
-          />
+          <img src={newlogo} alt={"tymtlogo-1"} loading="lazy" style={{ cursor: "pointer" }} onClick={() => navigate("/home")} />
         )}
         {currentlogo.isDrawerExpanded === false && (
-          <img
-            src={newlogohead}
-            alt={"tymtlogo-2"}
-            loading="lazy"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/home")}
-          />
+          <img src={newlogohead} alt={"tymtlogo-2"} loading="lazy" style={{ cursor: "pointer" }} onClick={() => navigate("/home")} />
         )}
 
-        <Stack
-          flexDirection={"row"}
-          alignItems={"center"}
-          sx={{ position: "fixed", left: "20%" }}
-        >
+        <Stack flexDirection={"row"} alignItems={"center"} sx={{ position: "fixed", left: "20%" }}>
           {location.pathname.indexOf("home") === -1 && (
             <Back
               onClick={() => {
@@ -209,19 +143,8 @@ const Navbar = () => {
                           navigate(`/store`);
                         }}
                       >
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M17 7L7 17M7 7L17 17"
-                            stroke="white"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M17 7L7 17M7 7L17 17" stroke="white" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </Button>
                     )}
@@ -235,7 +158,6 @@ const Navbar = () => {
               }}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
-                  // console.log("Enter key pressed");
                   navigate(`/store?key=${value}`);
                 }
               }}
@@ -243,7 +165,6 @@ const Navbar = () => {
           </ThemeProvider>
         </Stack>
         <Grid item className="button_group">
-          {/* Metamask Navbar Button */}
           <Tooltip
             placement="top"
             title={
@@ -257,60 +178,7 @@ const Navbar = () => {
                   border: "1px solid rgb(71, 76, 76)",
                 }}
               >
-                <Box className="fs-16-regular white">{t("tol-9_metamask")}</Box>
-              </Stack>
-            }
-            PopperProps={{
-              sx: {
-                [`& .MuiTooltip-tooltip`]: {
-                  backgroundColor: "transparent",
-                  boxShadow: "none",
-                },
-              },
-            }}
-          >
-            <Button
-              className="button_navbar_common"
-              onClick={() => {
-                setCardModalOpen(true);
-              }}
-            >
-              <svg
-                onMouseEnter={handleCardEnter}
-                onMouseLeave={handleCardLeave}
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M22 10H2M2 8.2L2 15.8C2 16.9201 2 17.4802 2.21799 17.908C2.40973 18.2843 2.71569 18.5903 3.09202 18.782C3.51984 19 4.07989 19 5.2 19L18.8 19C19.9201 19 20.4802 19 20.908 18.782C21.2843 18.5903 21.5903 18.2843 21.782 17.908C22 17.4802 22 16.9201 22 15.8V8.2C22 7.0799 22 6.51984 21.782 6.09202C21.5903 5.7157 21.2843 5.40974 20.908 5.21799C20.4802 5 19.9201 5 18.8 5L5.2 5C4.0799 5 3.51984 5 3.09202 5.21799C2.7157 5.40973 2.40973 5.71569 2.21799 6.09202C2 6.51984 2 7.07989 2 8.2Z"
-                  stroke="#AFAFAF"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Button>
-          </Tooltip>
-          {/* ~Metamask Navbar Button */}
-
-          <Tooltip
-            placement="top"
-            title={
-              <Stack
-                spacing={"10px"}
-                sx={{
-                  marginBottom: "-20px",
-                  backgroundColor: "rgb(49, 53, 53)",
-                  padding: "6px 8px",
-                  borderRadius: "32px",
-                  border: "1px solid rgb(71, 76, 76)",
-                }}
-              >
-                <Box className="fs-16-regular white">
-                  {t("tol-8_solar-card")}
-                </Box>
+                <Box className="fs-16-regular white">{t("tol-8_solar-card")}</Box>
               </Stack>
             }
             PopperProps={{
@@ -374,8 +242,7 @@ const Navbar = () => {
             <Button
               className="button_navbar_common"
               onClick={() => {
-                // navigate("/wallet");
-                // dispatch(setCurrentPage({ ...currentpage, index: 3, page: "wallet" }));
+                navigate("/wallet");
               }}
             >
               <svg
@@ -451,126 +318,21 @@ const Navbar = () => {
               </svg>
             </Button>
           </Tooltip>
-          <Tooltip
-            placement="top"
-            title={
-              <Stack
-                spacing={"10px"}
-                sx={{
-                  marginBottom: "-20px",
-                  backgroundColor: "rgb(49, 53, 53)",
-                  padding: "6px 8px",
-                  borderRadius: "32px",
-                  border: "1px solid rgb(71, 76, 76)",
-                }}
-              >
-                <Box className="fs-16-regular white">{t("tol-3_chat")}</Box>
-              </Stack>
-            }
-            PopperProps={{
-              sx: {
-                [`& .MuiTooltip-tooltip`]: {
-                  backgroundColor: "transparent",
-                  boxShadow: "none",
-                },
-              },
-            }}
-          >
-            <Button
-              className="button_navbar_common"
-              onClick={() => {
-                // setComing(true);
-                setShowChat(!showChat);
-              }}
-              sx={{ position: "relative" }}
-            >
-              {/* {chatnotification.alert === true && (
-                <>
-                  <Box
-                    className={"fs-12-light"}
-                    sx={{
-                      color: "#52E1F2",
-                      border:
-                        "1px solid var(--Stroke-linear-Hover, rgba(255, 255, 255, 0.10))",
-                      borderRadius: "var(--Angle-Small, 16px)",
-                      background:
-                        "var(--bg-stroke-icon-button-bg-10, rgba(128, 128, 128, 0.10))",
-                      position: "absolute",
-                      bottom: "0px",
-                      right: "-15.5px",
-                      padding: "2px 3px 2px 3px",
-                      backdropFilter: "blur(50px)",
-                    }}
-                  >
-                    124
-                  </Box>
-                </>
-              )} */}
-
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                onMouseEnter={handleMessageEnter}
-                onMouseLeave={handleMessageLeave}
-              >
-                <path
-                  d="M7.5 12H7.51M12 12H12.01M16.5 12H16.51M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 13.1971 3.23374 14.3397 3.65806 15.3845C3.73927 15.5845 3.77988 15.6845 3.798 15.7653C3.81572 15.8443 3.8222 15.9028 3.82221 15.9839C3.82222 16.0667 3.80718 16.1569 3.77711 16.3374L3.18413 19.8952C3.12203 20.2678 3.09098 20.4541 3.14876 20.5888C3.19933 20.7067 3.29328 20.8007 3.41118 20.8512C3.54589 20.909 3.73218 20.878 4.10476 20.8159L7.66265 20.2229C7.84309 20.1928 7.9333 20.1778 8.01613 20.1778C8.09715 20.1778 8.15566 20.1843 8.23472 20.202C8.31554 20.2201 8.41552 20.2607 8.61549 20.3419C9.6603 20.7663 10.8029 21 12 21ZM8 12C8 12.2761 7.77614 12.5 7.5 12.5C7.22386 12.5 7 12.2761 7 12C7 11.7239 7.22386 11.5 7.5 11.5C7.77614 11.5 8 11.7239 8 12ZM12.5 12C12.5 12.2761 12.2761 12.5 12 12.5C11.7239 12.5 11.5 12.2761 11.5 12C11.5 11.7239 11.7239 11.5 12 11.5C12.2761 11.5 12.5 11.7239 12.5 12ZM17 12C17 12.2761 16.7761 12.5 16.5 12.5C16.2239 12.5 16 12.2761 16 12C16 11.7239 16.2239 11.5 16.5 11.5C16.7761 11.5 17 11.7239 17 12Z"
-                  stroke="#AFAFAF"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Button>
-          </Tooltip>
-          <Button
-            className="button_navbar_profile"
-            onClick={() => setShowSetting(!showSetting)}
-          >
-            <Stack
-              direction={"row"}
-              alignItems={"center"}
-              marginLeft={"0px"}
-              justifyContent={"left"}
-              spacing={"8px"}
-              height={"32px"}
-            >
-              <Avatar
-                url={myInfoStore?.avatar}
-                size={32}
-                ischain={true}
-                onlineStatus={true}
-                status={!notification?.alert ? "donotdisturb" : "online"}
-              />
-              <Stack
-                direction={"column"}
-                width={"110px"}
-                alignItems={"flex-start"}
-              >
+          <Button className="button_navbar_profile" onClick={() => setShowSetting(!showSetting)}>
+            <Stack direction={"row"} alignItems={"center"} marginLeft={"0px"} justifyContent={"left"} spacing={"8px"} height={"32px"}>
+              <Avatar url={myInfoStore?.avatar} size={32} isChain={true} onlineStatus={true} status={notificationSettingStore?.status} />
+              <Stack direction={"column"} width={"110px"} alignItems={"flex-start"}>
                 <Box className={"fs-16-regular white"}>
-                  {myInfoStore?.nickName?.length > 11
-                    ? `${myInfoStore?.nickName?.substring(0, 10)}...`
-                    : myInfoStore?.nickName}
+                  {myInfoStore?.nickName?.length > 11 ? `${accountStore?.nickName?.substring(0, 10)}...` : accountStore?.nickName}
                 </Box>
-                <Box
-                  className={"fs-14-regular light"}
-                >{`${currentWallet?.substring(
-                  0,
-                  5
-                )}...${currentWallet?.substring(
-                  currentWallet?.length - 4
+                <Box className={"fs-14-regular light"}>{`${walletStore?.solar.substring(0, 5)}...${walletStore?.solar.substring(
+                  walletStore?.solar.length - 4
                 )}`}</Box>
               </Stack>
             </Stack>
           </Button>
         </Grid>
         <Settings view={showSetting} setView={setView} />
-        {/* {location.pathname.indexOf("chat") === -1 && (
-          <Chatindex viewChat={showChat} setViewChat={setChat} />
-        )} */}
-        {/* <Alertindex viewAlert={showAlert} setViewAlert={setAlert} /> */}
       </Grid>
       <ComingModal open={coming} setOpen={setComing} />
       <CardModal open={cardModalOpen} setOpen={setCardModalOpen} />
