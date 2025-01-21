@@ -50,7 +50,6 @@ const InstallButton = ({ game }: IPropsInstallButton) => {
     //   openLink(externalUrl);
     //   return;
     // }
-
     // if (installed) {
     //   if (game?._id === District53?._id) setD53ModalView(true);
     //   else setModalView(true);
@@ -75,9 +74,7 @@ const InstallButton = ({ game }: IPropsInstallButton) => {
     //       game: game,
     //     };
     //     emit(TauriEventNames.GAME_DOWNLOAD, noti_1);
-
     //     const downloadable = await downloadAndInstallNewGame(game);
-
     //     if (!downloadable) {
     //       const noti_1: INotificationGameDownloadParams = {
     //         status: "failed",
@@ -102,7 +99,6 @@ const InstallButton = ({ game }: IPropsInstallButton) => {
     //   if (!fullPath) setIsSupporting(false);
     //   else setIsSupporting(true);
     // };
-
     // checkSupport();
   }, [game]);
 
@@ -110,9 +106,7 @@ const InstallButton = ({ game }: IPropsInstallButton) => {
     // const checkInstalled = async (game: IGame) => {
     //   setInstalled(await isInstalled(game));
     // };
-
     // let intervalId = setInterval(() => checkInstalled(game), 1 * 1e3);
-
     // return () => {
     //   if (intervalId) clearInterval(intervalId);
     // };

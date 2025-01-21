@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Grid } from "@mui/material";
 
@@ -10,11 +10,18 @@ import ComingsoonD53 from "../../components/home/ComingSoon-D53";
 import District53Intro from "../../components/home/District53Intro";
 import RecentlyAddedGames from "../../components/home/RecentlyAddedGames";
 import UpdateModal from "../../components/home/UpdateModal";
-import AnimatedComponent from "../../components/AnimatedComponent";
+import AnimatedComponent from "../../components/home/AnimatedComponent";
 
 const Homepage = () => {
   const [image, setImage] = useState<string>(CONST_GAME_DISTRICT53?.imageUrl);
   const [updateModal, setUpdateModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    window.electronAPI.onCpuInfo((cpuInfo) => {
+      console.log("CPU Architecture:", cpuInfo.arch);
+      console.log("CPU Type:", cpuInfo.type);
+    });
+  }, []);
 
   return (
     <>

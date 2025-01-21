@@ -10,7 +10,7 @@ import { Grid, Box, Stack, Tooltip } from "@mui/material";
 import { CONST_GAME_DISTRICT53 } from "../../const/games/district53/District53";
 
 import D53Modal from "./D53Modal";
-import InstallButton from "../store/InstallButton";
+import InstallButton from "../game/InstallButton";
 
 import homeStyles from "../../styles/homeStyles";
 import districteffect from "../../assets/main/DistrictEffect.svg";
@@ -91,7 +91,7 @@ const District53Intro = ({ setImage }: IPropsDistrict53Intro) => {
               cursor: "pointer",
             }}
             onClick={() => {
-              // navigate(`/coming/${District53?._id}`);
+              navigate(`/game/${CONST_GAME_DISTRICT53?._id}`);
             }}
           >
             {t("hom-5_district53")}

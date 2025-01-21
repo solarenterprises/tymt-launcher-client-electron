@@ -26,6 +26,7 @@ import ConfirmInformation from "./pages/account/ConfirmInformation";
 
 // Home
 import Homepage from "./pages/main/Homepage";
+import GameOverview from "./pages/main/GameOverview";
 // ~Home
 
 //Wallet
@@ -54,6 +55,7 @@ root.render(
           <Route path="/confirm-information/:mode" element={<ConfirmInformation />} />
           <Route path="/" element={<HomeLayout />}>
             <Route path="/home" element={<Homepage />} />
+            <Route path="/game/:gameid" element={<GameOverview />} />
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/wallet/vote" element={<WalletVote />} />
           </Route>

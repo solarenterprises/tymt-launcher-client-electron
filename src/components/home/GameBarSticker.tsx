@@ -1,20 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { Grid, Button, Box, Stack } from "@mui/material";
 
-import { COSNT_GAME_LIST } from "../../const/games/GameConsts";
+import { CONST_GAME_LIST } from "../../const/games/GameConsts";
 
 const GameBarSticker = ({ image }: any) => {
   const navigate = useNavigate();
 
   return (
     <>
-      {COSNT_GAME_LIST?.map((game, index) => (
+      {CONST_GAME_LIST?.map((game, index) => (
         <Grid item key={index}>
           <Button
             className="button_gamecontent"
             key={game?.project_name}
             onClick={() => {
-              navigate(`/coming/${game?._id}`);
+              navigate(`/game/${game?._id}`);
             }}
           >
             <Stack direction={"row"} alignItems={"center"} width={"100%"}>

@@ -3,10 +3,10 @@ import { useTranslation } from "react-i18next";
 
 import { Grid, Box } from "@mui/material";
 
-import { COSNT_GAME_LIST } from "../../const/games/GameConsts";
+import { CONST_GAME_LIST } from "../../const/games/GameConsts";
 
-import AnimatedComponent from "../AnimatedComponent";
-import StoreGameCard from "../store/StoreGameCard";
+import AnimatedComponent from "./AnimatedComponent";
+import StoreGameCard from "../game/StoreGameCard";
 
 const RecentlyAddedGames = () => {
   const { t } = useTranslation();
@@ -20,7 +20,7 @@ const RecentlyAddedGames = () => {
           </Box>
         </Grid>
         <Grid container sx={{ width: "100%", marginTop: "0px" }} spacing={"32px"}>
-          {COSNT_GAME_LIST?.map((game, index) => (
+          {CONST_GAME_LIST?.map((game, index) => (
             <Grid item key={index}>
               <AnimatedComponent>
                 <StoreGameCard game={game} isComing={false} />

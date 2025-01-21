@@ -51,7 +51,7 @@ const StoreGameCard = ({ game, isComing }: IPropsStoreGameCard) => {
             },
           }}
           onClick={() => {
-            navigate(`/coming/${game?._id}`);
+            navigate(`/game/${game?._id}`);
           }}
         >
           {isComing && (
