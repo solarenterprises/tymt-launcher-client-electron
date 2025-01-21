@@ -28,4 +28,18 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.on("download-complete", () => callback()),
   onDownloadFailed: (callback: () => void) =>
     ipcRenderer.on("download-failed", () => callback()),
+
+  // extract & install
+  unzipFile: (fileLocation: string, installDir: string) =>
+    ipcRenderer.invoke("unzip-file", { fileLocation, installDir }),
+  moveAppImageLinux: (fileLocation: string, installDir: string) =>
+    ipcRenderer.invoke("move-app-image-linux", { fileLocation, installDir }),
+  unTarBz2Macos: (fileLocation: string, installDir: string) =>
+    ipcRenderer.invoke("un-tar-bz2-macos", { fileLocation, installDir }),
+  setPermission: (executablePath: string) =>
+    ipcRenderer.invoke("set-permission", { executablePath }),
+
+  // delete file
+  deleteFile: (filePath: string) =>
+    ipcRenderer.invoke("delete-file", { filePath }),
 });

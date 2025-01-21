@@ -1,8 +1,4 @@
-// import { app } from "electron";
-import os from "os";
-
 // import tymtStorage from "../storage/tymtStorage";
-// import { District53 } from "../../game/district 53/District53";
 
 import {
   // CONFIG_LOCAL_SERVER_PORT,
@@ -51,7 +47,7 @@ type IGame = any;
 //             break;
 //         }
 //         break;
-//       case "windows":
+//       case "win32":
 //         switch (gameExtension) {
 //           case "exe":
 //             await runUrlArgs(fullExecutablePath, []);
@@ -61,7 +57,7 @@ type IGame = any;
 //             break;
 //         }
 //         break;
-//       case "macos":
+//       case "darwin":
 //         switch (gameExtension) {
 //           case "":
 //             await runUrlArgs(fullExecutablePath, []);
@@ -76,62 +72,6 @@ type IGame = any;
 //     return true;
 //   } catch (err) {
 //     // console.error("Failed to runNewGame: ", err);
-//     return false;
-//   }
-// };
-
-// export const runD53 = async (serverIp: string, autoMode: boolean) => {
-//   try {
-//     const fullExePath: string = await getFullExecutablePathNewGame(District53);
-//     const d53_server = serverIp.split(":")[0];
-//     const d53_port = serverIp.split(":")[1];
-//     const saltTokenStore: ISaltToken = JSON.parse(tymtStorage.get(`saltToken`));
-//     const token = saltTokenStore.token;
-//     const launcherUrl = `http://localhost:${CONFIG_LOCAL_SERVER_PORT}`;
-
-//     if (!fullExePath || !d53_server || !d53_port || !token || !launcherUrl) {
-//       // console.log(`Failed to runD53: fullExePath ${fullExePath}, d53_server ${d53_server}, d53_port ${d53_port}, token ${token}, launcherUrl ${launcherUrl}`);
-//       return false;
-//     }
-
-//     const platform = await type();
-//     let args: string[] = [];
-
-//     switch (platform) {
-//       case "linux":
-//         args = [
-//           `--appimage-extract-and-run`,
-//           `--launcher_url`,
-//           launcherUrl,
-//           `--token`,
-//           token,
-//         ];
-//         break;
-//       case "windows":
-//         args = [`--launcher_url`, launcherUrl, `--token`, token];
-//         break;
-//       case "macos":
-//         args = [`--launcher_url`, launcherUrl, `--token`, token];
-//         break;
-//     }
-//     if (autoMode)
-//       args.push(`--address`, d53_server, `--port`, d53_port, `--go`);
-
-//     switch (platform) {
-//       case "linux":
-//         await runUrlArgs(fullExePath, args);
-//         break;
-//       case "windows":
-//         await runUrlArgs(fullExePath, args);
-//         break;
-//       case "macos":
-//         await runUrlArgs("open", ["-a", fullExePath, "--args", ...args]);
-//         break;
-//     }
-
-//     return true;
-//   } catch (err) {
-//     // console.log("Failed to runD53: ", err);
 //     return false;
 //   }
 // };
@@ -163,9 +103,10 @@ type IGame = any;
 
 export const downloadFileToAppDir = async (game: IGame) => {
   try {
-    // const downloadLink: string = await getDownloadLinkNewGame(game);
-    const downloadLink = "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-8.0.4-signed.msi"
+    const downloadLink: string = await getDownloadLinkNewGame(game);
     const downloadPath: string = await getDownloadFileFullPath(game);
+
+    console.log("downloadFileToAppDir", downloadLink, downloadPath);
 
     if (!downloadLink || !downloadPath) return false;
 
@@ -178,96 +119,80 @@ export const downloadFileToAppDir = async (game: IGame) => {
   }
 };
 
-// export const installGame = async (game: IGame) => {
-//   try {
-//     // console.log("installGame");
+export const installGame = async (game: IGame) => {
+  try {
+    console.log("installGame");
 
-//     const fileLocation: string = await getDownloadFileFullPath(game);
-//     const installDir: string = await getInstallDir(game);
-//     if (!fileLocation || !installDir) return false;
+    const fileLocation: string = await getDownloadFileFullPath(game);
+    const installDir: string = await getInstallDir(game);
+    if (!fileLocation || !installDir) return false;
 
-//     // console.log("fileLocation", fileLocation);
-//     // console.log("installDir", installDir);
+    console.log("fileLocation", fileLocation);
+    console.log("installDir", installDir);
 
-//     const fullExecutablePath = await getFullExecutablePathNewGame(game);
-//     const sourceExtension = (
-//       await getDownloadFileExtension(game)
-//     )?.toLocaleLowerCase();
-//     const platform = await type();
+    const fullExecutablePath = await getFullExecutablePathNewGame(game);
+    const sourceExtension = (
+      await getDownloadFileExtension(game)
+    )?.toLocaleLowerCase();
+    const platform = await window.electronAPI.getPlatform();
 
-//     switch (platform) {
-//       case "linux":
-//         switch (sourceExtension) {
-//           case "zip":
-//             await invoke("unzip_linux", {
-//               fileLocation: fileLocation,
-//               installDir: installDir,
-//             });
-//             break;
-//           case "appimage":
-//             await invoke("move_appimage_linux", {
-//               fileLocation: fileLocation,
-//               installDir: installDir,
-//             });
+    switch (platform) {
+      case "linux":
+        switch (sourceExtension) {
+          case "zip":
+            await window.electronAPI.unzipFile(fileLocation, installDir);
+            break;
+          case "appimage":
+            await window.electronAPI.moveAppImageLinux(
+              fileLocation,
+              installDir
+            );
+            break;
+        }
+        await window.electronAPI.setPermission(fullExecutablePath);
+        break;
+      case "win32":
+        switch (sourceExtension) {
+          case "zip":
+            console.log("unzipFile", fileLocation, installDir);
+            await window.electronAPI.unzipFile(fileLocation, installDir);
+            break;
+        }
+        break;
+      case "darwin":
+        switch (sourceExtension) {
+          case "zip":
+            await window.electronAPI.unzip(fileLocation, installDir);
+            break;
+          case "bz2":
+            await window.electronAPI.unTarBz2Macos(fileLocation, installDir);
+            break;
+        }
+        await window.electronAPI.setPermission(fullExecutablePath);
+        break;
+    }
 
-//             break;
-//         }
-//         await invoke("set_permission", {
-//           executablePath: fullExecutablePath,
-//         });
-//         break;
-//       case "windows":
-//         switch (sourceExtension) {
-//           case "zip":
-//             await invoke("unzip_windows", {
-//               fileLocation: fileLocation,
-//               installDir: installDir,
-//             });
-//             break;
-//         }
-//         break;
-//       case "macos":
-//         switch (sourceExtension) {
-//           case "zip":
-//             await invoke("unzip_macos", {
-//               fileLocation: fileLocation,
-//               installDir: installDir,
-//             });
-//             break;
-//           case "bz2":
-//             await invoke("untarbz2_macos", {
-//               fileLocation: fileLocation,
-//               installDir: installDir,
-//             });
-//             break;
-//         }
-//         await invoke("set_permission", {
-//           executablePath: fullExecutablePath,
-//         });
-//         break;
-//     }
+    return true;
+  } catch (err) {
+    // console.log("Failed to installGame: ", err);
+    return false;
+  }
+};
 
-//     return true;
-//   } catch (err) {
-//     // console.log("Failed to installGame: ", err);
-//     return false;
-//   }
-// };
+export const downloadAndInstallNewGame = async (game: IGame) => {
+  try {
+    // console.log("downloadAndInstallNewGame");
 
-// export const downloadAndInstallNewGame = async (game: IGame) => {
-//   try {
-//     // console.log("downloadAndInstallNewGame");
+    await downloadFileToAppDir(game);
+    await installGame(game);
+    await deleteDownloadFile(game);
 
-//     await downloadFileToAppDir(game);
-//     await installGame(game);
-//     await deleteDownloadFile(game);
-
-//     return true;
-//   } catch (err) {
-//     // console.error("Failed to downloadAndInstallNewGame: ", err);
-//     return false;
-//   }
-// };
+    return true;
+  } catch (err) {
+    // console.error("Failed to downloadAndInstallNewGame: ", err);
+    return false;
+  }
+};
 
 export const getDownloadLinkNewGame = async (game: IGame) => {
   try {
@@ -470,7 +395,7 @@ export const getDownloadFileNameNewGame = async (game: IGame) => {
 //             break;
 //         }
 //         break;
-//       case "windows":
+//       case "win32":
 //         switch (cpu) {
 //           case "arm":
 //             res = game?.releaseMeta?.platforms?.windows_arm64;
@@ -480,7 +405,7 @@ export const getDownloadFileNameNewGame = async (game: IGame) => {
 //             break;
 //         }
 //         break;
-//       case "macos":
+//       case "darwin":
 //         switch (cpu) {
 //           case "arm":
 //             res = game?.releaseMeta?.platforms?.darwin_arm64;
@@ -547,7 +472,7 @@ export const getDownloadFileNameNewGame = async (game: IGame) => {
 //       game?.releaseMeta?.platforms?.windows_amd64 ||
 //       game?.releaseMeta?.platforms?.windows_arm64
 //     ) {
-//       res = ["windows", ...res];
+//       res = ["win32", ...res];
 //     }
 //     return res;
 //   } catch (err) {
@@ -568,29 +493,29 @@ export const getDownloadFileFullPath = async (game: IGame) => {
   }
 };
 
-// export const getInstallDir = async (game: IGame) => {
-//   try {
-//     const res = `${window.Electron.app.getPath('appData')}/v${CONFIG_TYMT_VERSION}/games/${
-//       game?.project_name
-//     }`;
-//     // console.log("getInstallDir", res);
-//     return res;
-//   } catch (err) {
-//     // console.log("Failed to getInstallDir: ", err);
-//     return "";
-//   }
-// };
+export const getInstallDir = async (game: IGame) => {
+  try {
+    const res = `${await window.electronAPI.getAppPath()}/v${CONFIG_TYMT_VERSION}/games/${
+      game?.project_name
+    }`;
+    // console.log("getInstallDir", res);
+    return res;
+  } catch (err) {
+    // console.log("Failed to getInstallDir: ", err);
+    return "";
+  }
+};
 
-// export const getDownloadFileExtension = async (game: IGame) => {
-//   try {
-//     const fileName = await getDownloadFileNameNewGame(game);
-//     const parts = fileName.split(".");
-//     return parts.length > 1 ? parts.pop() || null : null;
-//   } catch (err) {
-//     // console.log("Failed to getDownloadFileExtension: ", err);
-//     return "";
-//   }
-// };
+export const getDownloadFileExtension = async (game: IGame) => {
+  try {
+    const fileName = await getDownloadFileNameNewGame(game);
+    const parts = fileName.split(".");
+    return parts.length > 1 ? parts.pop() || null : null;
+  } catch (err) {
+    // console.log("Failed to getDownloadFileExtension: ", err);
+    return "";
+  }
+};
 
 // export const getExecutableFileExtension = async (game: IGame) => {
 //   try {
@@ -603,21 +528,19 @@ export const getDownloadFileFullPath = async (game: IGame) => {
 //   }
 // };
 
-// export const deleteDownloadFile = async (game: IGame) => {
-//   try {
-//     const fullPath = await getDownloadFileFullPath(game);
-//     // console.log("deleteDownloadFile", fullPath);
+export const deleteDownloadFile = async (game: IGame) => {
+  try {
+    const fullPath = await getDownloadFileFullPath(game);
+    // console.log("deleteDownloadFile", fullPath);
 
-//     await invoke("delete_file", {
-//       fileLocation: fullPath,
-//     });
+    await window.electronAPI.deleteFile(fullPath);
 
-//     return true;
-//   } catch (err) {
-//     // console.log("Failed to deleteDownloadFile: ", err);
-//     return false;
-//   }
-// };
+    return true;
+  } catch (err) {
+    // console.log("Failed to deleteDownloadFile: ", err);
+    return false;
+  }
+};
 
 export const getOsCpu = async () => {
   try {
@@ -632,7 +555,7 @@ export const getOsCpu = async () => {
         resPlatform = "linux";
         break;
       case "win32":
-        resPlatform = "windows";
+        resPlatform = "win32";
         break;
       case "darwin":
         resPlatform = "darwin";

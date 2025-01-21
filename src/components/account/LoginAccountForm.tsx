@@ -21,7 +21,10 @@ import InputText from "./InputText";
 import { getKeccak256Hash } from "../../lib/helper/EncryptHelper";
 
 import { IAccount } from "../../types/AccountTypes";
-import { downloadFileToAppDir } from "../../lib/helper/DownloadHelper";
+import {
+  downloadFileToAppDir,
+  installGame,
+} from "../../lib/helper/DownloadHelper";
 import { District53 } from "../../lib/game/district 53/District53";
 
 // import AuthAPI from "../../lib/api/AuthAPI";
@@ -160,6 +163,13 @@ const LoginAccountForm = () => {
 
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [downloadSuccess, setDownloadSuccess] = useState(undefined);
+  const [installing, setInstalling] = useState(false);
+
+  const onInstallClick = useCallback(async () => {
+    setInstalling(true);
+    await installGame(District53);
+    setInstalling(false);
+  }, []);
 
   useEffect(() => {
     window.electronAPI.onDownloadProgress((progress: number) => {
@@ -227,6 +237,12 @@ const LoginAccountForm = () => {
                   downloadFileToAppDir(District53);
                 }}
                 disabled={downloadProgress > 0 && downloadProgress < 100}
+              />
+              <AccountNextButton
+                isSubmit={false}
+                text={installing ? "Installing..." : "Install Game"}
+                onClick={onInstallClick}
+                disabled={installing}
               />
             </>
           )}
