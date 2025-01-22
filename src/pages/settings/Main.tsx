@@ -36,12 +36,12 @@ import copyIcon from "../../assets/setting/CopyIcon.svg";
 import searchIcon from "../../assets/setting/SearchIcon.svg";
 import exitIcon from "../../assets/setting/ExitIcon.svg";
 
-export interface IMain {
+export interface IPropsMain {
   view: string;
   setView: (_: string) => void;
 }
 
-const Main = ({ view, setView }: IMain) => {
+const Main = ({ view, setView }: IPropsMain) => {
   const classname = SettingStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();

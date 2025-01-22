@@ -1,15 +1,23 @@
-import { Box, Button, Divider, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+
+import { Box, Button, Divider, Stack } from "@mui/material";
+
+import { getLanguageSetting } from "../../store/LanguageSettingSlice";
+
+import { ILanguageSetting } from "../../types/SettingTypes";
+
 import backIcon from "../../assets/setting/BackIcon.svg";
 import arrowImg from "../../assets/setting/ArrowRight.svg";
-// import { selectLanguage } from "../../features/settings/LanguageSlice";
-// import { propsType } from "../../types/settingTypes";
-type propsType = any;
 
-const General = ({ view, setView }: propsType) => {
+export interface IPropsGeneral {
+  view: string;
+  setView: (_: string) => void;
+}
+
+const General = ({ view, setView }: IPropsGeneral) => {
   const { t } = useTranslation();
-  // const language = useSelector(selectLanguage);
+  const languageSettingStore: ILanguageSetting = useSelector(getLanguageSetting);
 
   return (
     <>
@@ -31,8 +39,8 @@ const General = ({ view, setView }: propsType) => {
                 </Stack>
                 <Stack direction={"row"} justifyContent={"flex-end"} textAlign={"center"} gap={1}>
                   <Box className="fs-16-regular center-align gray">
-                    {/* {language == "en" && t("set-9_english")}
-                    {language == "jp" && t("set-17_japanese")} */}
+                    {languageSettingStore?.lang == "en" && t("set-9_english")}
+                    {languageSettingStore?.lang == "jp" && t("set-17_japanese")}
                   </Box>
                   <Box className="center-align">
                     <img src={arrowImg} />
