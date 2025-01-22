@@ -6,15 +6,11 @@ import {
 } from "../../config/MainConfig";
 
 // import { ISaltToken } from "../../types/AccountTypes";
-// import { IGame, IGameReleaseNative } from "../../types/GameTypes";
-type IGame = any;
+import { IGame, IGameReleaseNative } from "../../types/GameTypes";
 
-// export async function runUrlArgs(url: string, args: string[]) {
-//   window.Electron.ipcMain.emit("run_url_args", {
-//     url: url,
-//     args: args,
-//   });
-// }
+export async function runUrlArgs(url: string, args: string[]) {
+  window.electronAPI.runUrlArgs(url, args);
+}
 
 // export async function isInstalled(game: IGame) {
 //   try {
@@ -28,53 +24,54 @@ type IGame = any;
 //   }
 // }
 
-// export const runNewGame = async (game: IGame) => {
-//   try {
-//     const fullExecutablePath = await getFullExecutablePathNewGame(game);
-//     const gameExtension = (
-//       await getExecutableFileExtension(game)
-//     ).toLowerCase();
+export const runNewGame = async (game: IGame) => {
+  try {
+    // const fullExecutablePath = await getFullExecutablePathNewGame(game);
+    const fullExecutablePath = "C:\\Windows\\System32\\notepad.exe";
+    const gameExtension = (
+      await getExecutableFileExtension(game)
+    ).toLowerCase();
 
-//     const platform = await type();
+    const platform = await window.electronAPI.getPlatform();
 
-//     switch (platform) {
-//       case "linux":
-//         switch (gameExtension) {
-//           case "appimage":
-//             await runUrlArgs(fullExecutablePath, [
-//               `--appimage-extract-and-run`,
-//             ]);
-//             break;
-//         }
-//         break;
-//       case "win32":
-//         switch (gameExtension) {
-//           case "exe":
-//             await runUrlArgs(fullExecutablePath, []);
-//             break;
-//           case "bat":
-//             await runUrlArgs(fullExecutablePath, []);
-//             break;
-//         }
-//         break;
-//       case "darwin":
-//         switch (gameExtension) {
-//           case "":
-//             await runUrlArgs(fullExecutablePath, []);
-//             break;
-//           case "app":
-//             await runUrlArgs("open", [`-a`, fullExecutablePath]);
-//             break;
-//         }
-//         break;
-//     }
+    switch (platform) {
+      case "linux":
+        switch (gameExtension) {
+          case "appimage":
+            await runUrlArgs(fullExecutablePath, [
+              `--appimage-extract-and-run`,
+            ]);
+            break;
+        }
+        break;
+      case "win32":
+        switch (gameExtension) {
+          case "exe":
+            await runUrlArgs(fullExecutablePath, []);
+            break;
+          case "bat":
+            await runUrlArgs(fullExecutablePath, []);
+            break;
+        }
+        break;
+      case "darwin":
+        switch (gameExtension) {
+          case "":
+            await runUrlArgs(fullExecutablePath, []);
+            break;
+          case "app":
+            await runUrlArgs("open", [`-a`, fullExecutablePath]);
+            break;
+        }
+        break;
+    }
 
-//     return true;
-//   } catch (err) {
-//     // console.error("Failed to runNewGame: ", err);
-//     return false;
-//   }
-// };
+    return true;
+  } catch (err) {
+    // console.error("Failed to runNewGame: ", err);
+    return false;
+  }
+};
 
 // export async function openDir() {
 //   return invoke("open_directory", {
@@ -162,7 +159,7 @@ export const installGame = async (game: IGame) => {
       case "darwin":
         switch (sourceExtension) {
           case "zip":
-            await window.electronAPI.unzip(fileLocation, installDir);
+            await window.electronAPI.unzipFile(fileLocation, installDir);
             break;
           case "bz2":
             await window.electronAPI.unTarBz2Macos(fileLocation, installDir);
@@ -517,16 +514,16 @@ export const getDownloadFileExtension = async (game: IGame) => {
   }
 };
 
-// export const getExecutableFileExtension = async (game: IGame) => {
-//   try {
-//     const url = await getExecutablePathNewGame(game);
-//     const parts = url.split(".");
-//     return parts.length > 1 ? parts.pop() || "" : "";
-//   } catch (err) {
-//     // console.log("Failed to getExecutableFileExtension:", err);
-//     return "";
-//   }
-// };
+export const getExecutableFileExtension = async (game: IGame) => {
+  try {
+    const url = await getExecutablePathNewGame(game);
+    const parts = url.split(".");
+    return parts.length > 1 ? parts.pop() || "" : "";
+  } catch (err) {
+    // console.log("Failed to getExecutableFileExtension:", err);
+    return "";
+  }
+};
 
 export const deleteDownloadFile = async (game: IGame) => {
   try {

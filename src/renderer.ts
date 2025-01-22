@@ -34,9 +34,3 @@ console.log(
 
 // Add this to the end of the existing file
 import "./app";
-
-declare global {
-  interface Window {
-    electronAPI: any;
-  }
-}

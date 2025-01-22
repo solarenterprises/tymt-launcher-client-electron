@@ -7,9 +7,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   onCpuInfo: (callback: (cpuInfo: { arch: string; type: string }) => void) => {
     ipcRenderer.on("cpu-info", (_, cpuInfo) => callback(cpuInfo));
   },
-});
 
-contextBridge.exposeInMainWorld("electronAPI", {
   // system info
   getPlatform: () => ipcRenderer.invoke("getPlatform"),
   getArch: () => ipcRenderer.invoke("getArch"),
@@ -42,4 +40,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   // delete file
   deleteFile: (filePath: string) =>
     ipcRenderer.invoke("delete-file", { filePath }),
+
+  // run url args
+  runUrlArgs: (url: string, args: string[]) =>
+    ipcRenderer.invoke("run-url-args", { url, args }),
 });

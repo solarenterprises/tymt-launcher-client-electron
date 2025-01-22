@@ -23,7 +23,12 @@ const ProfileCard = ({ account }: IPropsProfileCard) => {
 
   const accountStore: IAccount = useSelector(getAccount);
 
-  const isGuest: boolean = useMemo(() => account?.nickName === "Guest" && account?.password === getKeccak256Hash(""), [account]);
+  const isGuest: boolean = useMemo(
+    () =>
+      account?.nickName === "Guest" &&
+      account?.password === getKeccak256Hash(""),
+    [account]
+  );
 
   const handleClick = useCallback(() => {
     dispatch(setAccount(account));
@@ -34,7 +39,7 @@ const ProfileCard = ({ account }: IPropsProfileCard) => {
 
   return (
     <>
-      <Button
+      <Box
         onClick={handleClick}
         sx={{
           textTransform: "none",
@@ -58,13 +63,15 @@ const ProfileCard = ({ account }: IPropsProfileCard) => {
             {/* <UserAvatar userId={account?.uid} size={64} /> */}
             <Stack>
               <Box className={"fs-16-regular white"}>{account?.nickName}</Box>
-              <Box className={"fs-14-regular light"}>{`non custodial wallet account`}</Box>
+              <Box className={"fs-14-regular light"}>
+                {`non custodial wallet account`}
+              </Box>
               <Box className={"fs-12-regular blue"}>{account?.sxpAddress}</Box>
             </Stack>
           </Stack>
           <Stack>{isGuest && <CompleteButton account={account} />}</Stack>
         </Stack>
-      </Button>
+      </Box>
     </>
   );
 };

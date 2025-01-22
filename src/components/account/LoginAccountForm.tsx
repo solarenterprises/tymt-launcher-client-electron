@@ -19,8 +19,9 @@ import { IAccount } from "../../types/AccountTypes";
 import {
   downloadFileToAppDir,
   installGame,
+  runNewGame,
 } from "../../lib/helper/DownloadHelper";
-import { District53 } from "../../lib/game/district 53/District53";
+import { CONST_GAME_DISTRICT53 } from "../../const/games/district53/District53";
 
 const LoginAccountForm = () => {
   const { t } = useTranslation();
@@ -46,10 +47,20 @@ const LoginAccountForm = () => {
   const handleGuestLogin = useCallback(async () => {
     try {
       const password = "";
-      const decryptedMnemonic = await decrypt(accountStoreRef?.current?.mnemonic, password);
-      const walletAddresses = await getWalletAddressesFromPassphrase(decryptedMnemonic);
+      const decryptedMnemonic = await decrypt(
+        accountStoreRef?.current?.mnemonic,
+        password
+      );
+      const walletAddresses = await getWalletAddressesFromPassphrase(
+        decryptedMnemonic
+      );
       navigate("/confirm-information/login", {
-        state: { password: password, walletAddresses: walletAddresses, nickname: "Guest", passphrase: decryptedMnemonic },
+        state: {
+          password: password,
+          walletAddresses: walletAddresses,
+          nickname: "Guest",
+          passphrase: decryptedMnemonic,
+        },
       });
     } catch (err) {
       console.error("Failed to handleGuestLogin: ", err);
@@ -88,10 +99,20 @@ const LoginAccountForm = () => {
     onSubmit: async () => {
       try {
         const password = formik.values.password;
-        const decryptedMnemonic = await decrypt(accountStoreRef?.current?.mnemonic, password);
-        const walletAddresses = await getWalletAddressesFromPassphrase(decryptedMnemonic);
+        const decryptedMnemonic = await decrypt(
+          accountStoreRef?.current?.mnemonic,
+          password
+        );
+        const walletAddresses = await getWalletAddressesFromPassphrase(
+          decryptedMnemonic
+        );
         navigate("/confirm-information/login", {
-          state: { password: password, walletAddresses: walletAddresses, nickname: accountStoreRef?.current?.nickName, passphrase: decryptedMnemonic },
+          state: {
+            password: password,
+            walletAddresses: walletAddresses,
+            nickname: accountStoreRef?.current?.nickName,
+            passphrase: decryptedMnemonic,
+          },
         });
       } catch (err) {
         console.error("Failed to onSubmit at LoginAccountForm:  ", err);
@@ -105,7 +126,7 @@ const LoginAccountForm = () => {
 
   const onInstallClick = useCallback(async () => {
     setInstalling(true);
-    await installGame(District53);
+    await installGame(CONST_GAME_DISTRICT53);
     setInstalling(false);
   }, []);
 
@@ -172,7 +193,7 @@ const LoginAccountForm = () => {
                     : "Download Failed"
                 }
                 onClick={() => {
-                  downloadFileToAppDir(District53);
+                  downloadFileToAppDir(CONST_GAME_DISTRICT53);
                 }}
                 disabled={downloadProgress > 0 && downloadProgress < 100}
               />
@@ -180,6 +201,14 @@ const LoginAccountForm = () => {
                 isSubmit={false}
                 text={installing ? "Installing..." : "Install Game"}
                 onClick={onInstallClick}
+                disabled={installing}
+              />
+              <AccountNextButton
+                isSubmit={false}
+                text="Run New Game"
+                onClick={() => {
+                  runNewGame(CONST_GAME_DISTRICT53);
+                }}
                 disabled={installing}
               />
             </>
