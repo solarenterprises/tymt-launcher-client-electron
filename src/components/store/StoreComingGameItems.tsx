@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 
 import { Box, Grid, Stack } from "@mui/material";
 
-import StoreGameCard from "./StoreGameCard";
-import AnimatedComponent from "../AnimatedComponent";
+import StoreGameCard from "../game/StoreGameCard";
+import AnimatedComponent from "../home/AnimatedComponent";
 
 // import { getGameList } from "../../features/store/GameListSlice";
 
@@ -25,13 +25,7 @@ export interface IPropsStoreGameItems {
   keyword?: string;
 }
 
-const StoreComingGameItems = ({
-  platform,
-  genre,
-  rank,
-  type,
-  keyword,
-}: IPropsStoreGameItems) => {
+const StoreComingGameItems = ({ platform, genre, rank, type, keyword }: IPropsStoreGameItems) => {
   const { t } = useTranslation();
 
   // const gameListStore: IGameList = useSelector(getGameList);
@@ -59,47 +53,20 @@ const StoreComingGameItems = ({
   const resultGames: IGame[] = [];
 
   return (
-    <Grid
-      item
-      xs={12}
-      container
-      spacing={"32px"}
-      sx={{ width: "100%", marginTop: "0px" }}
-    >
+    <Grid item xs={12} container spacing={"32px"} sx={{ width: "100%", marginTop: "0px" }}>
       {resultGames?.map((game, index) => (
         <Grid item>
           <AnimatedComponent>
-            <StoreGameCard
-              key={`${game?._id}-${index}`}
-              game={game}
-              isComing={comingGameListStore.games.some(
-                (element) => element._id === game._id
-              )}
-            />
+            <StoreGameCard key={`${game?._id}-${index}`} game={game} isComing={comingGameListStore.games.some((element) => element._id === game._id)} />
           </AnimatedComponent>
         </Grid>
       ))}
       {resultGames?.length === 0 && (
-        <Grid
-          item
-          xs={12}
-          container
-          justifyContent={"center"}
-          marginTop={"32px"}
-        >
+        <Grid item xs={12} container justifyContent={"center"} marginTop={"32px"}>
           <AnimatedComponent>
             <Stack flexDirection={"column"} justifyContent={"center"}>
-              <Box
-                component={"img"}
-                src={NoGamePng}
-                width={"300px"}
-                height={"300px"}
-                alignSelf={"center"}
-              />
-              <Box
-                className={"fs-18-regular white"}
-                sx={{ alignSelf: "center", marginTop: "24px" }}
-              >
+              <Box component={"img"} src={NoGamePng} width={"300px"} height={"300px"} alignSelf={"center"} />
+              <Box className={"fs-18-regular white"} sx={{ alignSelf: "center", marginTop: "24px" }}>
                 {t("sto-36_no-games")}
               </Box>
             </Stack>

@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 
 import { Grid, Box, Stack } from "@mui/material";
 
-import StoreGameCard from "../store/StoreGameCard";
-import AnimatedComponent from "../AnimatedComponent";
+import StoreGameCard from "../game/StoreGameCard";
+import AnimatedComponent from "../home/AnimatedComponent";
 
 // import { BasicGameList } from "../../lib/game/BasicGameList";
 // import { isInstalled } from "../../lib/helper/DownloadHelper";

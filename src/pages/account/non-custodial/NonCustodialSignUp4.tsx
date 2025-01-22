@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
@@ -26,6 +26,7 @@ const NonCustodialSignUp4 = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+  const { mode } = useParams();
 
   const { passphrase, password } = location.state || {};
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,7 +49,7 @@ const NonCustodialSignUp4 = () => {
         setLoading(true);
         const walletAddresses = await getWalletAddressesFromPassphrase(passphrase);
         const newNickName = formik.values.nickname;
-        navigate("/confirm-information/signup", {
+        navigate(`/confirm-information${mode === "guest" ? "/guest" : "/signup"}`, {
           state: {
             passphrase: passphrase,
             password: password,
