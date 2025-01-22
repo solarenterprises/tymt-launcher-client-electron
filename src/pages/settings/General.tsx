@@ -72,15 +72,6 @@ const General = ({ view, setView }: IPropsGeneral) => {
               </Stack>
             </Button>
             <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} />
-            <Button className="common-btn" onClick={() => setView("chat")}>
-              <Stack direction={"row"} justifyContent={"space-between"} textAlign={"center"} padding={"15px"}>
-                <Box className="fs-h4 white">{t("set-12_chat")}</Box>
-                <Box className="center-align">
-                  <img src={arrowImg} />
-                </Box>
-              </Stack>
-            </Button>
-            <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} />
             <Button
               className="common-btn"
               onClick={() => {
