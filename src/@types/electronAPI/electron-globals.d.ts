@@ -1,6 +1,6 @@
 interface Window {
   electronAPI: {
-    onCpuInfo: (callback: (cpuInfo: { arch: string; type: string }) => void) => void;
+    onSysInfo: (callback: (sysInfo: { cpuArch: string; cpuType: string; osType: string }) => void) => void;
     // Add other API methods here
   };
 }

@@ -4,7 +4,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("electronAPI", {
-  onCpuInfo: (callback: (cpuInfo: { arch: string; type: string }) => void) => {
-    ipcRenderer.on("cpu-info", (_, cpuInfo) => callback(cpuInfo));
+  onSysInfo: (callback: (sysInfo: { cpuArch: string; cpuType: string; osType: string }) => void) => {
+    ipcRenderer.on("sys-info", (_, sysInfo) => callback(sysInfo));
   },
 });

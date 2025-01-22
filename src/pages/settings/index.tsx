@@ -57,6 +57,15 @@ const Settings = ({ view, setView }: propsSettingType) => {
           onClick: toggleDrawer("right", false),
         },
       }}
+      sx={{
+        "& .MuiBox-root": {
+          overflow: "auto", // Enable scrolling
+          scrollbarWidth: "none", // Firefox
+          "&::-webkit-scrollbar": {
+            display: "none", // Chrome, Safari
+          },
+        },
+      }}
     >
       <Box className={classname.collaps_pan}>
         <img src={closeImg} className={classname.close_icon} onClick={() => setView(false)} />

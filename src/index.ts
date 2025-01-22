@@ -33,10 +33,11 @@ const createWindow = (): void => {
   // Get CPU information
   const cpuArch = os.arch();
   const cpuType = os.cpus()[0].model;
+  const osType = os.type();
 
   // Send CPU information to renderer process
   mainWindow.webContents.on("did-finish-load", () => {
-    mainWindow.webContents.send("cpu-info", { arch: cpuArch, type: cpuType });
+    mainWindow.webContents.send("sys-info", { cpuArch: cpuArch, cpuType: cpuType, osType: osType });
   });
 };
 
