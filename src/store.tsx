@@ -20,6 +20,7 @@ import currentChainReducer from "./store/CurrentChainSlice";
 // Setting
 import walletSettingReducer from "./store/WalletSettingSlice";
 import notificationSettingReducer from "./store/NotificationSettingSlice";
+import languageSettingReducer from "./store/LanguageSettingSlice";
 // ~Setting
 
 // const blacklistActionTypes = ["intercomsupport/setChatMounted", "intercomsupport/setMountedTrue", "intercomsupport/setMountedFalse"];
@@ -52,6 +53,7 @@ const store = configureStore({
     // Setting
     walletSetting: walletSettingReducer,
     notificationSetting: notificationSettingReducer,
+    languageSetting: languageSettingReducer,
     // ~Setting
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(stateSyncMiddleware),

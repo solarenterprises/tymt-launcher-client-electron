@@ -22,9 +22,9 @@ import { getCurrentCurrency } from "../../store/CurrentCurrencySlice";
 import { getCurrentChainWalletAddress } from "../../lib/helper/WalletHelper";
 
 import { IAccount } from "../../types/AccountTypes";
+import { IPriceList } from "../../types/PriceTypes";
 import { ICurrentChain, ISupportChain } from "../../types/ChainTypes";
 import { IBalanceList, IWalletAddresses } from "../../types/WalletTypes";
-import { IPriceList } from "../../types/PriceTypes";
 import { ICurrentCurrency, IReserveList } from "../../types/CurrencyTypes";
 
 import SettingStyle from "../../styles/SettingStyle";
@@ -196,9 +196,6 @@ const Main = ({ view, setView }: IMain) => {
                 </Box>
                 <Box className="fs-14-light gray">{`${t("set-88_total_balance")} ${numeral(totalBalance).format("0,0.00")} ${currentCurrencySymbol}`}</Box>
               </Box>
-              {/* <Box className="center-align">
-                <img src={arrowImg} />
-              </Box> */}
             </Box>
             <Divider variant="middle" sx={{ backgroundColor: "#FFFFFF1A" }} />
             <Box className={classname.icon_pad}>
@@ -219,7 +216,7 @@ const Main = ({ view, setView }: IMain) => {
                   </Box>
                 </Tooltip>
               </Button>
-              <Button className="tooltip-btn" onClick={() => navigate("/start")}>
+              <Button className="tooltip-btn" onClick={() => navigate("/welcome")}>
                 <Tooltip title={t("set-81_disconnect")} classes={{ tooltip: classname.tooltip }}>
                   <Box className="center-align">
                     <img src={exitIcon} />
