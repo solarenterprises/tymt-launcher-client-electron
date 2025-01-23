@@ -106,24 +106,8 @@ const Wallet = () => {
       //     ),
       //   ];
       //   await Promise.all(asyncAll);
-      //   const noti: INotificationParams = {
-      //     status: "success",
-      //     title: t("set-85_success"),
-      //     message: t("alt-21_balances-refresh-success"),
-      //     link: null,
-      //     translate: false,
-      //   };
-      //   emit(TauriEventNames.NOTIFICATION, noti);
       // } catch (err) {
-      //   // console.log("Failed to handleRefreshClick: ", err);
-      //   const noti: INotificationParams = {
-      //     status: "failed",
-      //     title: t("wal-56_failed"),
-      //     message: t("wal-53_refresh-vote-failed"),
-      //     link: null,
-      //     translate: false,
-      //   };
-      //   emit(TauriEventNames.NOTIFICATION, noti);
+      //   console.log("Failed to handleRefreshClick: ", err);
       // }
     },
     [
@@ -173,7 +157,7 @@ const Wallet = () => {
                     </Stack>
                     <Stack direction={"row"} spacing={"32px"}>
                       <Stack spacing={"8px"}>
-                        <IconButton className={"wallet-icon-button"} onClick={() => navigate("/wallet/send-sxp")}>
+                        <IconButton className={"wallet-icon-button"} onClick={() => navigate("/wallet-send")}>
                           <img src={sendIcon} className="wallet-icon-button-icon" />
                         </IconButton>
                         <Box className="fs-14-regular blue t-center fw">{t("wal-1_send")}</Box>
@@ -190,7 +174,7 @@ const Wallet = () => {
                         <Box className="fs-14-regular blue t-center fw">{t("wal-2_buy")}</Box>
                       </Stack>
                       <Stack spacing={"8px"}>
-                        <IconButton className={"wallet-icon-button"} onClick={() => navigate("/wallet/vote")}>
+                        <IconButton className={"wallet-icon-button"} onClick={() => navigate("/wallet-vote")}>
                           <img src={percentIcon} className="wallet-icon-button-icon" />
                         </IconButton>
                         <Box className="fs-14-regular t-center fw blue">{t("wal-3_vote")}</Box>

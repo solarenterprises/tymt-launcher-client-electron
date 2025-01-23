@@ -23,14 +23,16 @@ import ChooseProfile from "./ChooseProfile";
 
 import SettingStyle from "../../styles/SettingStyle";
 
-// import { propsSettingType } from "../../types/settingTypes";
-type propsSettingType = any;
-
 import closeImg from "../../assets/setting/CollapsCloseBtn.svg";
 
 type Anchor = "right";
 
-const Settings = ({ view, setView }: propsSettingType) => {
+export interface IPropsSettings {
+  view: boolean;
+  setView: (_: boolean) => void;
+}
+
+const Settings = ({ view, setView }: IPropsSettings) => {
   const classname = SettingStyle();
   const [state, setState] = useState({ right: false });
   const [panel, setPanel] = useState("main");

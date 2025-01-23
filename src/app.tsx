@@ -32,6 +32,7 @@ import GameOverview from "./pages/main/GameOverview";
 //Wallet
 import Wallet from "./pages/wallet/Wallet";
 import WalletVote from "./pages/wallet/WalletVote";
+import WalletSend from "./pages/wallet/WalletSend";
 //~Wallet
 
 import { Buffer } from "buffer";
@@ -57,7 +58,8 @@ root.render(
             <Route path="/home" element={<Homepage />} />
             <Route path="/game/:gameid" element={<GameOverview />} />
             <Route path="/wallet" element={<Wallet />} />
-            <Route path="/wallet/vote" element={<WalletVote />} />
+            <Route path="/wallet-vote" element={<WalletVote />} />
+            <Route path="/wallet-send" element={<WalletSend />} />
           </Route>
         </Routes>
       </HashRouter>
