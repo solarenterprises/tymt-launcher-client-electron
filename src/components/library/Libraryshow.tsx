@@ -1,19 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+
+import { CONST_GAME_LIST } from "../../const/games/GameConsts";
 
 import { Grid, Box, Stack } from "@mui/material";
 
-import StoreGameCard from "../game/StoreGameCard";
 import AnimatedComponent from "../home/AnimatedComponent";
+import StoreGameCard from "../game/StoreGameCard";
 
-// import { BasicGameList } from "../../lib/game/BasicGameList";
 // import { isInstalled } from "../../lib/helper/DownloadHelper";
 
-import NoGamePng from "../../assets/main/NoGames.png";
+import NoGamePng from "../../assets/main/nogames.png";
 
-// import { IGame, IGameList } from "../../types/GameTypes";
-type IGame = any;
+import { IGame } from "../../types/GameTypes";
+import { useSelector } from "react-redux";
 // import { getGameList } from "../../features/store/GameListSlice";
 
 export interface IPropsLibraryShow {
@@ -28,29 +28,30 @@ const LibraryShow = ({ status }: IPropsLibraryShow) => {
   // const activeGameList: IGame[] = useMemo(() => gameListStore?.games?.filter((one) => one?.visibilityState === "active"), [gameListStore]);
   // const displayGameList: IGame[] = useMemo(() => [...BasicGameList, ...activeGameList], [activeGameList, BasicGameList]);
 
+  const displayGameList = CONST_GAME_LIST;
+
   const [installedList, setInstalledList] = useState<IGame[]>([]);
 
-  // const uninstalledList: IGame[] = useMemo(
-  //   () => displayGameList?.filter((game) => !installedList?.some((one) => one?._id === game?._id)),
-  //   [displayGameList, installedList]
-  // );
-  const uninstalledList: IGame[] = [];
+  const uninstalledList: IGame[] = useMemo(
+    () => displayGameList?.filter((game) => !installedList?.some((one) => one?._id === game?._id)),
+    [displayGameList, installedList]
+  );
 
-  // useEffect(() => {
-  //   const fetchInstalledGames = async () => {
-  //     // setLoading(true);
-  //     const results = await Promise.all(
-  //       displayGameList?.map(async (game) => {
-  //         const installed = await isInstalled(game);
-  //         return installed ? game : null;
-  //       })
-  //     );
-  //     setInstalledList(results.filter((game) => game !== null));
-  //     // setLoading(false);
-  //   };
+  useEffect(() => {
+    const fetchInstalledGames = async () => {
+      // setLoading(true);
+      // const results = await Promise.all(
+      //   displayGameList?.map(async (game) => {
+      //     const installed = await isInstalled(game);
+      //     return installed ? game : null;
+      //   })
+      // );
+      // setInstalledList(results.filter((game) => game !== null));
+      // setLoading(false);
+    };
 
-  //   fetchInstalledGames();
-  // }, [displayGameList]);
+    fetchInstalledGames();
+  }, [displayGameList]);
 
   return (
     <>

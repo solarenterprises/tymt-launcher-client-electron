@@ -2,6 +2,10 @@ interface Window {
   electronAPI: {
     onCpuInfo: (callback: (cpuInfo: { arch: string; type: string }) => void) => void;
 
+    onSysInfo: (callback: (sysInfo: { cpuArch: string; cpuType: string; osType: string }) => void) => void;
+    
+    openExternalLink: (url: string) => void;
+    
     // system info
     getPlatform: () => Promise<string>;
     getArch: () => Promise<string>;

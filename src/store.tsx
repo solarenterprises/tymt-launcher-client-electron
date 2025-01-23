@@ -15,11 +15,13 @@ import balanceReducer from "./store/BalanceListSlice";
 import priceReducer from "./store/PriceListSlice";
 import currentCurrencyReducer from "./store/CurrentCurrencySlice";
 import currentChainReducer from "./store/CurrentChainSlice";
+import currentTokenReducer from "./store/CurrentTokenSlice";
 // ~Wallet
 
 // Setting
 import walletSettingReducer from "./store/WalletSettingSlice";
 import notificationSettingReducer from "./store/NotificationSettingSlice";
+import languageSettingReducer from "./store/LanguageSettingSlice";
 // ~Setting
 
 // DownloadStatus
@@ -51,11 +53,13 @@ const store = configureStore({
     priceList: priceReducer,
     currentCurrency: currentCurrencyReducer,
     currentChain: currentChainReducer,
+    currentToken: currentTokenReducer,
     // ~Wallet
 
     // Setting
     walletSetting: walletSettingReducer,
     notificationSetting: notificationSettingReducer,
+    languageSetting: languageSettingReducer,
     // ~Setting
 
     // DownloadStatus

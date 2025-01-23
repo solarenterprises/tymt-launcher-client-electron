@@ -5,6 +5,9 @@ import { INotificationSetting } from "../types/SettingTypes";
 
 const init: INotificationSetting = {
   status: "active",
+  sound: true,
+  inAppNotification: true,
+  nativeNotification: true,
 };
 
 const loadNotificationSetting: () => INotificationSetting = () => {
