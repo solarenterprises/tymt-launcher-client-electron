@@ -32,7 +32,11 @@ const Chain = ({ view, setView }: IPropsChain) => {
 
   const handleChainBoxClick = (one: ISupportChain) => {
     dispatch(setCurrentChain(one?.native?.name));
-    setView("main");
+    if (view === "chain-wallet") {
+      setView("wallet");
+    } else {
+      setView("main");
+    }
   };
 
   // const copyAddress = useCallback(
@@ -46,7 +50,7 @@ const Chain = ({ view, setView }: IPropsChain) => {
 
   return (
     <>
-      {view === "chain" && (
+      {(view === "chain" || view === "chain-wallet") && (
         <Stack direction={"column"}>
           <Stack flexDirection={"row"} justifyContent={"flex-start"} gap={"10px"} alignItems={"center"} textAlign={"center"} sx={{ padding: "20px" }}>
             <Button className={"setting-back-button"} onClick={() => setView("main")}>

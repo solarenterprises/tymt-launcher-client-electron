@@ -26,6 +26,7 @@ const Currency = ({ view, setView }: IPropsCurrency) => {
 
   const handleCurrencyClick = (_currency: string) => {
     dispatch(setCurrentCurrency(_currency));
+    setView("wallet");
   };
 
   return (

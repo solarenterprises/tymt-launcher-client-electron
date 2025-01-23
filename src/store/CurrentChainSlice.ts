@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import tymtStorage from "../lib/storage/tymtStorage";
 import { CONST_CHAIN_NAMES } from "../const/ChainConsts";
 
 import { compareJSONStructure } from "../lib/helper/JSONHelper";
@@ -11,9 +12,9 @@ const init: ICurrentChain = {
 };
 
 const loadCurrentChain: () => ICurrentChain = () => {
-  const data = sessionStorage.getItem(`currentChain`);
+  const data = tymtStorage.get(`currentChain`);
   if (!data || !compareJSONStructure(JSON.parse(data), init)) {
-    sessionStorage.setItem(`currentChain`, JSON.stringify(init));
+    tymtStorage.set(`currentChain`, JSON.stringify(init));
     return init;
   }
   return JSON.parse(data);
@@ -31,7 +32,7 @@ export const currentChainSlice = createSlice({
   reducers: {
     setCurrentChain: (state, action) => {
       state.data.chain = action.payload;
-      sessionStorage.setItem(`currentChain`, JSON.stringify(action.payload));
+      tymtStorage.set(`currentChain`, JSON.stringify(action.payload));
     },
   },
 });

@@ -6,12 +6,14 @@ import { Box, Button, Divider, Stack } from "@mui/material";
 
 import SwitchComp from "../../components/SwitchComp";
 
+import { getCurrentChain } from "../../store/CurrentChainSlice";
 import { getCurrentCurrency } from "../../store/CurrentCurrencySlice";
 import { getWalletSetting, setWalletSetting } from "../../store/WalletSettingSlice";
 
 import { IWalletSetting } from "../../types/SettingTypes";
 import { ICurrentCurrency } from "../../types/CurrencyTypes";
 
+import { ICurrentChain } from "../../types/ChainTypes";
 import backIcon from "../../assets/setting/BackIcon.svg";
 import arrowImg from "../../assets/setting/ArrowRight.svg";
 
@@ -23,6 +25,7 @@ const Wallet = ({ view, setView }: propsType) => {
 
   const walletSettingStore: IWalletSetting = useSelector(getWalletSetting);
   const currentCurrencyStore: ICurrentCurrency = useSelector(getCurrentCurrency);
+  const currentChainStore: ICurrentChain = useSelector(getCurrentChain);
 
   const handleHideZeroBalanceClick = useCallback(() => {
     dispatch(
@@ -48,7 +51,14 @@ const Wallet = ({ view, setView }: propsType) => {
             <Stack direction={"row"} justifyContent={"space-between"} textAlign={"center"} padding={"20px"}>
               <Stack direction={"column"} justifyContent={"flex-start"} textAlign={"left"} gap={1}>
                 <Box className="fs-h5 white">{t("set-29_hide-0-balance")}</Box>
-                <Box className="fs-14-regular gray">{t("set-29_hide-0-balance")}</Box>
+                <Box
+                  className="fs-14-regular gray"
+                  sx={{
+                    whiteSpace: "normal",
+                  }}
+                >
+                  {t("set-29_hide-0-balance")}
+                </Box>
               </Stack>
               <Stack direction={"row"} justifyContent={"flex-end"} textAlign={"center"} gap={1}>
                 <SwitchComp
@@ -78,12 +88,49 @@ const Wallet = ({ view, setView }: propsType) => {
                   </Stack>
                 </Stack>
                 <Stack direction={"column"} justifyContent={"flex-start"} textAlign={"left"}>
-                  <Box className="fs-14-regular gray">{t("set-33_choose-currency-balance")}</Box>
+                  <Box
+                    className="fs-14-regular gray"
+                    sx={{
+                      whiteSpace: "normal",
+                    }}
+                  >
+                    {t("set-33_choose-currency-balance")}
+                  </Box>
                 </Stack>
               </Stack>
             </Button>
             <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} />
-            <Button className="common-btn" sx={{ padding: "20px" }} onClick={() => setView("fee")}>
+            <Button
+              className="common-btn"
+              sx={{ padding: "20px" }}
+              onClick={() => {
+                setView("chain-wallet");
+              }}
+            >
+              <Stack direction={"column"} gap={"10px"}>
+                <Stack direction={"row"} justifyContent={"space-between"} textAlign={"center"}>
+                  <Box className="fs-h4 white center-align">{t("set-97_network")}</Box>
+                  <Stack direction={"row"} justifyContent={"flex-end"} textAlign={"right"} gap={"5px"}>
+                    <Box className="fs-16-regular gray center-align">{currentChainStore?.chain}</Box>
+                    <Box className="center-align">
+                      <img src={arrowImg} />
+                    </Box>
+                  </Stack>
+                </Stack>
+                <Stack direction={"column"} justifyContent={"flex-start"} textAlign={"left"}>
+                  <Box
+                    className="fs-14-regular gray"
+                    sx={{
+                      whiteSpace: "normal",
+                    }}
+                  >
+                    {t("set-98_network-detail")}
+                  </Box>
+                </Stack>
+              </Stack>
+            </Button>
+            <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} />
+            {/* <Button className="common-btn" sx={{ padding: "20px" }} onClick={() => setView("fee")}>
               <Stack direction={"row"} justifyContent={"space-between"} textAlign={"center"}>
                 <Box className="fs-h4 white">{t("set-31_fees")}</Box>
                 <Box className="center-align">
@@ -100,7 +147,7 @@ const Wallet = ({ view, setView }: propsType) => {
                 </Box>
               </Stack>
             </Button>
-            <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} />
+            <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} /> */}
           </Stack>
         </Stack>
       )}
