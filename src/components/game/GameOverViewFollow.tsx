@@ -2,6 +2,8 @@ import { useTranslation } from "react-i18next";
 
 import { Box, Button, Tooltip, Stack } from "@mui/material";
 
+import { ElectronAPI } from "../../lib/api/ElectronAPI";
+
 import { IGame } from "../../types/GameTypes";
 
 import Xicon from "../../assets/main/XIcon.png";
@@ -50,7 +52,7 @@ const GameOverViewFollow = ({ game }: IPropsGameOverViewFollow) => {
             <Button
               className="button_navbar_common"
               onClick={() => {
-                // openLink(game?.projectMeta?.external_url);
+                ElectronAPI.openExternalLink(game?.projectMeta?.external_url);
               }}
             >
               <img src={linkicon} />
@@ -87,7 +89,7 @@ const GameOverViewFollow = ({ game }: IPropsGameOverViewFollow) => {
             <Button
               className="button_navbar_common"
               onClick={() => {
-                // openLink(game?.projectMeta?.twitter_url);
+                ElectronAPI.openExternalLink(game?.projectMeta?.twitter_url);
               }}
             >
               <img src={Xicon} />
@@ -124,7 +126,7 @@ const GameOverViewFollow = ({ game }: IPropsGameOverViewFollow) => {
             <Button
               className="button_navbar_common"
               onClick={() => {
-                // openLink(game?.projectMeta?.youtube_url);
+                ElectronAPI.openExternalLink(game?.projectMeta?.youtube_url);
               }}
             >
               <img src={youtubeIcon} />
@@ -170,7 +172,7 @@ const GameOverViewFollow = ({ game }: IPropsGameOverViewFollow) => {
             <Button
               className="button_navbar_common"
               onClick={() => {
-                // openLink(game?.projectMeta?.discord_url);
+                ElectronAPI.openExternalLink(game?.projectMeta?.discord_url);
               }}
             >
               <img src={discordicon} />

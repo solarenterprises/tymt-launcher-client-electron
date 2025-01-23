@@ -19,7 +19,9 @@ import { getPriceList } from "../../store/PriceListSlice";
 import { getReserveList } from "../../store/ReserveListSlice";
 import { getCurrentCurrency } from "../../store/CurrentCurrencySlice";
 
-import { getCurrentChainWalletAddress } from "../../lib/helper/WalletHelper";
+import { ElectronAPI } from "../../lib/api/ElectronAPI";
+
+import { getCurrentChainWalletAddress, getExplorerUrl } from "../../lib/helper/WalletHelper";
 
 import { IAccount } from "../../types/AccountTypes";
 import { IPriceList } from "../../types/PriceTypes";
@@ -92,10 +94,11 @@ const Main = ({ view, setView }: IPropsMain) => {
     return res;
   }, [balanceListStore, priceListStore, reserve]);
 
-  // const handleExplorer = useCallback(() => {
-  //   const url = getExplorerUrl(currentChainInfo, walletStore);
-  //   openLink(url);
-  // }, [currentChainInfo]);
+  const handleExplorer = useCallback(() => {
+    const url = getExplorerUrl(currentSupportChain, walletStore);
+    console.log(url);
+    ElectronAPI.openExternalLink(url);
+  }, [currentSupportChain]);
 
   return (
     <>
@@ -206,10 +209,7 @@ const Main = ({ view, setView }: IPropsMain) => {
                   </Box>
                 </Tooltip>
               </Button>
-              <Button
-                className="tooltip-btn"
-                // onClick={handleExplorer}
-              >
+              <Button className="tooltip-btn" onClick={handleExplorer}>
                 <Tooltip title={t("set-80_open-in-explorer")} classes={{ tooltip: classname.tooltip }}>
                   <Box className="center-align">
                     <img src={searchIcon} />

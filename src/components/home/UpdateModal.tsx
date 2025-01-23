@@ -1,8 +1,11 @@
+import { useTranslation } from "react-i18next";
+
 import { Box, Stack, Modal, Fade } from "@mui/material";
+
+import { ElectronAPI } from "../../lib/api/ElectronAPI";
+
 import closeIcon from "../../assets/setting/XIcon.svg";
 import logo from "../../assets/main/FoxHeadComingSoon.png";
-// import { openLink } from "../../lib/helper/DownloadHelper";
-import { useTranslation } from "react-i18next";
 
 interface props {
   open: boolean;
@@ -41,7 +44,7 @@ const UpdateModal = ({ open, setOpen }: props) => {
                   cursor: "pointer",
                 }}
                 onClick={() => {
-                  // openLink("https://tymt.com");
+                  ElectronAPI.openExternalLink("https://tymt.com");
                 }}
               >
                 https://tymt.com
