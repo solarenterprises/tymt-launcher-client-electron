@@ -339,7 +339,7 @@ const WalletSend = () => {
                 </Box>
               )}
               <Box mb={"32px"}>
-                <InputText id="send-password" type="password" label={t("ncca-3_password")} value={password} setValue={setPassword} />
+                <InputText id="send-password" type="password" label={t("ncca-3_password")} value={password} setValue={setPassword} showTooltip={false} />
               </Box>
               <Button
                 disabled={
