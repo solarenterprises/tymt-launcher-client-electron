@@ -7,4 +7,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   onSysInfo: (callback: (sysInfo: { cpuArch: string; cpuType: string; osType: string }) => void) => {
     ipcRenderer.on("sys-info", (_, sysInfo) => callback(sysInfo));
   },
+  openExternalLink: (url: string) => {
+    ipcRenderer.send("open-external-link", url);
+  },
 });

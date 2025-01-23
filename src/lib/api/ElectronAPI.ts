@@ -10,4 +10,11 @@ export class ElectronAPI {
       });
     });
   }
+
+  static async openExternalLink(url: string): Promise<void> {
+    return new Promise((resolve) => {
+      window.electronAPI.openExternalLink(url);
+      resolve();
+    });
+  }
 }
