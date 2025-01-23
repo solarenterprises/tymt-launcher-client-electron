@@ -83,11 +83,7 @@ const registerGlobalShortcut = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 
-app
-  .whenReady()
-  .then(createTray)
-  .then(registerGlobalShortcut)
-  .then(createWindow);
+app.whenReady().then(createTray).then(registerGlobalShortcut).then(createWindow);
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -112,7 +108,7 @@ app.on("activate", () => {
 // Listen for IPC messages to open external links
 ipcMain.on("open-external-link", (event, url) => {
   shell.openExternal(url);
-}
+});
 
 ipcMain.handle("getPlatform", () => process.platform);
 
@@ -128,99 +124,84 @@ ipcMain.handle("getAppPath", () => {
   return appPath;
 });
 
-ipcMain.handle(
-  "download-file",
-  async (event, { downloadLink, downloadPath }: IDownloadFile) => {
-    const win = BrowserWindow.getFocusedWindow();
+ipcMain.handle("download-file", async (event, { downloadLink, downloadPath }: IDownloadFile) => {
+  const win = BrowserWindow.getFocusedWindow();
 
-    win.webContents.downloadURL(downloadLink);
+  win.webContents.downloadURL(downloadLink);
 
-    win.webContents.session.on("will-download", (event, item) => {
-      // Set save path
-      item.setSavePath(downloadPath);
+  win.webContents.session.on("will-download", (event, item) => {
+    // Set save path
+    item.setSavePath(downloadPath);
 
-      // Monitor progress
-      item.on("updated", (event, state) => {
-        if (state === "interrupted") {
-          console.log("Download is interrupted but can be resumed");
-        } else if (state === "progressing") {
-          if (item.isPaused()) {
-            console.log("Download is paused");
-          } else {
-            const progress = item.getReceivedBytes() / item.getTotalBytes();
-            win.webContents.send("download-progress", progress * 100); // Send progress to renderer
-          }
-        }
-      });
-
-      // Download completed
-      item.once("done", (event, state) => {
-        if (state === "completed") {
-          console.log("Download successful");
-          win.webContents.send("download-complete", downloadPath);
+    // Monitor progress
+    item.on("updated", (event, state) => {
+      if (state === "interrupted") {
+        console.log("Download is interrupted but can be resumed");
+      } else if (state === "progressing") {
+        if (item.isPaused()) {
+          console.log("Download is paused");
         } else {
-          console.error("Download failed");
-          win.webContents.send("download-failed");
-        }
-      });
-    });
-  }
-);
-
-ipcMain.handle(
-  "unzip-file",
-  (event, { fileLocation, installDir }: IUnzipFile) => {
-    try {
-      const zip = new admZip(fileLocation);
-      zip.extractAllTo(installDir);
-    } catch (error) {
-      console.error("Error unzipping file:", error);
-    }
-  }
-);
-
-ipcMain.handle(
-  "move-app-image-linux",
-  async (event, { fileLocation, installDir }: IUnzipFile) => {
-    const sourcePath = path.resolve(fileLocation);
-    const fileName = path.basename(sourcePath);
-    const destinationPath = path.join(installDir, fileName);
-
-    // Ensure the parent directory exists
-    const parentDir = path.dirname(destinationPath);
-    if (!fs.existsSync(parentDir)) {
-      fs.mkdirSync(parentDir, { recursive: true });
-    }
-
-    // Move the file
-    try {
-      fs.renameSync(sourcePath, destinationPath);
-    } catch (error) {
-      throw new Error(`Failed to move file: ${error.message}`);
-    }
-  }
-);
-
-ipcMain.handle(
-  "un-tar-bz2-macos",
-  (event, { fileLocation, installDir }: IUnzipFile) => {
-    const installPath = path.resolve(installDir);
-
-    // Create the directory if it doesn't exist
-    if (!fs.existsSync(installPath)) {
-      fs.mkdirSync(installPath, { recursive: true });
-    }
-
-    exec(
-      `tar -xvjf "${fileLocation}" -C "${installDir}"`,
-      (error, stdout, stderr) => {
-        if (error) {
-          throw new Error(`Failed to unzip: ${stderr || error.message}`);
+          const progress = item.getReceivedBytes() / item.getTotalBytes();
+          win.webContents.send("download-progress", progress * 100); // Send progress to renderer
         }
       }
-    );
+    });
+
+    // Download completed
+    item.once("done", (event, state) => {
+      if (state === "completed") {
+        console.log("Download successful");
+        win.webContents.send("download-complete", downloadPath);
+      } else {
+        console.error("Download failed");
+        win.webContents.send("download-failed");
+      }
+    });
+  });
+});
+
+ipcMain.handle("unzip-file", (event, { fileLocation, installDir }: IUnzipFile) => {
+  try {
+    const zip = new admZip(fileLocation);
+    zip.extractAllTo(installDir);
+  } catch (error) {
+    console.error("Error unzipping file:", error);
   }
-);
+});
+
+ipcMain.handle("move-app-image-linux", async (event, { fileLocation, installDir }: IUnzipFile) => {
+  const sourcePath = path.resolve(fileLocation);
+  const fileName = path.basename(sourcePath);
+  const destinationPath = path.join(installDir, fileName);
+
+  // Ensure the parent directory exists
+  const parentDir = path.dirname(destinationPath);
+  if (!fs.existsSync(parentDir)) {
+    fs.mkdirSync(parentDir, { recursive: true });
+  }
+
+  // Move the file
+  try {
+    fs.renameSync(sourcePath, destinationPath);
+  } catch (error) {
+    throw new Error(`Failed to move file: ${error.message}`);
+  }
+});
+
+ipcMain.handle("un-tar-bz2-macos", (event, { fileLocation, installDir }: IUnzipFile) => {
+  const installPath = path.resolve(installDir);
+
+  // Create the directory if it doesn't exist
+  if (!fs.existsSync(installPath)) {
+    fs.mkdirSync(installPath, { recursive: true });
+  }
+
+  exec(`tar -xvjf "${fileLocation}" -C "${installDir}"`, (error, stdout, stderr) => {
+    if (error) {
+      throw new Error(`Failed to unzip: ${stderr || error.message}`);
+    }
+  });
+});
 
 ipcMain.handle("set-permission", (event, executablePath: string) => {
   // Check if the file exists
