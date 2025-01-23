@@ -1,11 +1,11 @@
 const tymtStorage = {
   set(key: string, value: any) {
     if (value === undefined) return;
-    let stringify = JSON.stringify(value);
+    const stringify = JSON.stringify(value);
     localStorage.setItem(key, stringify);
   },
   get(key: string, defaultValue = "") {
-    let stringify = localStorage.getItem(key);
+    const stringify = localStorage.getItem(key);
     if (stringify === null || stringify === "undefined") return defaultValue;
     return JSON.parse(stringify) ? JSON.parse(stringify) : "";
   },

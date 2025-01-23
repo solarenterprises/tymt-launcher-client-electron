@@ -7,8 +7,7 @@ import { CONST_SYSINFO_OS } from "../../const/SysInfoConsts";
 
 import { getSupportOSList } from "../../lib/helper/GameHelper";
 
-import { platformEnum, platformIconMap } from "../../types/GameTypes";
-import { IGame } from "../../types/GameTypes";
+import { IGame, platformEnum, platformIconMap } from "../../types/GameTypes";
 
 import storeStyles from "../../styles/StoreStyles";
 

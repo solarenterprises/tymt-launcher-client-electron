@@ -115,7 +115,7 @@ ipcMain.handle("getPlatform", () => process.platform);
 ipcMain.handle("getArch", () => process.arch);
 
 ipcMain.handle("getAppPath", () => {
-  const appPath = `${app.getPath("appData")}/tymtLauncher`;
+  const appPath = path.join(app.getPath("appData"), "tymtLauncher");
 
   if (!fs.existsSync(appPath)) {
     fs.mkdirSync(appPath, { recursive: true });
@@ -219,8 +219,12 @@ ipcMain.handle("set-permission", (event, executablePath: string) => {
 });
 
 ipcMain.handle("delete-file", (event, filePath: string) => {
-  fs.unlinkSync(filePath);
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+  }
 });
+
+ipcMain.handle("read-dir", (event, dirPath: string) => fs.existsSync(dirPath));
 
 ipcMain.handle("run-url-args", (event, { url, args }: IRunUrlArgs) => {
   console.log(url);
@@ -256,3 +260,5 @@ ipcMain.handle("run-url-args", (event, { url, args }: IRunUrlArgs) => {
     console.log("No command provided");
   }
 });
+
+ipcMain.handle("open-link", (event, url: string) => shell.openExternal(url));

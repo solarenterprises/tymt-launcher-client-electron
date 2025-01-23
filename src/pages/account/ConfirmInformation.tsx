@@ -18,8 +18,7 @@ import { setWallet } from "../../store/WalletSlice";
 import { setLogin } from "../../store/LoginSlice";
 import { setMnemonic } from "../../store/MnemonicSlice";
 
-import { getKeccak256Hash } from "../../lib/helper/EncryptHelper";
-import { encrypt } from "../../lib/helper/EncryptHelper";
+import { getKeccak256Hash, encrypt } from "../../lib/helper/EncryptHelper";
 
 import { IWalletAddresses } from "../../types/WalletTypes";
 import { IAccount, IAccountList } from "../../types/AccountTypes";
@@ -52,7 +51,7 @@ const ConfirmInformation = () => {
 
   const handleSignUp = async () => {
     try {
-      let newAccount: IAccount = {
+      const newAccount: IAccount = {
         uid: "",
         avatar: "",
         nickName: nickname,
@@ -69,7 +68,7 @@ const ConfirmInformation = () => {
 
   const handleGuestComplete = async () => {
     try {
-      let newAccount: IAccount = {
+      const newAccount: IAccount = {
         uid: "",
         avatar: "",
         nickName: nickname,
@@ -86,7 +85,7 @@ const ConfirmInformation = () => {
 
   const handleLogin = async () => {
     try {
-      let newAccount: IAccount = {
+      const newAccount: IAccount = {
         uid: "",
         avatar: "",
         nickName: nickname,

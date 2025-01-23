@@ -24,6 +24,10 @@ import notificationSettingReducer from "./store/NotificationSettingSlice";
 import languageSettingReducer from "./store/LanguageSettingSlice";
 // ~Setting
 
+// DownloadStatus
+import downloadStatusReducer from "./store/DownloadStatusSlice";
+// ~DownloadStatus
+
 // const blacklistActionTypes = ["intercomsupport/setChatMounted", "intercomsupport/setMountedTrue", "intercomsupport/setMountedFalse"];
 const blacklistActionTypes: string[] = [];
 
@@ -57,6 +61,10 @@ const store = configureStore({
     notificationSetting: notificationSettingReducer,
     languageSetting: languageSettingReducer,
     // ~Setting
+
+    // DownloadStatus
+    downloadStatus: downloadStatusReducer,
+    // ~DownloadStatus
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(stateSyncMiddleware),
 });
