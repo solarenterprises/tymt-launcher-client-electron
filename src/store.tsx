@@ -22,6 +22,10 @@ import walletSettingReducer from "./store/WalletSettingSlice";
 import notificationSettingReducer from "./store/NotificationSettingSlice";
 // ~Setting
 
+// DownloadStatus
+import downloadStatusReducer from "./store/DownloadStatusSlice";
+// ~DownloadStatus
+
 // const blacklistActionTypes = ["intercomsupport/setChatMounted", "intercomsupport/setMountedTrue", "intercomsupport/setMountedFalse"];
 const blacklistActionTypes: string[] = [];
 
@@ -53,6 +57,10 @@ const store = configureStore({
     walletSetting: walletSettingReducer,
     notificationSetting: notificationSettingReducer,
     // ~Setting
+
+    // DownloadStatus
+    downloadStatus: downloadStatusReducer,
+    // ~DownloadStatus
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(stateSyncMiddleware),
 });

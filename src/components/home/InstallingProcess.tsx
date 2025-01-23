@@ -4,30 +4,20 @@ import { Button, Box, Stack } from "@mui/material";
 
 import InstallProcessContextMenu from "./InstallProcessContextMenu";
 
-// import { getDownloadStatus } from "../../features/home/DownloadStatusSlice";
+import { getDownloadStatus } from "../../store/DownloadStatusSlice";
 // import { getCurrentLogo } from "../../features/home/Tymtlogo";
 
 import downloadbig from "../../assets/main/DownloadBig.svg";
 import downloadsmall from "../../assets/main/DownloadSmall.svg";
 
-// import { IDownloadStatus, IPoint, TymtlogoType } from "../../types/homeTypes";
-type IPoint = any;
-// import { openDir } from "../../lib/helper/DownloadHelper";
-// import numeral from "numeral";
+import { IDownloadStatus, IPoint, TymtlogoType } from "../../types/HomeTypes";
+import { openDir } from "../../lib/helper/DownloadHelper";
+import numeral from "numeral";
 
 const InstallingProcess = () => {
   // const drawer: TymtlogoType = useSelector(getCurrentLogo);
   const drawer = { isDrawerExpanded: false };
-  // const downloadStatusStore: IDownloadStatus = useSelector(getDownloadStatus);
-  const downloadStatusStore = {
-    isDownloading: false,
-    progress: 0,
-    total: 0,
-    game: {
-      imageUrl: "",
-      title: "",
-    },
-  };
+  const downloadStatusStore: IDownloadStatus = useSelector(getDownloadStatus);
 
   const [showContextMenu, setShowContextMenu] = useState<boolean>(false);
   const [contextMenuPosition, setContextMenuPosition] = useState<IPoint>({
@@ -35,9 +25,7 @@ const InstallingProcess = () => {
     y: 0,
   });
 
-  const handleRightClick = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
+  const handleRightClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
     const mouseX = e.clientX;
@@ -66,18 +54,16 @@ const InstallingProcess = () => {
               justifyContent: "left",
               position: "relative",
               "&:hover": {
-                backgroundColor:
-                  "var(--bg-stroke-icon-button-bg-10, rgba(128, 128, 128, 0.10))",
-                border:
-                  "1px solid var(--Stroke-linear-Hover, rgba(255, 255, 255, 0.10))",
+                backgroundColor: "var(--bg-stroke-icon-button-bg-10, rgba(128, 128, 128, 0.10))",
+                border: "1px solid var(--Stroke-linear-Hover, rgba(255, 255, 255, 0.10))",
               },
             }}
             onClick={async () => {
-              // try {
-              //   await openDir();
-              // } catch (error) {
-              //   console.error("Failed to open the directory:", error);
-              // }
+              try {
+                await openDir();
+              } catch (error) {
+                console.error("Failed to open the directory:", error);
+              }
             }}
           >
             <img
@@ -118,10 +104,7 @@ const InstallingProcess = () => {
                 }}
               >
                 <img src={downloadbig} />
-                {/* {`${numeral(
-                  (downloadStatusStore?.progress / downloadStatusStore?.total) *
-                    100
-                ).format("0")}%`} */}
+                {`${numeral((downloadStatusStore?.progress / downloadStatusStore?.total) * 100).format("0")}%`}
               </Box>
             </Stack>
           </Button>
@@ -145,18 +128,16 @@ const InstallingProcess = () => {
               justifyContent: "center",
               position: "relative",
               "&:hover": {
-                backgroundColor:
-                  "var(--bg-stroke-icon-button-bg-10, rgba(128, 128, 128, 0.10))",
-                border:
-                  "1px solid var(--Stroke-linear-Hover, rgba(255, 255, 255, 0.10))",
+                backgroundColor: "var(--bg-stroke-icon-button-bg-10, rgba(128, 128, 128, 0.10))",
+                border: "1px solid var(--Stroke-linear-Hover, rgba(255, 255, 255, 0.10))",
               },
             }}
             onClick={async () => {
-              // try {
-              //   await openDir();
-              // } catch (error) {
-              //   console.error("Failed to open the directory:", error);
-              // }
+              try {
+                await openDir();
+              } catch (error) {
+                console.error("Failed to open the directory:", error);
+              }
             }}
           >
             <img
@@ -178,19 +159,12 @@ const InstallingProcess = () => {
               }}
             >
               <img src={downloadsmall} width={"16px"} />
-              {/* {`${numeral(
-                (downloadStatusStore?.progress / downloadStatusStore?.total) *
-                  100
-              ).format("0")}%`} */}
+              {`${numeral((downloadStatusStore?.progress / downloadStatusStore?.total) * 100).format("0")}%`}
             </Box>
           </Button>
         </Box>
       )}
-      <InstallProcessContextMenu
-        view={showContextMenu}
-        setView={setShowContextMenu}
-        contextMenuPosition={contextMenuPosition}
-      />
+      <InstallProcessContextMenu view={showContextMenu} setView={setShowContextMenu} contextMenuPosition={contextMenuPosition} />
     </>
   );
 };

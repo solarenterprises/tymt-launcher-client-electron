@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-// import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ThreeDots } from "react-loader-spinner";
-// import { emit } from "@tauri-apps/api/event";
 
 // import { District53 } from "../../lib/game/district 53/District53";
 // import { TauriEventNames } from "../../consts/TauriEventNames";
@@ -12,21 +11,26 @@ import { Button, Stack, Box } from "@mui/material";
 import D53Modal from "../home/D53Modal";
 import WarningModalNewGame from "../home/WarningModalNewGame";
 
-// import { getDownloadStatus } from "../../features/home/DownloadStatusSlice";
+import { getDownloadStatus, setDownloadStatus } from "../../store/DownloadStatusSlice";
 
-// import {
-//   checkOnline,
-//   downloadAndInstallNewGame,
-//   getFullExecutablePathNewGame,
-//   getGameReleaseBrowser,
-//   isInstalled,
-//   openLink,
-// } from "../../lib/helper/DownloadHelper";
+import {
+  checkOnline,
+  deleteDownloadFile,
+  downloadAndInstallNewGame,
+  downloadFileToAppDir,
+  getFullExecutablePathNewGame,
+  getGameReleaseBrowser,
+  installGame,
+  isInstalled,
+  openLink,
+} from "../../lib/helper/DownloadHelper";
 
-// import { IGame } from "../../types/GameTypes";
-type IGame = any;
+import { CONST_GAME_DISTRICT53 } from "../../const/games/district53/District53";
+
+import { IGame } from "../../types/GameTypes";
 // import { INotificationGameDownloadParams, INotificationParams } from "../../types/NotificationTypes";
-// import { IDownloadStatus } from "../../types/homeTypes";
+import { IDownloadStatus } from "../../types/HomeTypes";
+import ElectronNotification from "../EelectronNotification";
 
 export interface IPropsInstallButton {
   game: IGame;
@@ -34,9 +38,11 @@ export interface IPropsInstallButton {
 
 const InstallButton = ({ game }: IPropsInstallButton) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
-  // const downloadStatusStore: IDownloadStatus = useSelector(getDownloadStatus);
-  const downloadStatusStore = { isDownloading: false };
+  const downloadStatusStore: IDownloadStatus = useSelector(getDownloadStatus);
+
+  const { showNotification } = ElectronNotification();
 
   const [modalView, setModalView] = useState<boolean>(false);
   const [d53ModalView, setD53ModalView] = useState<boolean>(false);
@@ -44,73 +50,96 @@ const InstallButton = ({ game }: IPropsInstallButton) => {
   const [installed, setInstalled] = useState(false);
 
   const handleClick = useCallback(async () => {
-    // if (game?.projectMeta?.type === "browser") {
-    //   const externalUrl = getGameReleaseBrowser(game)?.external_url;
-    //   if (!externalUrl) return;
-    //   openLink(externalUrl);
-    //   return;
-    // }
-    // if (installed) {
-    //   if (game?._id === District53?._id) setD53ModalView(true);
-    //   else setModalView(true);
-    //   return;
-    // }
-    // const id = game?.project_name;
-    // if (!id) return;
-    // const online = await checkOnline();
-    // if (!online) {
-    //   const noti_0: INotificationParams = {
+    if (game?.projectMeta?.type === "browser") {
+      const externalUrl = getGameReleaseBrowser(game)?.external_url;
+      if (!externalUrl) return;
+      openLink(externalUrl);
+      return;
+    }
+    if (installed) {
+      if (game?._id === CONST_GAME_DISTRICT53?._id) setD53ModalView(true);
+      else setModalView(true);
+      return;
+    }
+    const id = game?.project_name;
+    if (!id) return;
+    const online = await checkOnline();
+    if (!online) {
+      // const noti_0: INotificationParams = {
+      //   status: "failed",
+      //   title: t("alt-26_internet-error"),
+      //   message: t("alt-27_you-not-connected"),
+      //   link: null,
+      //   translate: false,
+      // };
+      // emit(TauriEventNames.NOTIFICATION, noti_0);
+      showNotification(t("alt-26_internet-error"), t("alt-27_you-not-connected"));
+      return;
+    }
+    // const noti_1: INotificationGameDownloadParams = {
+    //   status: "started",
+    //   game: game,
+    // };
+    // emit(TauriEventNames.GAME_DOWNLOAD, noti_1);
+    dispatch(setDownloadStatus({ isDownloading: true, game: game }));
+    await downloadFileToAppDir(game);
+    // if (!success) {
+    //   const noti_1: INotificationGameDownloadParams = {
     //     status: "failed",
-    //     title: t("alt-26_internet-error"),
-    //     message: t("alt-27_you-not-connected"),
-    //     link: null,
-    //     translate: false,
+    //     game: game,
     //   };
-    //   emit(TauriEventNames.NOTIFICATION, noti_0);
+    //   emit(TauriEventNames.GAME_DOWNLOAD, noti_1);
     // } else {
-    //   if (!installed) {
-    //     const noti_1: INotificationGameDownloadParams = {
-    //       status: "started",
-    //       game: game,
-    //     };
-    //     emit(TauriEventNames.GAME_DOWNLOAD, noti_1);
-    //     const downloadable = await downloadAndInstallNewGame(game);
-    //     if (!downloadable) {
-    //       const noti_1: INotificationGameDownloadParams = {
-    //         status: "failed",
-    //         game: game,
-    //       };
-    //       emit(TauriEventNames.GAME_DOWNLOAD, noti_1);
-    //     } else {
-    //       const noti_3: INotificationGameDownloadParams = {
-    //         status: "finished",
-    //         game: game,
-    //       };
-    //       emit(TauriEventNames.GAME_DOWNLOAD, noti_3);
-    //     }
-    //     setInstalled(await isInstalled(game));
-    //   }
+    //   const noti_3: INotificationGameDownloadParams = {
+    //     status: "finished",
+    //     game: game,
+    //   };
+    //   emit(TauriEventNames.GAME_DOWNLOAD, noti_3);
     // }
+    setInstalled(await isInstalled(game));
   }, [game, installed]);
 
   useEffect(() => {
-    // const checkSupport = async () => {
-    //   const fullPath = await getFullExecutablePathNewGame(game);
-    //   if (!fullPath) setIsSupporting(false);
-    //   else setIsSupporting(true);
-    // };
-    // checkSupport();
+    const checkSupport = async () => {
+      const fullPath = await getFullExecutablePathNewGame(game);
+      if (!fullPath) setIsSupporting(false);
+      else setIsSupporting(true);
+    };
+    checkSupport();
   }, [game]);
 
   useEffect(() => {
-    // const checkInstalled = async (game: IGame) => {
-    //   setInstalled(await isInstalled(game));
-    // };
-    // let intervalId = setInterval(() => checkInstalled(game), 1 * 1e3);
-    // return () => {
-    //   if (intervalId) clearInterval(intervalId);
-    // };
+    const checkInstalled = async (game: IGame) => {
+      setInstalled(await isInstalled(game));
+    };
+
+    const intervalId = setInterval(() => checkInstalled(game), 1 * 1e3);
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [game]);
+
+  useEffect(() => {
+    window.electronAPI.onDownloadProgress((progress: number) => {
+      dispatch(setDownloadStatus({ isDownloading: true, progress: progress, total: 100, game: game }));
+    });
+    window.electronAPI.onDownloadComplete(async () => {
+      if (!downloadStatusStore.isDownloading || downloadStatusStore.game._id !== game._id) {
+        return;
+      }
+
+      dispatch(setDownloadStatus({ isDownloading: true, progress: 100, total: 100, game: game }));
+      await installGame(game);
+      await deleteDownloadFile(game);
+      dispatch(setDownloadStatus({ isDownloading: false, game: game }));
+      showNotification(t("alt-7_download-finish"), t("alt-8_now-play-game"));
+    });
+    window.electronAPI.onDownloadFailed(() => {
+      showNotification(t("alt-5_os-not-support"), t("alt-6_os-not-support-intro"));
+      dispatch(setDownloadStatus({ isDownloading: false, game: game }));
+    });
+  }, [downloadStatusStore]);
 
   return (
     <>

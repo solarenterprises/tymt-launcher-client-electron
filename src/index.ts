@@ -1,11 +1,4 @@
-import {
-  app,
-  BrowserWindow,
-  globalShortcut,
-  Menu,
-  Tray,
-  ipcMain,
-} from "electron";
+import { app, BrowserWindow, globalShortcut, Menu, Tray, ipcMain, shell } from "electron";
 import path from "path";
 import fs from "fs";
 import { exec } from "child_process";
@@ -90,11 +83,7 @@ const registerGlobalShortcut = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 
-app
-  .whenReady()
-  .then(createTray)
-  .then(registerGlobalShortcut)
-  .then(createWindow);
+app.whenReady().then(createTray).then(registerGlobalShortcut).then(createWindow);
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -121,103 +110,37 @@ ipcMain.handle("getEnvVars", () => {
     CONFIG_PRODUCTION_VERSION: process.env.APP_PRODUCTION_VERSION,
     CONFIG_NETWORK_NAME: process.env.APP_NETWORK_NAME,
 
-    CONFIG_TYMT_BACKEND_URL:
-      process.env.APP_PRODUCTION_VERSION === "prod"
-        ? process.env.APP_TYMT_BACKEND_URL
-        : process.env.APP_TYMT_BACKEND_DEV_URL,
-    CONFIG_TYMT_SOCKET_BACKEND_URL:
-      process.env.APP_PRODUCTION_VERSION === "prod"
-        ? process.env.APP_SOCKET_BACKEND_URL
-        : process.env.APP_SOCKET_BACKEND_DEV_URL,
-    CONFIG_TYMT_AVATAR_URL:
-      process.env.APP_PRODUCTION_VERSION === "prod"
-        ? process.env.APP_TYMT_AVATAR_URL
-        : process.env.APP_TYMT_AVATAR_DEV_URL,
+    CONFIG_TYMT_BACKEND_URL: process.env.APP_PRODUCTION_VERSION === "prod" ? process.env.APP_TYMT_BACKEND_URL : process.env.APP_TYMT_BACKEND_DEV_URL,
+    CONFIG_TYMT_SOCKET_BACKEND_URL: process.env.APP_PRODUCTION_VERSION === "prod" ? process.env.APP_SOCKET_BACKEND_URL : process.env.APP_SOCKET_BACKEND_DEV_URL,
+    CONFIG_TYMT_AVATAR_URL: process.env.APP_PRODUCTION_VERSION === "prod" ? process.env.APP_TYMT_AVATAR_URL : process.env.APP_TYMT_AVATAR_DEV_URL,
 
     CONFIG_TYMT_RELEASE_DATE: process.env.APP_TYMT_RELEASE_DATE,
     CONFIG_TYME_VERSION: process.env.APP_TYMT_VERSION,
 
-    CONFIG_SOLAR_API_URL:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_SOLAR_API_URL
-        : process.env.APP_TESTNET_SOLAR_API_URL,
-    CONFIG_SOLAR_WSS_URL:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_SOLAR_WSS_URL
-        : process.env.APP_TESTNET_SOLAR_WSS_URL,
+    CONFIG_SOLAR_API_URL: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_SOLAR_API_URL : process.env.APP_TESTNET_SOLAR_API_URL,
+    CONFIG_SOLAR_WSS_URL: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_SOLAR_WSS_URL : process.env.APP_TESTNET_SOLAR_WSS_URL,
 
-    CONFIG_SOLAR_SCAN:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_SOLAR_SCAN
-        : process.env.APP_TESTNET_SOLAR_SCAN,
-    CONFIG_ETH_SCAN:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_ETH_SCAN
-        : process.env.APP_TESTNET_ETH_SCAN,
-    CONFIG_ARB_SCAN:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_ARB_SCAN
-        : process.env.APP_TESTNET_ARB_SCAN,
-    CONFIG_AVAX_SCAN:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_AVAX_SCAN
-        : process.env.APP_TESTNET_AVAX_SCAN,
-    CONFIG_BSC_SCAN:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_BSC_SCAN
-        : process.env.APP_TESTNET_BSC_SCAN,
-    CONFIG_OPT_SCAN:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_OPT_SCAN
-        : process.env.APP_TESTNET_OPT_SCAN,
-    CONFIG_POL_SCAN:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_POL_SCAN
-        : process.env.APP_TESTNET_POL_SCAN,
-    CONFIG_BTC_SCAN:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_BTC_SCAN
-        : process.env.APP_TESTNET_BTC_SCAN,
-    CONFIG_SOL_SCAN:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_SOL_SCAN
-        : process.env.APP_TESTNET_SOL_SCAN,
+    CONFIG_SOLAR_SCAN: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_SOLAR_SCAN : process.env.APP_TESTNET_SOLAR_SCAN,
+    CONFIG_ETH_SCAN: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_ETH_SCAN : process.env.APP_TESTNET_ETH_SCAN,
+    CONFIG_ARB_SCAN: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_ARB_SCAN : process.env.APP_TESTNET_ARB_SCAN,
+    CONFIG_AVAX_SCAN: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_AVAX_SCAN : process.env.APP_TESTNET_AVAX_SCAN,
+    CONFIG_BSC_SCAN: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_BSC_SCAN : process.env.APP_TESTNET_BSC_SCAN,
+    CONFIG_OPT_SCAN: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_OPT_SCAN : process.env.APP_TESTNET_OPT_SCAN,
+    CONFIG_POL_SCAN: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_POL_SCAN : process.env.APP_TESTNET_POL_SCAN,
+    CONFIG_BTC_SCAN: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_BTC_SCAN : process.env.APP_TESTNET_BTC_SCAN,
+    CONFIG_SOL_SCAN: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_SOL_SCAN : process.env.APP_TESTNET_SOL_SCAN,
 
-    CONFIG_BSC_API_URL:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_BSC_API_URL
-        : process.env.APP_TESTNET_BSC_API_URL,
-    CONFIG_ETH_API_URL:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_ETH_API_URL
-        : process.env.APP_TESTNET_ETH_API_URL,
-    CONFIG_POL_API_URL:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_POL_API_URL
-        : process.env.APP_TESTNET_POL_API_URL,
-    CONFIG_OP_API_URL:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_OP_API_URL
-        : process.env.APP_TESTNET_OP_API_URL,
-    CONFIG_ARB_API_URL:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_ARB_API_URL
-        : process.env.APP_TESTNET_ARB_API_URL,
-    CONFIG_AVAX_API_URL:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_AVAX_API_URL
-        : process.env.APP_TESTNET_AVAX_API_URL,
-    CONFIG_BTC_API_URL:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_BTC_API_URL
-        : process.env.APP_TESTNET_BTC_API_URL,
+    CONFIG_BSC_API_URL: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_BSC_API_URL : process.env.APP_TESTNET_BSC_API_URL,
+    CONFIG_ETH_API_URL: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_ETH_API_URL : process.env.APP_TESTNET_ETH_API_URL,
+    CONFIG_POL_API_URL: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_POL_API_URL : process.env.APP_TESTNET_POL_API_URL,
+    CONFIG_OP_API_URL: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_OP_API_URL : process.env.APP_TESTNET_OP_API_URL,
+    CONFIG_ARB_API_URL: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_ARB_API_URL : process.env.APP_TESTNET_ARB_API_URL,
+    CONFIG_AVAX_API_URL: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_AVAX_API_URL : process.env.APP_TESTNET_AVAX_API_URL,
+    CONFIG_BTC_API_URL: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_BTC_API_URL : process.env.APP_TESTNET_BTC_API_URL,
 
     CONFIG_ALCHEMY_KEY: process.env.APP_ALCHEMY_KEY,
 
-    CONFIG_BSC_RPC_URL:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_BSC_RPC_URL
-        : process.env.APP_TESTNET_BSC_RPC_URL,
+    CONFIG_BSC_RPC_URL: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_BSC_RPC_URL : process.env.APP_TESTNET_BSC_RPC_URL,
     CONFIG_ETH_RPC_URL:
       process.env.APP_NETWORK_NAME === "mainnet"
         ? process.env.APP_MAINNET_ETH_RPC_URL + process.env.APP_ALCHEMY_KEY
@@ -234,10 +157,7 @@ ipcMain.handle("getEnvVars", () => {
       process.env.APP_NETWORK_NAME === "mainnet"
         ? process.env.APP_MAINNET_ARB_RPC_URL + process.env.APP_ALCHEMY_KEY
         : process.env.APP_TESTNET_ARB_RPC_URL + process.env.APP_ALCHEMY_KEY,
-    CONFIG_AVAX_RPC_URL:
-      process.env.APP_NETWORK_NAME === "mainnet"
-        ? process.env.APP_MAINNET_AVAX_PROVIDER
-        : process.env.APP_TESTNET_AVAX_PROVIDER,
+    CONFIG_AVAX_RPC_URL: process.env.APP_NETWORK_NAME === "mainnet" ? process.env.APP_MAINNET_AVAX_PROVIDER : process.env.APP_TESTNET_AVAX_PROVIDER,
 
     CONFIG_BSC_API_KEY: process.env.APP_BSC_API_KEY,
     CONFIG_ETH_API_KEY: process.env.APP_ETH_API_KEY,
@@ -253,7 +173,7 @@ ipcMain.handle("getPlatform", () => process.platform);
 ipcMain.handle("getArch", () => process.arch);
 
 ipcMain.handle("getAppPath", () => {
-  const appPath = `${app.getPath("appData")}/tymtLauncher`;
+  const appPath = path.join(app.getPath("appData"), "tymtLauncher");
 
   if (!fs.existsSync(appPath)) {
     fs.mkdirSync(appPath, { recursive: true });
@@ -262,99 +182,84 @@ ipcMain.handle("getAppPath", () => {
   return appPath;
 });
 
-ipcMain.handle(
-  "download-file",
-  async (event, { downloadLink, downloadPath }: IDownloadFile) => {
-    const win = BrowserWindow.getFocusedWindow();
+ipcMain.handle("download-file", async (event, { downloadLink, downloadPath }: IDownloadFile) => {
+  const win = BrowserWindow.getFocusedWindow();
 
-    win.webContents.downloadURL(downloadLink);
+  win.webContents.downloadURL(downloadLink);
 
-    win.webContents.session.on("will-download", (event, item) => {
-      // Set save path
-      item.setSavePath(downloadPath);
+  win.webContents.session.on("will-download", (event, item) => {
+    // Set save path
+    item.setSavePath(downloadPath);
 
-      // Monitor progress
-      item.on("updated", (event, state) => {
-        if (state === "interrupted") {
-          console.log("Download is interrupted but can be resumed");
-        } else if (state === "progressing") {
-          if (item.isPaused()) {
-            console.log("Download is paused");
-          } else {
-            const progress = item.getReceivedBytes() / item.getTotalBytes();
-            win.webContents.send("download-progress", progress * 100); // Send progress to renderer
-          }
-        }
-      });
-
-      // Download completed
-      item.once("done", (event, state) => {
-        if (state === "completed") {
-          console.log("Download successful");
-          win.webContents.send("download-complete", downloadPath);
+    // Monitor progress
+    item.on("updated", (event, state) => {
+      if (state === "interrupted") {
+        console.log("Download is interrupted but can be resumed");
+      } else if (state === "progressing") {
+        if (item.isPaused()) {
+          console.log("Download is paused");
         } else {
-          console.error("Download failed");
-          win.webContents.send("download-failed");
-        }
-      });
-    });
-  }
-);
-
-ipcMain.handle(
-  "unzip-file",
-  (event, { fileLocation, installDir }: IUnzipFile) => {
-    try {
-      const zip = new admZip(fileLocation);
-      zip.extractAllTo(installDir);
-    } catch (error) {
-      console.error("Error unzipping file:", error);
-    }
-  }
-);
-
-ipcMain.handle(
-  "move-app-image-linux",
-  async (event, { fileLocation, installDir }: IUnzipFile) => {
-    const sourcePath = path.resolve(fileLocation);
-    const fileName = path.basename(sourcePath);
-    const destinationPath = path.join(installDir, fileName);
-
-    // Ensure the parent directory exists
-    const parentDir = path.dirname(destinationPath);
-    if (!fs.existsSync(parentDir)) {
-      fs.mkdirSync(parentDir, { recursive: true });
-    }
-
-    // Move the file
-    try {
-      fs.renameSync(sourcePath, destinationPath);
-    } catch (error) {
-      throw new Error(`Failed to move file: ${error.message}`);
-    }
-  }
-);
-
-ipcMain.handle(
-  "un-tar-bz2-macos",
-  (event, { fileLocation, installDir }: IUnzipFile) => {
-    const installPath = path.resolve(installDir);
-
-    // Create the directory if it doesn't exist
-    if (!fs.existsSync(installPath)) {
-      fs.mkdirSync(installPath, { recursive: true });
-    }
-
-    exec(
-      `tar -xvjf "${fileLocation}" -C "${installDir}"`,
-      (error, stdout, stderr) => {
-        if (error) {
-          throw new Error(`Failed to unzip: ${stderr || error.message}`);
+          const progress = item.getReceivedBytes() / item.getTotalBytes();
+          win.webContents.send("download-progress", progress * 100); // Send progress to renderer
         }
       }
-    );
+    });
+
+    // Download completed
+    item.once("done", (event, state) => {
+      if (state === "completed") {
+        console.log("Download successful");
+        win.webContents.send("download-complete", downloadPath);
+      } else {
+        console.error("Download failed");
+        win.webContents.send("download-failed");
+      }
+    });
+  });
+});
+
+ipcMain.handle("unzip-file", (event, { fileLocation, installDir }: IUnzipFile) => {
+  try {
+    const zip = new admZip(fileLocation);
+    zip.extractAllTo(installDir);
+  } catch (error) {
+    console.error("Error unzipping file:", error);
   }
-);
+});
+
+ipcMain.handle("move-app-image-linux", async (event, { fileLocation, installDir }: IUnzipFile) => {
+  const sourcePath = path.resolve(fileLocation);
+  const fileName = path.basename(sourcePath);
+  const destinationPath = path.join(installDir, fileName);
+
+  // Ensure the parent directory exists
+  const parentDir = path.dirname(destinationPath);
+  if (!fs.existsSync(parentDir)) {
+    fs.mkdirSync(parentDir, { recursive: true });
+  }
+
+  // Move the file
+  try {
+    fs.renameSync(sourcePath, destinationPath);
+  } catch (error) {
+    throw new Error(`Failed to move file: ${error.message}`);
+  }
+});
+
+ipcMain.handle("un-tar-bz2-macos", (event, { fileLocation, installDir }: IUnzipFile) => {
+  const installPath = path.resolve(installDir);
+
+  // Create the directory if it doesn't exist
+  if (!fs.existsSync(installPath)) {
+    fs.mkdirSync(installPath, { recursive: true });
+  }
+
+  exec(`tar -xvjf "${fileLocation}" -C "${installDir}"`, (error, stdout, stderr) => {
+    if (error) {
+      throw new Error(`Failed to unzip: ${stderr || error.message}`);
+    }
+  });
+});
 
 ipcMain.handle("set-permission", (event, executablePath: string) => {
   // Check if the file exists
@@ -372,8 +277,12 @@ ipcMain.handle("set-permission", (event, executablePath: string) => {
 });
 
 ipcMain.handle("delete-file", (event, filePath: string) => {
-  fs.unlinkSync(filePath);
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+  }
 });
+
+ipcMain.handle("read-dir", (event, dirPath: string) => fs.existsSync(dirPath));
 
 ipcMain.handle("run-url-args", (event, { url, args }: IRunUrlArgs) => {
   console.log(url);
@@ -409,3 +318,5 @@ ipcMain.handle("run-url-args", (event, { url, args }: IRunUrlArgs) => {
     console.log("No command provided");
   }
 });
+
+ipcMain.handle("open-link", (event, url: string) => shell.openExternal(url));

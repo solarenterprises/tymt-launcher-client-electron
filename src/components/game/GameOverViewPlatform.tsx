@@ -5,8 +5,7 @@ import { Box, Stack } from "@mui/material";
 
 import { getSupportOSList } from "../../lib/helper/GameHelper";
 
-import { platformEnum, platformIconMap } from "../../types/GameTypes";
-import { IGame } from "../../types/GameTypes";
+import { IGame, platformEnum, platformIconMap } from "../../types/GameTypes";
 
 import storeStyles from "../../styles/StoreStyles";
 

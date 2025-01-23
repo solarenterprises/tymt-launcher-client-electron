@@ -12,25 +12,18 @@ export async function runUrlArgs(url: string, args: string[]) {
   window.electronAPI.runUrlArgs(url, args);
 }
 
-// export async function isInstalled(game: IGame) {
-//   try {
-//     await readDir(
-//       `${window.Electron.app.getPath('appData')('appData')}/v${CONFIG_TYMT_VERSION}/games/${game.project_name}`
-//     );
-//     return true;
-//   } catch (err) {
-//     // console.log("Failed to isInstalled: ", err);
-//     return false;
-//   }
-// }
+export async function isInstalled(game: IGame) {
+  try {
+    return await window.electronAPI.readDir(`${window.electronAPI.getAppPath()}/v${CONFIG_TYMT_VERSION}/games/${game.project_name}`);
+  } catch (error) {
+    return false;
+  }
+}
 
 export const runNewGame = async (game: IGame) => {
   try {
-    // const fullExecutablePath = await getFullExecutablePathNewGame(game);
-    const fullExecutablePath = "C:\\Windows\\System32\\notepad.exe";
-    const gameExtension = (
-      await getExecutableFileExtension(game)
-    ).toLowerCase();
+    const fullExecutablePath = await getFullExecutablePathNewGame(game);
+    const gameExtension = (await getExecutableFileExtension(game)).toLowerCase();
 
     const platform = await window.electronAPI.getPlatform();
 
@@ -38,9 +31,7 @@ export const runNewGame = async (game: IGame) => {
       case "linux":
         switch (gameExtension) {
           case "appimage":
-            await runUrlArgs(fullExecutablePath, [
-              `--appimage-extract-and-run`,
-            ]);
+            await runUrlArgs(fullExecutablePath, [`--appimage-extract-and-run`]);
             break;
         }
         break;
@@ -73,30 +64,28 @@ export const runNewGame = async (game: IGame) => {
   }
 };
 
-// export async function openDir() {
-//   return invoke("open_directory", {
-//     path: window.Electron.app.getPath('appData')('appData'),
-//   });
-// }
+export async function openDir() {
+  return window.electronAPI.runUrlArgs("open", [`${window.electronAPI.getAppPath()}`]);
+}
 
-// export async function openLink(url: string) {
-//   try {
-//     await open(url);
-//   } catch (err) {
-//     // console.error("Failed to open link:", err);
-//   }
-// }
+export async function openLink(url: string) {
+  try {
+    await window.electronAPI.openLink(url);
+  } catch (err) {
+    // console.error("Failed to open link:", err);
+  }
+}
 
-// export const checkOnline = async (): Promise<boolean> => {
-//   try {
-//     await fetch("https://www.google.com", {
-//       mode: "no-cors",
-//     });
-//     return true;
-//   } catch (error) {
-//     return false;
-//   }
-// };
+export const checkOnline = async (): Promise<boolean> => {
+  try {
+    await fetch("https://www.google.com", {
+      mode: "no-cors",
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
 
 export const downloadFileToAppDir = async (game: IGame) => {
   try {
@@ -128,9 +117,7 @@ export const installGame = async (game: IGame) => {
     console.log("installDir", installDir);
 
     const fullExecutablePath = await getFullExecutablePathNewGame(game);
-    const sourceExtension = (
-      await getDownloadFileExtension(game)
-    )?.toLocaleLowerCase();
+    const sourceExtension = (await getDownloadFileExtension(game))?.toLocaleLowerCase();
     const platform = await window.electronAPI.getPlatform();
 
     switch (platform) {
@@ -140,10 +127,7 @@ export const installGame = async (game: IGame) => {
             await window.electronAPI.unzipFile(fileLocation, installDir);
             break;
           case "appimage":
-            await window.electronAPI.moveAppImageLinux(
-              fileLocation,
-              installDir
-            );
+            await window.electronAPI.moveAppImageLinux(fileLocation, installDir);
             break;
         }
         await window.electronAPI.setPermission(fullExecutablePath);
@@ -247,8 +231,7 @@ export const getFullExecutablePathNewGame = async (game: IGame) => {
   try {
     const prefix: string = await window.electronAPI.getAppPath();
     const exePath: string = await getExecutablePathNewGame(game);
-    const fullPath =
-      prefix + `/v${CONFIG_TYMT_VERSION}/games/${game.project_name}/` + exePath;
+    const fullPath = prefix + `/v${CONFIG_TYMT_VERSION}/games/${game.project_name}/` + exePath;
     // console.log("getFullExecutablePathNewGame", fullPath);
     return fullPath;
   } catch (err) {
@@ -360,18 +343,18 @@ export const getDownloadFileNameNewGame = async (game: IGame) => {
 //   }
 // };
 
-// export const getGameReleaseBrowser = (game: IGame) => {
-//   try {
-//     if (game?.projectMeta?.type !== "browser") {
-//       return null;
-//     }
-//     const res = game?.releaseMeta?.platforms?.web;
-//     return res;
-//   } catch (err) {
-//     // console.log("Failed to getGameReleaseBrowser: ", err);
-//     return null;
-//   }
-// };
+export const getGameReleaseBrowser = (game: IGame) => {
+  try {
+    if (game?.projectMeta?.type !== "browser") {
+      return null;
+    }
+    const res = game?.releaseMeta?.platforms?.web;
+    return res;
+  } catch (err) {
+    // console.log("Failed to getGameReleaseBrowser: ", err);
+    return null;
+  }
+};
 
 // export const getGameReleaseNative = async (game: IGame) => {
 //   try {
@@ -492,9 +475,7 @@ export const getDownloadFileFullPath = async (game: IGame) => {
 
 export const getInstallDir = async (game: IGame) => {
   try {
-    const res = `${await window.electronAPI.getAppPath()}/v${CONFIG_TYMT_VERSION}/games/${
-      game?.project_name
-    }`;
+    const res = `${await window.electronAPI.getAppPath()}/v${CONFIG_TYMT_VERSION}/games/${game?.project_name}`;
     // console.log("getInstallDir", res);
     return res;
   } catch (err) {
