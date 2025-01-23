@@ -1,5 +1,9 @@
 interface Window {
   electronAPI: {
+    onSysInfo: (callback: (sysInfo: { cpuArch: string; cpuType: string; osType: string }) => void) => void;
+    
+    openExternalLink: (url: string) => void;
+    
     onCpuInfo: (
       callback: (cpuInfo: { arch: string; type: string }) => void
     ) => void;

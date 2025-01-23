@@ -1,12 +1,25 @@
 import * as bip39 from "bip39";
 
-import { CONST_CHAIN_NAMES, CONST_SUPPORT_CHAINS } from "../../const/ChainConsts";
+import { CONST_CHAIN_NAMES, CONST_CHAIN_SYMBOLS, CONST_SUPPORT_CHAINS } from "../../const/ChainConsts";
+import {
+  CONFIG_NETWORK_NAME,
+  CONFIG_SOLAR_SCAN,
+  CONFIG_BSC_SCAN,
+  CONFIG_ETH_SCAN,
+  CONFIG_SOL_SCAN,
+  CONFIG_POL_SCAN,
+  CONFIG_AVAX_SCAN,
+  CONFIG_ARB_SCAN,
+  CONFIG_OPT_SCAN,
+  CONFIG_BTC_SCAN,
+} from "../../config/MainConfig";
 
 import tymtCore from "../core/tymtCore";
 
 import { IWalletAddresses } from "../../types/WalletTypes";
 import { IPriceList } from "../../types/PriceTypes";
 import { IBalanceList } from "../../types/WalletTypes";
+import { ISupportChain } from "../../types/ChainTypes";
 
 export const checkMnemonic = (_mnemonic: string) => {
   if (_mnemonic.split(" ").length == 24) {
@@ -187,4 +200,52 @@ export const getSupportNativeOrTokenBySymbol = (tokenSymbol: string) => {
   } catch (err) {
     console.error("Failed to getSupportNativeOrTokenBySymbol: ", err);
   }
+};
+
+export const getExplorerUrl = (chain: ISupportChain, walletStore: IWalletAddresses): string => {
+  let url = "";
+  const currentChainWallet = getCurrentChainWalletAddress(walletStore, chain?.native?.name);
+  switch (chain?.native?.symbol) {
+    case CONST_CHAIN_SYMBOLS.SOLAR: {
+      url = CONFIG_SOLAR_SCAN + "wallet/" + currentChainWallet;
+      break;
+    }
+    case CONST_CHAIN_SYMBOLS.BINANCE: {
+      url = CONFIG_BSC_SCAN + "address/" + currentChainWallet;
+      break;
+    }
+    case CONST_CHAIN_SYMBOLS.ETHEREUM: {
+      url = CONFIG_ETH_SCAN + "address/" + currentChainWallet;
+      break;
+    }
+    case CONST_CHAIN_SYMBOLS.BITCOIN: {
+      url = CONFIG_BTC_SCAN + "address/" + currentChainWallet;
+      break;
+    }
+    case CONST_CHAIN_SYMBOLS.SOLANA: {
+      if (CONFIG_NETWORK_NAME == "testnet") {
+        url = CONFIG_SOL_SCAN + "account/" + currentChainWallet + "?cluster=testnet";
+      } else {
+        url = CONFIG_SOL_SCAN + "account/" + currentChainWallet;
+      }
+      break;
+    }
+    case CONST_CHAIN_SYMBOLS.POLYGON: {
+      url = CONFIG_POL_SCAN + "address/" + currentChainWallet;
+      break;
+    }
+    case CONST_CHAIN_SYMBOLS.AVALANCHE: {
+      url = CONFIG_AVAX_SCAN + "address/" + currentChainWallet;
+      break;
+    }
+    case CONST_CHAIN_SYMBOLS.ARBITRUM: {
+      url = CONFIG_ARB_SCAN + "address/" + currentChainWallet;
+      break;
+    }
+    case CONST_CHAIN_SYMBOLS.OPTIMISM: {
+      url = CONFIG_OPT_SCAN + "address/" + currentChainWallet;
+      break;
+    }
+  }
+  return url;
 };

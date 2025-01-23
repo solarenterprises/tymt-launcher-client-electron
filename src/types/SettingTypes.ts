@@ -12,4 +12,11 @@ export interface IWalletSetting {
 
 export interface INotificationSetting {
   status: string; // active, idle, do-not-disturb
+  sound: boolean;
+  inAppNotification: boolean;
+  nativeNotification: boolean;
+}
+
+export interface ILanguageSetting {
+  lang: string;
 }

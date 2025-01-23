@@ -1,3 +1,5 @@
+import { CONST_SYSINFO_CPU, CONST_SYSINFO_OS } from "../../const/SysInfoConsts";
+import { ElectronAPI } from "../api/ElectronAPI";
 import { IGame, IGameReleaseNative } from "../../types/GameTypes";
 
 export const getGameReleaseNative = async (game: IGame) => {
@@ -6,37 +8,36 @@ export const getGameReleaseNative = async (game: IGame) => {
       return null;
     }
     let res: IGameReleaseNative;
-    // const platform = await type();
-    // const cpu = await arch();
-    const platform: string = "windows";
-    const cpu: string = "x86_64";
+    const sysInfo = await ElectronAPI.getSystemInfo();
+    const platform = sysInfo.osType;
+    const cpu = sysInfo.cpuArch;
     switch (platform) {
-      case "linux":
+      case CONST_SYSINFO_OS.LINUX:
         switch (cpu) {
-          case "arm":
+          case CONST_SYSINFO_CPU.ARM64:
             res = game?.releaseMeta?.platforms?.linux_arm64;
             break;
-          case "x86_64":
+          case CONST_SYSINFO_CPU.X86_64:
             res = game?.releaseMeta?.platforms?.linux_amd64;
             break;
         }
         break;
-      case "windows":
+      case CONST_SYSINFO_OS.WINDOWS:
         switch (cpu) {
-          case "arm":
+          case CONST_SYSINFO_CPU.ARM64:
             res = game?.releaseMeta?.platforms?.windows_arm64;
             break;
-          case "x86_64":
+          case CONST_SYSINFO_CPU.X86_64:
             res = game?.releaseMeta?.platforms?.windows_amd64;
             break;
         }
         break;
-      case "macos":
+      case CONST_SYSINFO_OS.MACOS:
         switch (cpu) {
-          case "arm":
+          case CONST_SYSINFO_CPU.ARM64:
             res = game?.releaseMeta?.platforms?.darwin_arm64;
             break;
-          case "x86_64":
+          case CONST_SYSINFO_CPU.X86_64:
             res = game?.releaseMeta?.platforms?.darwin_amd64;
             break;
         }
@@ -82,13 +83,13 @@ export const getSupportOSList = (game: IGame) => {
   try {
     let res: string[] = [];
     if (game?.releaseMeta?.platforms?.darwin_amd64 || game?.releaseMeta?.platforms?.darwin_arm64) {
-      res = ["darwin", ...res];
+      res = [CONST_SYSINFO_OS.MACOS, ...res];
     }
     if (game?.releaseMeta?.platforms?.linux_amd64 || game?.releaseMeta?.platforms?.linux_arm64) {
-      res = ["linux", ...res];
+      res = [CONST_SYSINFO_OS.LINUX, ...res];
     }
     if (game?.releaseMeta?.platforms?.windows_amd64 || game?.releaseMeta?.platforms?.windows_arm64) {
-      res = ["windows", ...res];
+      res = [CONST_SYSINFO_OS.WINDOWS, ...res];
     }
     return res;
   } catch (err) {

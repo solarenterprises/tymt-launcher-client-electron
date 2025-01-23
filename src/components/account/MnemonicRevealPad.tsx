@@ -1,12 +1,8 @@
 import { useCallback } from "react";
 
-// import { TauriEventNames } from "../../consts/TauriEventNames";
-
 import CopyIconButton from "../home/CopyIconButton";
 import ExportIconButton from "../home/ExportIconButton";
 import MnemonicWord from "./MnemonicWord";
-
-// import { INotificationParams } from "../../types/NotificationTypes";
 
 export interface IPropsMnemonicRevealPad {
   passphrase: string;
@@ -17,7 +13,10 @@ export interface IPropsMnemonicRevealPad {
 const MnemonicRevealPad = ({ passphrase, blur, setBlur }: IPropsMnemonicRevealPad) => {
   const mnemonic = passphrase?.split(" ");
 
-  const copyMnemonicToClipboard = () => {};
+  const copyMnemonicToClipboard = () => {
+    navigator.clipboard.writeText(passphrase);
+  };
+
   const saveFile = async () => {};
 
   return (

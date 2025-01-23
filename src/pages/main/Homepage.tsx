@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Grid } from "@mui/material";
 
@@ -15,13 +15,6 @@ import AnimatedComponent from "../../components/home/AnimatedComponent";
 const Homepage = () => {
   const [image, setImage] = useState<string>(CONST_GAME_DISTRICT53?.imageUrl);
   const [updateModal, setUpdateModal] = useState<boolean>(false);
-
-  useEffect(() => {
-    window.electronAPI.onCpuInfo((cpuInfo) => {
-      console.log("CPU Architecture:", cpuInfo.arch);
-      console.log("CPU Type:", cpuInfo.type);
-    });
-  }, []);
 
   return (
     <>
