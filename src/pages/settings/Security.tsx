@@ -71,7 +71,7 @@ const Security = ({ view, setView }: propsType) => {
               </Stack>
             </Button>
             <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} />
-            <Stack
+            {/* <Stack
               direction={"column"}
               justifyContent={"flex-start"}
               gap={1}
@@ -93,7 +93,7 @@ const Security = ({ view, setView }: propsType) => {
               >
                 {t("set-73_multi-factor-detail")}
               </Box>
-            </Stack>
+            </Stack> */}
           </Stack>
           <ComingModal open={coming} setOpen={setComing} />
         </Stack>
