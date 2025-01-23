@@ -1,18 +1,25 @@
 import { useState, useMemo } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-
-// import { currencySymbols } from "../../consts/SupportCurrency";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Stack, Box, Button } from "@mui/material";
 
+import { CONST_CURRENCY_SYMBOLS } from "../../const/CurrencyConsts";
+
 import QrModal from "./QrModal";
 
-// import { getCurrencyList } from "../../features/wallet/CurrencyListSlice";
-// import { getCurrentCurrency } from "../../features/wallet/CurrentCurrencySlice";
-// import { getBalanceList } from "../../features/wallet/BalanceListSlice";
-// import { getPriceList } from "../../features/wallet/PriceListSlice";
+import { setCurrentChain } from "../../store/CurrentChainSlice";
+import { getCurrentCurrency } from "../../store/CurrentCurrencySlice";
+import { getBalanceList } from "../../store/BalanceListSlice";
+import { getPriceList } from "../../store/PriceListSlice";
+import { getReserveList } from "../../store/ReserveListSlice";
 
-// import { formatBalance } from "../../lib/helper";
+import { getTokenBalanceBySymbol, getTokenPriceByCmc } from "../../lib/helper/WalletHelper";
+import { formatBalance } from "../../lib/helper/NumberHelper";
+
+import { ISupportChain } from "../../types/ChainTypes";
+import { ICurrentCurrency, IReserveList } from "../../types/CurrencyTypes";
+import { IBalanceList } from "../../types/WalletTypes";
+import { IPriceList } from "../../types/PriceTypes";
 
 import CommonStyles from "../../styles/commonStyles";
 
@@ -27,11 +34,6 @@ import walletImg8 from "../../assets/wallet/WalletCard8.png";
 import walletImg9 from "../../assets/wallet/WalletCard9.png";
 import qrIcon from "../../assets/wallet/QrIcon.svg";
 
-// import { IBalanceList, ICurrencyList, ICurrentCurrency, IPriceList, ISupportChain } from "../../types/walletTypes";
-type ISupportChain = any;
-// import { getTokenBalanceBySymbol, getTokenPriceByCmc } from "../../lib/helper/WalletHelper";
-// import { setCurrentChain } from "../../features/wallet/CurrentChainSlice";
-
 const backgrounds = [walletImg1, walletImg2, walletImg3, walletImg4, walletImg5, walletImg6, walletImg7, walletImg8, walletImg9];
 
 export interface IPropsWalletCard {
@@ -41,28 +43,28 @@ export interface IPropsWalletCard {
 }
 
 const WalletCard = ({ supportChain, index }: IPropsWalletCard) => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const background = backgrounds[index];
   const common = CommonStyles();
 
-  // const currencyListStore: ICurrencyList = useSelector(getCurrencyList);
-  // const currentCurrencyStore: ICurrentCurrency = useSelector(getCurrentCurrency);
-  // const balanceListStore: IBalanceList = useSelector(getBalanceList);
-  // const priceListStore: IPriceList = useSelector(getPriceList);
+  const currentCurrencyStore: ICurrentCurrency = useSelector(getCurrentCurrency);
+  const balanceListStore: IBalanceList = useSelector(getBalanceList);
+  const priceListStore: IPriceList = useSelector(getPriceList);
+  const reserveListStore: IReserveList = useSelector(getReserveList);
 
-  // const reserve: number = useMemo(
-  //   () => currencyListStore?.list?.find((one) => one?.name === currentCurrencyStore?.currency)?.reserve,
-  //   [currencyListStore, currentCurrencyStore]
-  // );
-  // const symbol: string = useMemo(() => currencySymbols[currentCurrencyStore?.currency], [currentCurrencyStore]);
-  // const balance = useMemo(() => getTokenBalanceBySymbol(balanceListStore, supportChain?.chain?.symbol), [balanceListStore]);
-  // const price = useMemo(() => getTokenPriceByCmc(priceListStore, supportChain?.chain?.cmc), [priceListStore]);
+  const reserve: number = useMemo(
+    () => reserveListStore?.list?.find((one) => one?.currency === currentCurrencyStore?.currency)?.reserve,
+    [reserveListStore, currentCurrencyStore]
+  );
+  const symbol: string = useMemo(() => CONST_CURRENCY_SYMBOLS[currentCurrencyStore?.currency], [currentCurrencyStore]);
+  const balance = useMemo(() => getTokenBalanceBySymbol(balanceListStore, supportChain?.native?.symbol), [balanceListStore]);
+  const price = useMemo(() => getTokenPriceByCmc(priceListStore, supportChain?.native?.cmc), [priceListStore]);
 
   const [open, setOpen] = useState(false);
 
   const handleWalletCardClick = () => {
-    // dispatch(setCurrentChain(supportChain?.chain?.name));
+    dispatch(setCurrentChain(supportChain?.native?.name));
   };
 
   return (
@@ -91,11 +93,8 @@ const WalletCard = ({ supportChain, index }: IPropsWalletCard) => {
             <Box component={"img"} src={supportChain?.native?.logo} width={"40px"} height={"40px"} />
             <Stack gap={1}>
               <Box className={"fs-h3 white t-left"}>{supportChain?.native?.name}</Box>
-              <Box className={"fs-18-regular white"}>
-                {supportChain?.native?.symbol}
-                {/* {` ${formatBalance(balance, 4)}`} */}
-              </Box>
-              <Box className={"fs-16-regular light t-left"}>{/* {`${symbol} ${formatBalance(Number(price ?? 0) * Number(balance ?? 0) * reserve)}`} */}</Box>
+              <Box className={"fs-18-regular white"}>{`${formatBalance(balance, 4)} ${supportChain?.native?.symbol}`}</Box>
+              <Box className={"fs-16-regular light t-left"}>{`${symbol} ${formatBalance(Number(price ?? 0) * Number(balance ?? 0) * reserve)}`}</Box>
             </Stack>
           </Stack>
           <Box

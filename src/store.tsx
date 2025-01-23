@@ -15,6 +15,7 @@ import balanceReducer from "./store/BalanceListSlice";
 import priceReducer from "./store/PriceListSlice";
 import currentCurrencyReducer from "./store/CurrentCurrencySlice";
 import currentChainReducer from "./store/CurrentChainSlice";
+import currentTokenReducer from "./store/CurrentTokenSlice";
 // ~Wallet
 
 // Setting
@@ -48,6 +49,7 @@ const store = configureStore({
     priceList: priceReducer,
     currentCurrency: currentCurrencyReducer,
     currentChain: currentChainReducer,
+    currentToken: currentTokenReducer,
     // ~Wallet
 
     // Setting
