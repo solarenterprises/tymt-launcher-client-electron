@@ -1,11 +1,9 @@
 interface Window {
   electronAPI: {
-    onCpuInfo: (callback: (cpuInfo: { arch: string; type: string }) => void) => void;
-
     onSysInfo: (callback: (sysInfo: { cpuArch: string; cpuType: string; osType: string }) => void) => void;
-    
+
     openExternalLink: (url: string) => void;
-    
+
     // system info
     getPlatform: () => Promise<string>;
     getArch: () => Promise<string>;
@@ -16,8 +14,6 @@ interface Window {
     // download file
     downloadFile: (downloadLink: string, downloadPath: string) => Promise<void>;
     onDownloadProgress: (callback: (progress: number) => void) => void;
-    onDownloadComplete: (callback: () => void) => void;
-    onDownloadFailed: (callback: () => void) => void;
 
     // extract & install
     unzipFile: (fileLocation: string, installDir: string) => Promise<void>;
@@ -26,12 +22,15 @@ interface Window {
     setPermission: (executablePath: string) => Promise<void>;
 
     // delete file
-    deleteFile: (filePath: string) => Promise<void>;
+    deleteItem: (itemPath: string) => Promise<void>;
+
     readDir: (filePath: string) => Promise<boolean>;
+    openDir: (dirPath: string) => Promise<void>;
 
     // run url args
     runUrlArgs: (url: string, args: string[]) => Promise<void>;
 
-    openLink: (url: string) => Promise<void>;
+    // fetch
+    fetch: (url: string, init?: RequestInit) => Promise<any>;
   };
 }

@@ -2,13 +2,13 @@ import { useTranslation } from "react-i18next";
 
 import { Box, Stack, Modal, Fade } from "@mui/material";
 
-// import { runNewGame } from "../../lib/helper/DownloadHelper";
+import { runNewGame } from "../../lib/helper/DownloadHelper";
 
-// import { IGame } from "../../types/GameTypes";
-type IGame = any;
+import { IGame } from "../../types/GameTypes";
 
 import closeIcon from "../../assets/setting/XIcon.svg";
 import logo from "../../assets/main/FoxHeadComingSoon.png";
+import ElectronNotification from "../EelectronNotification";
 // import { emit } from "@tauri-apps/api/event";
 // import { TauriEventNames } from "../../consts/TauriEventNames";
 // import { INotificationParams } from "../../types/NotificationTypes";
@@ -21,6 +21,7 @@ export interface IPropsWarningModalNewGame {
 
 const WarningModalNewGame = ({ open, setOpen, game }: IPropsWarningModalNewGame) => {
   const { t } = useTranslation();
+  const { showNotification } = ElectronNotification();
 
   const modalStyle = {
     display: "flex",
@@ -48,13 +49,13 @@ const WarningModalNewGame = ({ open, setOpen, game }: IPropsWarningModalNewGame)
               <Box className="fs-h3 white">{t("ga-29_not-related-solar")}</Box>
               <Box
                 onClick={async () => {
-                  // //   setOpen(false);
-                  // const res = await runNewGame(game);
-                  // if (res) {
-                  //   setOpen(false);
-                  //   return;
-                  // }
-
+                  setOpen(false);
+                  const res = await runNewGame(game);
+                  if (res) {
+                    setOpen(false);
+                    return;
+                  }
+                  showNotification(t("alt-9_run-failed"), t("alt-10_run-failed-intro"));
                   // const noti: INotificationParams = {
                   //   status: "failed",
                   //   title: t("alt-9_run-failed"),

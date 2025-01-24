@@ -105,13 +105,12 @@ export const CONST_GAME_DISTRICT53: IGame = {
     meta_uri: "",
     platforms: {
       windows_amd64: {
-        name: "master.zip",
+        name: "District53_5.9.0.2_win_x64.zip",
         executable: "District53_5.9.0.2_win_x64/bin/District53.exe",
         installSize: "",
         downloadSize: "22000000",
-        // external_url: "https://github.com/solarenterprises/d53-minetest/releases/download/5.9.0.2/District53_5.9.0.2_win_x64.zip",
-        external_url: "https://dev.tymt.com/public/upload/games/District53_5.9.0.2_win_x64.zip",
-        // external_url: "https://github.com/solarenterprises/d53-minetest/archive/refs/heads/master.zip",
+        external_url: "https://github.com/solarenterprises/d53-minetest/releases/download/5.9.0.2/District53_5.9.0.2_win_x64.zip",
+        // external_url: "https://dev.tymt.com/public/upload/games/District53_5.9.0.2_win_x64.zip",
       },
       darwin_amd64: {
         name: "District53_5.9.0.2_mac_x64_86.zip",
