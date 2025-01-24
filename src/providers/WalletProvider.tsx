@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode, useMemo } from "react";
-import { useSelector } from "react-redux";
+import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { CONST_CURRENCY_SYMBOLS } from "../const/CurrencyConsts";
 import { CONST_CHAIN_NAMES, CONST_SUPPORT_CHAINS } from "../const/ChainConsts";
@@ -9,7 +9,7 @@ import { getCurrentCurrency } from "../store/CurrentCurrencySlice";
 import { getCurrentToken } from "../store/CurrentTokenSlice";
 import { getWallet } from "../store/WalletSlice";
 import { getPriceList } from "../store/PriceListSlice";
-import { getBalanceList } from "../store/BalanceListSlice";
+import { getBalanceList, setBalanceList } from "../store/BalanceListSlice";
 import { getReserveList } from "../store/ReserveListSlice";
 
 import {
@@ -24,8 +24,10 @@ import {
 
 import { ICurrentChain, ISupportChain } from "../types/ChainTypes";
 import { ICurrentCurrency, IReserveList } from "../types/CurrencyTypes";
-import { IBalanceList, ICurrentToken, IWalletAddresses } from "../types/WalletTypes";
+import { IBalanceList, ICurrentToken, IVotingData, IWalletAddresses } from "../types/WalletTypes";
 import { IPriceList } from "../types/PriceTypes";
+import { IAccount } from "../types/AccountTypes";
+import { IWalletSetting } from "../types/SettingTypes";
 
 interface WalletContextType {
   sxpPrice: number;
@@ -39,11 +41,16 @@ interface WalletContextType {
   currentChainNativePrice: number;
   currentChainNativeBalance: number;
   totalBalance: number;
+
+  sxpVote: (_: IAccount, __: IWalletAddresses, ___: IWalletSetting, ____: string, _____: IVotingData) => Promise<{ success: boolean; error?: string }>;
+  fetchBalanceList: () => void;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
+  const dispatch = useDispatch();
+
   const currentChainStore: ICurrentChain = useSelector(getCurrentChain);
   const currentCurrencyStore: ICurrentCurrency = useSelector(getCurrentCurrency);
   const currentTokenStore: ICurrentToken = useSelector(getCurrentToken);
@@ -88,6 +95,29 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     return res;
   }, [balanceListStore, priceListStore, currentCurrencyReserve]);
 
+  const sxpVote = async (
+    accountStore: IAccount,
+    walletStore: IWalletAddresses,
+    walletSettingStore: IWalletSetting,
+    password: string,
+    voteAsset: IVotingData
+  ) => {
+    return window.electronAPI.sxpVote(accountStore, walletStore, walletSettingStore, password, voteAsset);
+  };
+
+  const fetchBalanceList = useCallback(async () => {
+    console.log("DDD");
+    if (!walletStore || !walletStore?.solar) return;
+    const balanceList = await window.electronAPI.fetchBalanceList(walletStore);
+    dispatch(setBalanceList(balanceList));
+  }, [walletStore]);
+
+  useEffect(() => {
+    fetchBalanceList();
+    const intervalId = setInterval(fetchBalanceList, 60000);
+    return () => clearInterval(intervalId);
+  }, [dispatch, walletStore]);
+
   return (
     <WalletContext.Provider
       value={{
@@ -102,6 +132,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         currentChainNativeBalance,
         currentCurrencySymbol,
         totalBalance,
+        sxpVote,
+        fetchBalanceList,
       }}
     >
       {children}

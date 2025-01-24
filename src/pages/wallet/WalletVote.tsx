@@ -4,6 +4,8 @@ import numeral from "numeral";
 
 import { Grid, Box, Divider, Stack, Button, Pagination, IconButton, Tooltip } from "@mui/material";
 
+import { CONFIG_SOLAR_SCAN } from "../../config/MainConfig";
+
 import { useWallet } from "../../providers/WalletProvider";
 
 import AnimatedComponent from "../../components/home/AnimatedComponent";
@@ -39,14 +41,12 @@ const WalletVote = () => {
   const handleRefreshClick = async () => {
     try {
       setCurrentPage(1);
-
       const [res1, res2, res3, res4] = await Promise.all([
         Solar.get53Delegates(1),
         Solar.getVotingData(sxpAddress),
         Solar.getAllDelegates(),
         Solar.getBlockchain(),
       ]);
-
       setData(res1.data.data);
       setTotalPage(res1.data.meta.pageCount);
       if (Array.isArray(res2.data.data) && res2.data.data.length > 0) {
@@ -88,7 +88,6 @@ const WalletVote = () => {
   useEffect(() => {
     let intervalId;
     let error = false;
-
     const fetchData = async () => {
       if (error) {
       } else {
@@ -101,16 +100,13 @@ const WalletVote = () => {
         }
       }
     };
-
     intervalId = setInterval(fetchData, 4 * 1e3);
-
     return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
     let intervalId;
     let error = false;
-
     const fetchData = async () => {
       if (error) {
       } else {
@@ -126,9 +122,7 @@ const WalletVote = () => {
         }
       }
     };
-
     intervalId = setInterval(fetchData, 120 * 1e3);
-
     return () => clearInterval(intervalId);
   });
 
@@ -314,7 +308,7 @@ const WalletVote = () => {
                       borderLeft: Object.keys(votingData).includes(item.username) && votingData[item.username] !== 0 ? "5px solid #EF4444" : "none",
                     }}
                     onDoubleClick={() => {
-                      ElectronAPI.openExternalLink(`https://solarscan.com/wallet/${item.username}`);
+                      ElectronAPI.openExternalLink(`${CONFIG_SOLAR_SCAN}wallet/${item.username}`);
                     }}
                   >
                     <Stack width={"100%"}>

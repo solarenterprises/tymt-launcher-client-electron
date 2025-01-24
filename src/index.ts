@@ -262,3 +262,5 @@ ipcMain.handle("run-url-args", (event, { url, args }: IRunUrlArgs) => {
 });
 
 ipcMain.handle("open-link", (event, url: string) => shell.openExternal(url));
+
+import "./ipc/ipcWeb3";

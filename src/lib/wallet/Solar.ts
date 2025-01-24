@@ -94,17 +94,13 @@ export class Solar {
     }
   }
 
-  static getCurrentNonce(address: string) {
-    return new Promise<number>((resolve, reject) => {
-      (async () => {
-        try {
-          let walletInfo: any = await (await fetch(`${CONFIG_SOLAR_API_URL}/wallets/${address}`)).json();
-          resolve(parseInt(walletInfo.data.nonce));
-        } catch (e) {
-          reject(e);
-        }
-      })();
-    });
+  static async getCurrentNonce(address: string): Promise<number> {
+    try {
+      const response = await axios.get(`${CONFIG_SOLAR_API_URL}/wallets/${address}`);
+      return parseInt(response.data.data.nonce);
+    } catch (e) {
+      throw new Error(`Failed to get current nonce: ${e.message}`);
+    }
   }
 
   static async vote(passphrase: string, addr: string, votesAsset: any, feeUSD: string, sxpPriceUSD: number) {
@@ -126,7 +122,8 @@ export class Solar {
 
   static async getBalance(addr: string): Promise<number> {
     try {
-      return ((await (await fetch(`${CONFIG_SOLAR_API_URL}/wallets/${addr}`)).json()).data.balance as number) / 1e8;
+      const response = await axios.get(`${CONFIG_SOLAR_API_URL}/wallets/${addr}`);
+      return response.data.data.balance / 1e8;
     } catch {
       return 0;
     }

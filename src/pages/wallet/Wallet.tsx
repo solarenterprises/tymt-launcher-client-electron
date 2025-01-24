@@ -22,7 +22,7 @@ import { getCurrentToken, setCurrentToken } from "../../store/CurrentTokenSlice"
 import { getBalanceList } from "../../store/BalanceListSlice";
 import { getWalletSetting, setWalletSetting } from "../../store/WalletSettingSlice";
 
-import { getTokenBalanceBySymbol } from "../../lib/helper/WalletHelper";
+import { getNativeTokenBalanceByChainName, getTokenBalanceBySymbol } from "../../lib/helper/WalletHelper";
 
 import { IBalanceList, ICurrentToken } from "../../types/WalletTypes";
 import { IWalletSetting } from "../../types/SettingTypes";
@@ -173,7 +173,7 @@ const Wallet = () => {
                   <Grid container spacing={"32px"}>
                     {CONST_SUPPORT_CHAINS?.map((supportChain, index) => {
                       if (walletSettingStore?.hideZeroBalance) {
-                        if (currentChainNativeBalance !== 0) {
+                        if (getNativeTokenBalanceByChainName(balanceListStore, supportChain?.native?.name) !== 0) {
                           return (
                             <Grid item xs={6} key={index}>
                               <WalletCard supportChain={supportChain} index={index} setLoading={setLoading} />

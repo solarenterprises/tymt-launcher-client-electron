@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import * as ethereumjsWallet from "ethereumjs-wallet";
 import * as bip39 from "bip39";
+import axios from "axios";
 
 import { CONFIG_BSC_API_KEY, CONFIG_BSC_API_URL, CONFIG_BSC_RPC_URL, CONFIG_NETWORK_NAME } from "../../config/MainConfig";
 
@@ -26,8 +27,16 @@ export class BSC {
 
   static async getBalance(addr: string): Promise<number> {
     try {
-      const result = (await (await fetch(`${CONFIG_BSC_API_URL}?module=account&action=balance&address=${addr}&apikey=${CONFIG_BSC_API_KEY}`)).json()).result;
-      return (result as number) / 1e9 / 1e9;
+      const response = await axios.get(`${CONFIG_BSC_API_URL}`, {
+        params: {
+          module: "account",
+          action: "balance",
+          address: addr,
+          apikey: CONFIG_BSC_API_KEY,
+        },
+      });
+      const result = response.data.result;
+      return parseFloat(result) / 1e18; // Convert from Wei to BNB
     } catch (err) {
       console.error("Failed to BSC getBalance: ", err);
       return 0;
@@ -44,17 +53,19 @@ export class BSC {
             balance: 0.0,
           });
         } else {
+          const response = await axios.get(`${CONFIG_BSC_API_URL}`, {
+            params: {
+              module: "account",
+              action: "tokenbalance",
+              contractAddress: tokens[i].address,
+              address: addr,
+              apikey: CONFIG_BSC_API_KEY,
+            },
+          });
+          const balance = parseFloat(response.data.result) / 10 ** (tokens[i].decimals as number);
           result.push({
             symbol: tokens[i].symbol,
-            balance:
-              ((
-                await (
-                  await fetch(
-                    `${CONFIG_BSC_API_URL}?module=account&action=tokenbalance&contractAddress=${tokens[i].address}&address=${addr}&apikey=${CONFIG_BSC_API_KEY}`
-                  )
-                ).json()
-              ).result as number) /
-              10 ** (tokens[i].decimals as number),
+            balance: balance,
           });
         }
       }

@@ -2,11 +2,15 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 
 import { contextBridge, ipcRenderer } from "electron";
+import { IAccount } from "./types/AccountTypes";
+import { IVotingData, IWalletAddresses } from "./types/WalletTypes";
+import { IWalletSetting } from "./types/SettingTypes";
 
 contextBridge.exposeInMainWorld("electronAPI", {
   onSysInfo: (callback: (sysInfo: { cpuArch: string; cpuType: string; osType: string }) => void) => {
     ipcRenderer.on("sys-info", (_, sysInfo) => callback(sysInfo));
   },
+
   openExternalLink: (url: string) => {
     ipcRenderer.send("open-external-link", url);
   },
@@ -40,4 +44,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   // open link
   openLink: (url: string) => ipcRenderer.invoke("open-link", url),
+
+  sxpVote: (accountStore: IAccount, walletStore: IWalletAddresses, walletSettingStore: IWalletSetting, password: string, voteAsset: IVotingData) => {
+    return ipcRenderer.invoke("sxp-vote", accountStore, walletStore, walletSettingStore, password, voteAsset);
+  },
+
+  fetchBalanceList: (walletStore: IWalletAddresses) => {
+    return ipcRenderer.invoke("fetch-balance-list", walletStore);
+  },
 });
