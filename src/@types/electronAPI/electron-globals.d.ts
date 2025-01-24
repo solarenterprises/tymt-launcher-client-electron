@@ -22,10 +22,12 @@ interface Window {
     setPermission: (executablePath: string) => Promise<void>;
 
     // delete file
-    deleteItem: (itemPath: string) => Promise<void>;
+    deleteFile: (filePath: string) => Promise<void>;
 
-    readDir: (filePath: string) => Promise<boolean>;
+    // directory
+    readDir: (dirPath: string) => Promise<boolean>;
     openDir: (dirPath: string) => Promise<void>;
+    deleteDir: (dirPath: string) => Promise<void>;
 
     // run url args
     runUrlArgs: (url: string, args: string[]) => Promise<void>;

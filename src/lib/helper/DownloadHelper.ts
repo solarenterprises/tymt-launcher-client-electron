@@ -552,8 +552,7 @@ export const deleteDownloadFile = async (game: IGame) => {
   try {
     const fullPath = await getDownloadFileFullPath(game);
     // console.log("deleteDownloadFile", fullPath);
-
-    await window.electronAPI.deleteItem(fullPath);
+    await window.electronAPI.deleteFile(fullPath);
 
     return true;
   } catch (err) {
@@ -564,9 +563,9 @@ export const deleteDownloadFile = async (game: IGame) => {
 
 export const deleteGame = async (game: IGame) => {
   try {
-    const appPath = await window.electronAPI.getAppPath();
-    const dirPath = appPath + `/v${CONFIG_TYMT_VERSION}/games/${game?.project_name}`;
-    await window.electronAPI.deleteItem(dirPath);
+    const dirPath = `${await window.electronAPI.getAppPath()}/v${CONFIG_TYMT_VERSION}/games/${game?.project_name}`;
+    // console.log("deleteGame", dirPath);
+    await window.electronAPI.deleteDir(dirPath);
     return true;
   } catch (err) {
     // console.log("Failed to deleteGame: ", err);

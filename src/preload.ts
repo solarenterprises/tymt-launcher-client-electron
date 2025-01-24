@@ -27,11 +27,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
   setPermission: (executablePath: string) => ipcRenderer.invoke("set-permission", executablePath),
 
   // delete file
-  deleteItem: (itemPath: string) => ipcRenderer.invoke("delete-item", itemPath),
+  deleteFile: (filePath: string) => ipcRenderer.invoke("delete-file", filePath),
 
+  // directory
   readDir: (dirPath: string) => ipcRenderer.invoke("read-dir", dirPath),
-
   openDir: (dirPath: string) => ipcRenderer.invoke("open-dir", dirPath),
+  deleteDir: (dirPath: string) => ipcRenderer.invoke("delete-dir", dirPath),
 
   // run url args
   runUrlArgs: (url: string, args: string[]) => ipcRenderer.invoke("run-url-args", { url, args }),

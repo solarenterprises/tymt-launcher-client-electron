@@ -232,7 +232,7 @@ ipcMain.handle("set-permission", async (event, executablePath: string) => {
   }
 });
 
-ipcMain.handle("delete-item", (event, itemPath: string) => shell.trashItem(itemPath));
+ipcMain.handle("delete-file", (event, filePath: string) => shell.trashItem(filePath));
 
 ipcMain.handle("read-dir", async (event, dirPath: string) => {
   try {
@@ -243,6 +243,8 @@ ipcMain.handle("read-dir", async (event, dirPath: string) => {
 });
 
 ipcMain.handle("open-dir", (event, dirPath: string) => shell.openPath(dirPath));
+
+ipcMain.handle("delete-dir", (event, dirPath: string) => fs.rmdir(dirPath, { recursive: true }));
 
 ipcMain.handle("run-url-args", async (event, { url, args }: IRunUrlArgs) => {
   const commandPath = url === "open" ? args[1] : url;
