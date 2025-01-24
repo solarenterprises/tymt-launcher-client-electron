@@ -6,7 +6,7 @@ import { Box, Button, Divider, Stack } from "@mui/material";
 
 import { CONST_SUPPORT_CHAINS } from "../../const/ChainConsts";
 
-import ChainBox from "../../components/ChainBox";
+import ChainBox from "../../components/home/ChainBox";
 
 import { AppDispatch } from "../../store";
 import { getWallet } from "../../store/WalletSlice";

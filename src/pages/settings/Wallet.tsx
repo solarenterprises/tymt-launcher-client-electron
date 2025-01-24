@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Box, Button, Divider, Stack } from "@mui/material";
 
-import SwitchComp from "../../components/SwitchComp";
+import SwitchComp from "../../components/home/SwitchComp";
 
 import { getCurrentChain } from "../../store/CurrentChainSlice";
 import { getCurrentCurrency } from "../../store/CurrentCurrencySlice";

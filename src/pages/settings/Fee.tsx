@@ -5,16 +5,9 @@ import { useTranslation } from "react-i18next";
 
 // import { currencySymbols } from "../../consts/SupportCurrency";
 
-import {
-  Box,
-  Button,
-  Divider,
-  Stack,
-  InputAdornment,
-  TextField,
-} from "@mui/material";
+import { Box, Button, Divider, Stack, InputAdornment, TextField } from "@mui/material";
 
-import FeeSwitchButton from "../../components/FeeSwitchButton";
+import FeeSwitchButton from "../../components/home/FeeSwitchButton";
 
 // import { getWalletSetting, setWalletSetting } from "../../features/settings/WalletSettingSlice";
 // import { getCurrencyList } from "../../features/wallet/CurrencyListSlice";
@@ -47,18 +40,8 @@ const Fee = ({ view, setView }: propsType) => {
     <>
       {view === "fee" && (
         <Stack direction={"column"}>
-          <Stack
-            flexDirection={"row"}
-            justifyContent={"flex-start"}
-            gap={"10px"}
-            alignItems={"center"}
-            textAlign={"center"}
-            sx={{ padding: "20px" }}
-          >
-            <Button
-              className={"setting-back-button"}
-              onClick={() => setView("wallet")}
-            >
+          <Stack flexDirection={"row"} justifyContent={"flex-start"} gap={"10px"} alignItems={"center"} textAlign={"center"} sx={{ padding: "20px" }}>
+            <Button className={"setting-back-button"} onClick={() => setView("wallet")}>
               <Box component={"img"} src={backIcon}></Box>
             </Button>
             <Box className="fs-h3 white">{t("set-55_transaction-fee")}</Box>
@@ -75,10 +58,7 @@ const Fee = ({ view, setView }: propsType) => {
                   placeholder="0.0"
                   InputProps={{
                     endAdornment: (
-                      <InputAdornment
-                        position="end"
-                        classes={{ root: classname.adornment }}
-                      >
+                      <InputAdornment position="end" classes={{ root: classname.adornment }}>
                         {/* {symbol} */}
                       </InputAdornment>
                     ),

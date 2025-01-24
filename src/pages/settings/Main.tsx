@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -6,28 +6,15 @@ import numeral from "numeral";
 
 import { Box, Button, Divider, Stack, Tooltip } from "@mui/material";
 
-import { CONST_SUPPORT_CHAINS } from "../../const/ChainConsts";
-import { CONST_CURRENCY_SYMBOLS } from "../../const/CurrencyConsts";
+import { useWallet } from "../../providers/WalletProvider";
 
 import Avatar from "../../components/home/Avatar";
 
 import { getAccount } from "../../store/AccountSlice";
-import { getCurrentChain } from "../../store/CurrentChainSlice";
-import { getWallet } from "../../store/WalletSlice";
-import { getBalanceList } from "../../store/BalanceListSlice";
-import { getPriceList } from "../../store/PriceListSlice";
-import { getReserveList } from "../../store/ReserveListSlice";
-import { getCurrentCurrency } from "../../store/CurrentCurrencySlice";
 
 import { ElectronAPI } from "../../lib/api/ElectronAPI";
 
-import { getCurrentChainWalletAddress, getExplorerUrl } from "../../lib/helper/WalletHelper";
-
 import { IAccount } from "../../types/AccountTypes";
-import { IPriceList } from "../../types/PriceTypes";
-import { ICurrentChain, ISupportChain } from "../../types/ChainTypes";
-import { IBalanceList, IWalletAddresses } from "../../types/WalletTypes";
-import { ICurrentCurrency, IReserveList } from "../../types/CurrencyTypes";
 
 import SettingStyle from "../../styles/SettingStyle";
 
@@ -47,58 +34,21 @@ const Main = ({ view, setView }: IPropsMain) => {
   const classname = SettingStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const {
+    currentSupportChain,
+    currentChainWalletAddress,
+    currentChainExplorerUrl,
+    currentChainNativeBalance,
+    currentChainNativePrice,
+    currentCurrencySymbol,
+    totalBalance,
+  } = useWallet();
 
   const accountStore: IAccount = useSelector(getAccount);
-  const walletStore: IWalletAddresses = useSelector(getWallet);
-  const balanceListStore: IBalanceList = useSelector(getBalanceList);
-  const priceListStore: IPriceList = useSelector(getPriceList);
-  const reserveListStore: IReserveList = useSelector(getReserveList);
-  const currentChainStore: ICurrentChain = useSelector(getCurrentChain);
-  const currentCurrencyStore: ICurrentCurrency = useSelector(getCurrentCurrency);
-
-  const currentSupportChain: ISupportChain = useMemo(
-    () => CONST_SUPPORT_CHAINS.find((one) => one?.native?.name === currentChainStore?.chain),
-    [currentChainStore]
-  );
-  const currentChainWalletAddress: string = useMemo(
-    () => getCurrentChainWalletAddress(walletStore, currentChainStore?.chain),
-    [walletStore, currentChainStore]
-  );
-  const currentChainNativeBalance = useMemo(
-    () => balanceListStore?.list?.find((one) => one?.symbol === currentSupportChain?.native?.symbol)?.balance,
-    [balanceListStore, currentSupportChain]
-  );
-  const currentChainNativePrice = useMemo(
-    () => priceListStore?.list?.find((one) => one?.cmc === currentSupportChain?.native?.cmc)?.price,
-    [priceListStore, currentSupportChain]
-  );
-  const currentCurrencySymbol: string = useMemo(() => CONST_CURRENCY_SYMBOLS[currentCurrencyStore?.currency], [currentCurrencyStore]);
-  const reserve: number = useMemo(
-    () => reserveListStore?.list?.find((one) => one?.currency === currentCurrencyStore?.currency)?.reserve,
-    [reserveListStore, currentCurrencyStore]
-  );
-  const totalBalance = useMemo(() => {
-    let total = 0;
-    for (const supportChain of CONST_SUPPORT_CHAINS ?? []) {
-      const nativeBalance = balanceListStore?.list?.find((one) => one?.symbol === supportChain?.native?.symbol)?.balance;
-      const nativePrice = priceListStore?.list?.find((one) => one?.cmc === supportChain?.native?.cmc)?.price;
-      total += (nativeBalance ?? 0) * (nativePrice ?? 0);
-
-      for (const token of supportChain?.tokens ?? []) {
-        const tokenBalance = balanceListStore?.list?.find((one) => one?.symbol === token?.symbol)?.balance;
-        const tokenPrice = priceListStore?.list?.find((one) => one?.cmc === token?.cmc)?.price;
-        total += (tokenBalance ?? 0) * (tokenPrice ?? 0);
-      }
-    }
-    const res = total * reserve;
-    return res;
-  }, [balanceListStore, priceListStore, reserve]);
 
   const handleExplorer = useCallback(() => {
-    const url = getExplorerUrl(currentSupportChain, walletStore);
-    console.log(url);
-    ElectronAPI.openExternalLink(url);
-  }, [currentSupportChain]);
+    ElectronAPI.openExternalLink(currentChainExplorerUrl);
+  }, [currentChainExplorerUrl]);
 
   return (
     <>

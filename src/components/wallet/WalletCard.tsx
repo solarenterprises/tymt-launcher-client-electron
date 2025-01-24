@@ -3,21 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Stack, Box, Button } from "@mui/material";
 
-import { CONST_CURRENCY_SYMBOLS } from "../../const/CurrencyConsts";
+import { useWallet } from "../../providers/WalletProvider";
 
 import QrModal from "./QrModal";
 
 import { setCurrentChain } from "../../store/CurrentChainSlice";
-import { getCurrentCurrency } from "../../store/CurrentCurrencySlice";
 import { getBalanceList } from "../../store/BalanceListSlice";
 import { getPriceList } from "../../store/PriceListSlice";
-import { getReserveList } from "../../store/ReserveListSlice";
 
 import { getTokenBalanceBySymbol, getTokenPriceByCmc } from "../../lib/helper/WalletHelper";
 import { formatBalance } from "../../lib/helper/NumberHelper";
 
 import { ISupportChain } from "../../types/ChainTypes";
-import { ICurrentCurrency, IReserveList } from "../../types/CurrencyTypes";
 import { IBalanceList } from "../../types/WalletTypes";
 import { IPriceList } from "../../types/PriceTypes";
 
@@ -44,20 +41,14 @@ export interface IPropsWalletCard {
 
 const WalletCard = ({ supportChain, index }: IPropsWalletCard) => {
   const dispatch = useDispatch();
+  const { currentCurrencyReserve, currentCurrencySymbol } = useWallet();
 
   const background = backgrounds[index];
   const common = CommonStyles();
 
-  const currentCurrencyStore: ICurrentCurrency = useSelector(getCurrentCurrency);
   const balanceListStore: IBalanceList = useSelector(getBalanceList);
   const priceListStore: IPriceList = useSelector(getPriceList);
-  const reserveListStore: IReserveList = useSelector(getReserveList);
 
-  const reserve: number = useMemo(
-    () => reserveListStore?.list?.find((one) => one?.currency === currentCurrencyStore?.currency)?.reserve,
-    [reserveListStore, currentCurrencyStore]
-  );
-  const symbol: string = useMemo(() => CONST_CURRENCY_SYMBOLS[currentCurrencyStore?.currency], [currentCurrencyStore]);
   const balance = useMemo(() => getTokenBalanceBySymbol(balanceListStore, supportChain?.native?.symbol), [balanceListStore]);
   const price = useMemo(() => getTokenPriceByCmc(priceListStore, supportChain?.native?.cmc), [priceListStore]);
 
@@ -94,7 +85,9 @@ const WalletCard = ({ supportChain, index }: IPropsWalletCard) => {
             <Stack gap={1}>
               <Box className={"fs-h3 white t-left"}>{supportChain?.native?.name}</Box>
               <Box className={"fs-18-regular white"}>{`${formatBalance(balance, 4)} ${supportChain?.native?.symbol}`}</Box>
-              <Box className={"fs-16-regular light t-left"}>{`${symbol} ${formatBalance(Number(price ?? 0) * Number(balance ?? 0) * reserve)}`}</Box>
+              <Box className={"fs-16-regular light t-left"}>{`${currentCurrencySymbol} ${formatBalance(
+                Number(price ?? 0) * Number(balance ?? 0) * currentCurrencyReserve
+              )}`}</Box>
             </Stack>
           </Stack>
           <Box

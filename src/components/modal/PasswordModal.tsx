@@ -12,7 +12,7 @@ import { Box, Stack, Modal, Button, TextField, InputAdornment, CircularProgress,
 // import { useNotification } from "../../providers/NotificationProvider";
 
 import InputText from "../account/InputText";
-import FeeSwitchButton from "../FeeSwitchButton";
+import FeeSwitchButton from "../home/FeeSwitchButton";
 
 import { getAccount } from "../../store/AccountSlice";
 import { getWallet } from "../../store/WalletSlice";

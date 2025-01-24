@@ -5,18 +5,10 @@ import { useTranslation } from "react-i18next";
 
 // import { currencySymbols } from "../../consts/SupportCurrency";
 
-import {
-  SwipeableDrawer,
-  Box,
-  Stack,
-  IconButton,
-  Divider,
-  TextField,
-  InputAdornment,
-} from "@mui/material";
+import { SwipeableDrawer, Box, Stack, IconButton, Divider, TextField, InputAdornment } from "@mui/material";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 
-import FeeSwitchButton from "../FeeSwitchButton";
+import FeeSwitchButton from "../home/FeeSwitchButton";
 
 // import { getWalletSetting, setWalletSetting } from "../../features/settings/WalletSettingSlice";
 // import { getCurrencyList } from "../../features/wallet/CurrencyListSlice";
@@ -55,20 +47,13 @@ const TransactionFeeDrawer = ({ view, setView }: props) => {
 
   const [state, setState] = useState({ right: false });
 
-  const toggleDrawer =
-    (anchor: Anchor, open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event &&
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return;
-      }
+  const toggleDrawer = (anchor: Anchor, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    if (event && event.type === "keydown" && ((event as React.KeyboardEvent).key === "Tab" || (event as React.KeyboardEvent).key === "Shift")) {
+      return;
+    }
 
-      setState({ ...state, [anchor]: open });
-    };
+    setState({ ...state, [anchor]: open });
+  };
 
   return (
     <SwipeableDrawer
@@ -85,19 +70,10 @@ const TransactionFeeDrawer = ({ view, setView }: props) => {
       }}
     >
       <Box className={classname.collaps_pan}>
-        <img
-          src={closeImg}
-          className={classname.close_icon}
-          onClick={() => setView(false)}
-        />
+        <img src={closeImg} className={classname.close_icon} onClick={() => setView(false)} />
       </Box>
       <Box className={classname.setting_pan}>
-        <Stack
-          direction={"row"}
-          alignItems={"center"}
-          spacing={"16px"}
-          padding={"18px 16px"}
-        >
+        <Stack direction={"row"} alignItems={"center"} spacing={"16px"} padding={"18px 16px"}>
           <IconButton
             className="icon-button"
             sx={{
@@ -130,10 +106,7 @@ const TransactionFeeDrawer = ({ view, setView }: props) => {
                 InputProps={{
                   inputMode: "numeric",
                   endAdornment: (
-                    <InputAdornment
-                      position="end"
-                      classes={{ root: classname.adornment }}
-                    >
+                    <InputAdornment position="end" classes={{ root: classname.adornment }}>
                       {symbol}
                     </InputAdornment>
                   ),

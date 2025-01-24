@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { Box, SwipeableDrawer, Stack, Button, Divider } from "@mui/material";
 
-import ChainBox from "../../components/ChainBox";
+import ChainBox from "../home/ChainBox";
 
 import { CONST_SUPPORT_CHAINS } from "../../const/ChainConsts";
 

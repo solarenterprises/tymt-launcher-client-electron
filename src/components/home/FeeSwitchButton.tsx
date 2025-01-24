@@ -7,7 +7,7 @@ import { Stack, Box, Button } from "@mui/material";
 // import { getWalletSetting, setWalletSetting } from "../features/settings/WalletSettingSlice";
 // import { getCurrentChain } from "../features/wallet/CurrentChainSlice";
 
-import SettingStyle from "../styles/SettingStyle";
+import SettingStyle from "../../styles/SettingStyle";
 
 // import { IWalletSetting } from "../types/settingTypes";
 // import { ICurrentChain, ISupportChain } from "../types/walletTypes";
