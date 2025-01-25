@@ -45,8 +45,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   // open link
   openLink: (url: string) => ipcRenderer.invoke("open-link", url),
 
-  sxpVote: (accountStore: IAccount, walletStore: IWalletAddresses, walletSettingStore: IWalletSetting, password: string, voteAsset: IVotingData) => {
-    return ipcRenderer.invoke("sxp-vote", accountStore, walletStore, walletSettingStore, password, voteAsset);
+  sxpVote: (accountStore: IAccount, walletStore: IWalletAddresses, sxpFee: number, password: string, voteAsset: IVotingData) => {
+    return ipcRenderer.invoke("sxp-vote", accountStore, walletStore, sxpFee, password, voteAsset);
   },
 
   fetchBalanceList: (walletStore: IWalletAddresses) => {

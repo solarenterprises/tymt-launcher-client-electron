@@ -37,7 +37,7 @@ const PasswordModal = ({ open, setOpen, voteAsset }: IPropsPasswordModal) => {
   const classname = SettingStyle();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { currentCurrencySymbol, currentCurrencyReserve, sxpVote } = useWallet();
+  const { currentCurrencySymbol, currentCurrencyReserve, sxpFee, sxpVote } = useWallet();
 
   const accountStore: IAccount = useSelector(getAccount);
   const walletStore: IWalletAddresses = useSelector(getWallet);
@@ -59,7 +59,7 @@ const PasswordModal = ({ open, setOpen, voteAsset }: IPropsPasswordModal) => {
   const handleVoteClick = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await sxpVote(accountStore, walletStore, walletSettingStore, password, voteAsset);
+      const res = await sxpVote(accountStore, walletStore, sxpFee, password, voteAsset);
       if (res.success) {
         setOpen(false);
         setPassword("");
@@ -117,7 +117,7 @@ const PasswordModal = ({ open, setOpen, voteAsset }: IPropsPasswordModal) => {
                       input: classname.input,
                     },
                   }}
-                  value={numeral(Number(walletSettingStore?.feeUSD) * Number(currentCurrencyReserve)).format("0,0.0000")}
+                  value={numeral(Number(sxpFee) * Number(currentCurrencyReserve)).format("0,0.0000")}
                   // onBlur={(e) => {
                   //   dispatch(
                   //     setWallet({

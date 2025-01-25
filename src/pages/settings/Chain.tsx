@@ -1,6 +1,5 @@
-import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { Box, Button, Divider, Stack } from "@mui/material";
 
@@ -9,12 +8,8 @@ import { CONST_SUPPORT_CHAINS } from "../../const/ChainConsts";
 import ChainBox from "../../components/home/ChainBox";
 
 import { AppDispatch } from "../../store";
-import { getWallet } from "../../store/WalletSlice";
 import { setCurrentChain } from "../../store/CurrentChainSlice";
 
-import { getCurrentChainWalletAddress } from "../../lib/helper/WalletHelper";
-
-import { IWalletAddresses } from "../../types/WalletTypes";
 import { ISupportChain } from "../../types/ChainTypes";
 
 import backIcon from "../../assets/setting/BackIcon.svg";
@@ -28,10 +23,12 @@ const Chain = ({ view, setView }: IPropsChain) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
-  const walletStore: IWalletAddresses = useSelector(getWallet);
-
   const handleChainBoxClick = (one: ISupportChain) => {
     dispatch(setCurrentChain(one?.native?.name));
+    handleBackClick();
+  };
+
+  const handleBackClick = () => {
     if (view === "chain-wallet") {
       setView("wallet");
     } else {
@@ -39,21 +36,12 @@ const Chain = ({ view, setView }: IPropsChain) => {
     }
   };
 
-  // const copyAddress = useCallback(
-  //   (one: ISupportChain) => {
-  //     const chainName = one?.native?.name;
-  //     const address = getCurrentChainWalletAddress(walletStore, chainName);
-  //     navigator.clipboard.writeText(address);
-  //   },
-  //   [walletStore]
-  // );
-
   return (
     <>
       {(view === "chain" || view === "chain-wallet") && (
         <Stack direction={"column"}>
           <Stack flexDirection={"row"} justifyContent={"flex-start"} gap={"10px"} alignItems={"center"} textAlign={"center"} sx={{ padding: "20px" }}>
-            <Button className={"setting-back-button"} onClick={() => setView("main")}>
+            <Button className={"setting-back-button"} onClick={handleBackClick}>
               <Box component={"img"} src={backIcon}></Box>
             </Button>
             <Box className="fs-h3 white">{t("set-5_choose-chain")}</Box>

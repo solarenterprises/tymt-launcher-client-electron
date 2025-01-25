@@ -3,14 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { CONST_CURRENCY_SYMBOLS } from "../const/CurrencyConsts";
 import { CONST_CHAIN_NAMES, CONST_SUPPORT_CHAINS } from "../const/ChainConsts";
+import { CONST_FEE_SXP } from "../const/WalletConsts";
 
 import { getCurrentChain } from "../store/CurrentChainSlice";
 import { getCurrentCurrency } from "../store/CurrentCurrencySlice";
-import { getCurrentToken } from "../store/CurrentTokenSlice";
+import { getCurrentToken, setCurrentToken } from "../store/CurrentTokenSlice";
 import { getWallet } from "../store/WalletSlice";
 import { getPriceList } from "../store/PriceListSlice";
 import { getBalanceList, setBalanceList } from "../store/BalanceListSlice";
 import { getReserveList } from "../store/ReserveListSlice";
+import { getWalletSetting, setWalletSetting } from "../store/WalletSettingSlice";
 
 import {
   getCurrentChainWalletAddress,
@@ -18,11 +20,12 @@ import {
   getNativeTokenBalanceByChainName,
   getNativeTokenPriceByChainName,
   getSupportChainByName,
+  getSupportNativeOrTokenBySymbol,
   getTokenBalanceBySymbol,
   getTokenPriceByCmc,
 } from "../lib/helper/WalletHelper";
 
-import { ICurrentChain, ISupportChain } from "../types/ChainTypes";
+import { ICurrentChain, ISupportChain, ISupportNative, ISupportToken } from "../types/ChainTypes";
 import { ICurrentCurrency, IReserveList } from "../types/CurrencyTypes";
 import { IBalanceList, ICurrentToken, IVotingData, IWalletAddresses } from "../types/WalletTypes";
 import { IPriceList } from "../types/PriceTypes";
@@ -33,16 +36,19 @@ interface WalletContextType {
   sxpPrice: number;
   sxpBalance: number;
   sxpAddress: string;
+  sxpFee: number;
   currentSupportChain: ISupportChain;
   currentChainWalletAddress: string;
   currentChainExplorerUrl: string;
   currentCurrencyReserve: number;
   currentCurrencySymbol: string;
+  currentNativeOrToken: ISupportNative | ISupportToken;
   currentChainNativePrice: number;
   currentChainNativeBalance: number;
   totalBalance: number;
 
-  sxpVote: (_: IAccount, __: IWalletAddresses, ___: IWalletSetting, ____: string, _____: IVotingData) => Promise<{ success: boolean; error?: string }>;
+  sxpVote: (_: IAccount, __: IWalletAddresses, ___: number, ____: string, _____: IVotingData) => Promise<{ success: boolean; error?: string }>;
+  setSxpFeeAsInput: (_: number) => void;
   fetchBalanceList: () => void;
 }
 
@@ -51,6 +57,8 @@ const WalletContext = createContext<WalletContextType | undefined>(undefined);
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const dispatch = useDispatch();
 
+  const [sxpFee, setSxpFee] = useState<number>(0);
+
   const currentChainStore: ICurrentChain = useSelector(getCurrentChain);
   const currentCurrencyStore: ICurrentCurrency = useSelector(getCurrentCurrency);
   const currentTokenStore: ICurrentToken = useSelector(getCurrentToken);
@@ -58,6 +66,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const priceListStore: IPriceList = useSelector(getPriceList);
   const balanceListStore: IBalanceList = useSelector(getBalanceList);
   const reserveListStore: IReserveList = useSelector(getReserveList);
+  const walletSettingStore: IWalletSetting = useSelector(getWalletSetting);
 
   const sxpPrice = useMemo(() => getNativeTokenPriceByChainName(priceListStore, CONST_CHAIN_NAMES?.SOLAR), [priceListStore]);
   const sxpBalance = useMemo(() => getNativeTokenBalanceByChainName(balanceListStore, CONST_CHAIN_NAMES?.SOLAR), [balanceListStore]);
@@ -74,6 +83,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     [reserveListStore, currentCurrencyStore]
   );
   const currentCurrencySymbol: string = useMemo(() => CONST_CURRENCY_SYMBOLS[currentCurrencyStore?.currency], [currentCurrencyStore]);
+  const currentNativeOrToken = useMemo(() => getSupportNativeOrTokenBySymbol(currentTokenStore?.token), [currentTokenStore]);
   const currentChainNativeBalance = useMemo(
     () => getTokenBalanceBySymbol(balanceListStore, currentSupportChain?.native?.symbol),
     [balanceListStore, currentSupportChain]
@@ -95,18 +105,19 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     return res;
   }, [balanceListStore, priceListStore, currentCurrencyReserve]);
 
-  const sxpVote = async (
-    accountStore: IAccount,
-    walletStore: IWalletAddresses,
-    walletSettingStore: IWalletSetting,
-    password: string,
-    voteAsset: IVotingData
-  ) => {
-    return window.electronAPI.sxpVote(accountStore, walletStore, walletSettingStore, password, voteAsset);
+  const setSxpFeeAsInput = useCallback(
+    (fee: number) => {
+      dispatch(setWalletSetting({ ...walletSettingStore, feeLevel: "input" }));
+      setSxpFee(fee);
+    },
+    [dispatch, walletSettingStore]
+  );
+
+  const sxpVote = async (accountStore: IAccount, walletStore: IWalletAddresses, sxpFee: number, password: string, voteAsset: IVotingData) => {
+    return window.electronAPI.sxpVote(accountStore, walletStore, sxpFee, password, voteAsset);
   };
 
   const fetchBalanceList = useCallback(async () => {
-    console.log("DDD");
     if (!walletStore || !walletStore?.solar) return;
     const balanceList = await window.electronAPI.fetchBalanceList(walletStore);
     dispatch(setBalanceList(balanceList));
@@ -118,21 +129,44 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     return () => clearInterval(intervalId);
   }, [dispatch, walletStore]);
 
+  useEffect(() => {
+    dispatch(setCurrentToken(currentSupportChain?.native?.symbol));
+  }, [currentSupportChain]);
+
+  useEffect(() => {
+    switch (walletSettingStore?.feeLevel) {
+      case "minimum":
+        setSxpFee(CONST_FEE_SXP.MIN);
+        break;
+      case "average":
+        setSxpFee(CONST_FEE_SXP.MID);
+        break;
+      case "maximum":
+        setSxpFee(CONST_FEE_SXP.MAX);
+        break;
+      default:
+        break;
+    }
+  }, [walletSettingStore]);
+
   return (
     <WalletContext.Provider
       value={{
         sxpPrice,
         sxpBalance,
         sxpAddress,
+        sxpFee,
         currentSupportChain,
         currentChainWalletAddress,
         currentChainExplorerUrl,
         currentCurrencyReserve,
+        currentCurrencySymbol,
+        currentNativeOrToken,
         currentChainNativePrice,
         currentChainNativeBalance,
-        currentCurrencySymbol,
         totalBalance,
         sxpVote,
+        setSxpFeeAsInput,
         fetchBalanceList,
       }}
     >

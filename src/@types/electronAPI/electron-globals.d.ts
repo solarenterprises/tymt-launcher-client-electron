@@ -37,7 +37,7 @@ interface Window {
     sxpVote: (
       accountStore: IAccount,
       walletStore: IWalletAddresses,
-      walletSettingStore: IWalletSetting,
+      sxpFee: number,
       password: string,
       voteAsset: IVotingData
     ) => Promise<{ success: boolean; error?: string }>;

@@ -1,15 +1,14 @@
-import { useTranslation } from "react-i18next";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import { Grid, Box, Stack, IconButton, Button } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
-import { CONST_CURRENCY_SYMBOLS } from "../../const/CurrencyConsts";
 import { CONST_CHAIN_NAMES } from "../../const/ChainConsts";
 
-import tymtCore from "../../lib/core/tymtCore";
+import { useWallet } from "../../providers/WalletProvider";
 
 import AnimatedComponent from "../../components/home/AnimatedComponent";
 import InputText from "../../components/account/InputText";
@@ -19,36 +18,21 @@ import TransactionFeeDrawer from "../../components/wallet/TransactionFeeDrawer";
 import ChooseChainDrawer from "../../components/wallet/ChooseChainDrawer";
 
 import { AppDispatch } from "../../store";
-import { getWallet } from "../../store/WalletSlice";
 import { getAccount } from "../../store/AccountSlice";
-import { getWalletSetting } from "../../store/WalletSettingSlice";
-import { getCurrentCurrency } from "../../store/CurrentCurrencySlice";
-import { fetchPriceListAsync, getPriceList } from "../../store/PriceListSlice";
-import { fetchReserveListAsync, getReserveList } from "../../store/ReserveListSlice";
-import { fetchBalanceListAsync, getBalanceList } from "../../store/BalanceListSlice";
-import { getCurrentToken } from "../../store/CurrentTokenSlice";
 import { getCurrentChain } from "../../store/CurrentChainSlice";
+import { getCurrentToken } from "../../store/CurrentTokenSlice";
 
+import tymtCore from "../../lib/core/tymtCore";
 import { getKeccak256Hash } from "../../lib/helper/EncryptHelper";
 import { formatBalance } from "../../lib/helper/NumberHelper";
-import {
-  getCurrentChainWalletAddress,
-  getNativeTokenBalanceByChainName,
-  getNativeTokenPriceByChainName,
-  getSupportChainByName,
-  getSupportNativeOrTokenBySymbol,
-} from "../../lib/helper/WalletHelper";
 
 import SettingStyle from "../../styles/SettingStyle";
 
 import walletIcon from "../../assets/wallet/Wallet.svg";
 
-import { IPriceList } from "../../types/PriceTypes";
-import { IBalanceList, IWalletAddresses, ICurrentToken } from "../../types/WalletTypes";
-import { IWalletSetting } from "../../types/SettingTypes";
-import { IReserveList, ICurrentCurrency } from "../../types/CurrencyTypes";
 import { ICurrentChain } from "../../types/ChainTypes";
-import { IRecipient } from "../../types/TransactionTypes";
+import { IRecipient, ISendCoin, ISendCoinData } from "../../types/TransactionTypes";
+import { ICurrentToken } from "../../types/WalletTypes";
 
 const WalletSend = () => {
   const { t } = useTranslation();
@@ -56,14 +40,7 @@ const WalletSend = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const accountStore = useSelector(getAccount);
-  const reserveListStore: IReserveList = useSelector(getReserveList);
-  const currentCurrencyStore: ICurrentCurrency = useSelector(getCurrentCurrency);
-  const walletSettingStore: IWalletSetting = useSelector(getWalletSetting);
-  const currentTokenStore: ICurrentToken = useSelector(getCurrentToken);
   const currentChainStore: ICurrentChain = useSelector(getCurrentChain);
-  const walletStore: IWalletAddresses = useSelector(getWallet);
-  const balanceListStore: IBalanceList = useSelector(getBalanceList);
-  const priceListStore: IPriceList = useSelector(getPriceList);
 
   const [addressBookView, setAddressBookView] = useState<boolean>(false);
   const [transactionFeeView, setTransactionFeeView] = useState<boolean>(false);
@@ -75,19 +52,18 @@ const WalletSend = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const reserve: number = useMemo(
-    () => reserveListStore?.list?.find((one) => one?.currency === currentCurrencyStore?.currency)?.reserve,
-    [reserveListStore, currentCurrencyStore]
-  );
-  const symbol: string = useMemo(() => CONST_CURRENCY_SYMBOLS[currentCurrencyStore?.currency], [currentCurrencyStore]);
-  const currentNativeOrToken = useMemo(() => getSupportNativeOrTokenBySymbol(currentTokenStore?.token), [currentTokenStore]);
-  const currentSupportChain = useMemo(() => getSupportChainByName(currentChainStore?.chain), [currentChainStore]);
-  const currentWallet = useMemo(() => getCurrentChainWalletAddress(walletStore, currentChainStore?.chain), [currentChainStore, walletStore]);
-  const currentNativeBalance = useMemo(
-    () => getNativeTokenBalanceByChainName(balanceListStore, currentChainStore?.chain) ?? 0,
-    [balanceListStore, currentChainStore]
-  );
-  const currentNativePrice = useMemo(() => getNativeTokenPriceByChainName(priceListStore, currentChainStore?.chain) ?? 0, [priceListStore, currentChainStore]);
+  const currentTokenStore: ICurrentToken = useSelector(getCurrentToken);
+
+  const {
+    sxpFee,
+    currentCurrencyReserve,
+    currentCurrencySymbol,
+    currentSupportChain,
+    currentChainWalletAddress,
+    currentChainNativeBalance,
+    currentChainNativePrice,
+    currentNativeOrToken,
+  } = useWallet();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -139,50 +115,45 @@ const WalletSend = () => {
     setDraft([...draft, newItem]);
   }, [draft, setDraft, address, amount, currentSupportChain, currentNativeOrToken]);
 
-  const handleTransfer = useCallback(
-    async () => {
-      // let params: ISendCoinData = {
-      //   passphrase: password,
-      //   fee: walletSettingStore?.feeUSD,
-      //   recipients: draft,
-      // };
-      // if (draft.length > 0) {
-      //   params.recipients = draft;
-      // } else {
-      //   params.recipients = [
-      //     {
-      //       address: address,
-      //       amount: amount,
-      //       chainSymbol: currentSupportChain?.native?.symbol,
-      //       tokenSymbol: currentNativeOrToken?.symbol,
-      //       tokenAddr: currentNativeOrToken?.address,
-      //       tokenDecimals: currentNativeOrToken?.decimals,
-      //       icon: currentNativeOrToken?.logo,
-      //     },
-      //   ];
-      // const temp: ISendCoin = {
-      //   currentTokenSymbol: currentTokenStore?.token,
-      //   data: params,
-      // };
+  const handleTransfer = useCallback(async () => {
+    let params: ISendCoinData = {
+      passphrase: password,
+      fee: sxpFee,
+      recipients: draft,
+    };
+    if (draft.length > 0) {
+      params.recipients = draft;
+    } else {
+      params.recipients = [
+        {
+          address: address,
+          amount: amount,
+          chainSymbol: currentSupportChain?.native?.symbol,
+          tokenSymbol: currentNativeOrToken?.symbol,
+          tokenAddr: currentNativeOrToken?.address,
+          tokenDecimals: currentNativeOrToken?.decimals,
+          icon: currentNativeOrToken?.logo,
+        },
+      ];
+      const temp: ISendCoin = {
+        currentTokenSymbol: currentTokenStore?.token,
+        data: params,
+      };
       // dispatch(sendCoinAsync(temp)).then((action) => {
-      //   if (action.type.endsWith("/fulfilled")) {
-      //     if ((action.payload as INotification).status === "success") {
-      //       setDraft([]);
-      //       setAmount("");
-      //       setAddress("");
-      //       setPassword("");
-      //     }
-      //     dispatch(fetchBalanceListAsync(walletStore));
-      //     dispatch(fetchPriceListAsync());
-      //     dispatch(fetchReserveListAsync());
-      //   }
-      // });
+      // if (action.type.endsWith("/fulfilled")) {
+      // if ((action.payload as INotification).status === "success") {
+      // setDraft([]);
+      // setAmount("");
+      // setAddress("");
+      // setPassword("");
       // }
-    },
-    [
-      /*walletSettingStore, walletStore, draft, address, dispatch, password, currentNativeOrToken, currentSupportChain, accountStore*/
-    ]
-  );
+      // dispatch(fetchBalanceListAsync(walletStore));
+      // dispatch(fetchPriceListAsync());
+      // dispatch(fetchReserveListAsync());
+      // }
+      // });
+    }
+  }, [sxpFee, draft, address, dispatch, password, currentNativeOrToken, currentSupportChain, accountStore]);
 
   const removeDraft = useCallback(
     (deleteId: number) => {
@@ -226,7 +197,7 @@ const WalletSend = () => {
                     </Stack>
                     <Stack direction={"row"} alignItems={"center"} spacing={"8px"}>
                       <Box component={"img"} src={walletIcon} width={"12px"} height={"12px"} />
-                      <Box className={"fs-14-regular light"}>{currentWallet}</Box>
+                      <Box className={"fs-14-regular light"}>{currentChainWalletAddress}</Box>
                     </Stack>
                   </Stack>
                 </Stack>
@@ -236,12 +207,12 @@ const WalletSend = () => {
                   <Box className={"fs-18-regular light"}>{t("wal-9_you-send")}</Box>
                   <Stack direction={"row"} alignItems={"center"} spacing={"8px"}>
                     <Box component={"img"} src={walletIcon} width={"18px"} height={"18px"} />
-                    <Box className={"fs-12-light light"}>{formatBalance(currentNativeBalance ?? 0, 4)}</Box>
+                    <Box className={"fs-12-light light"}>{formatBalance(currentChainNativeBalance ?? 0, 4)}</Box>
                     <Box
                       className={"fs-14-bold blue"}
                       onClick={() => {
-                        setAmount(currentNativeBalance?.toString());
-                        handleAmount(currentNativeBalance?.toString());
+                        setAmount(currentChainNativeBalance?.toString());
+                        handleAmount(currentChainNativeBalance?.toString());
                       }}
                       sx={{
                         cursor: "pointer",
@@ -254,14 +225,15 @@ const WalletSend = () => {
                 <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
                   <Stack width={"100%"}>
                     <InputBox id="send-amount" placeholder="0.0" label="" align="left" onChange={handleAmount} value={amount?.toString()} />
-                    <Box className={"fs-12-light light"}>{`~${symbol} ${formatBalance(Number(amount) * Number(currentNativePrice) * reserve, 4)}`}</Box>
+                    <Box className={"fs-12-light light"}>{`~${currentCurrencySymbol} ${formatBalance(
+                      Number(amount) * Number(currentChainNativePrice) * currentCurrencyReserve,
+                      4
+                    )}`}</Box>
                   </Stack>
                   <Stack direction={"row"} alignItems={"center"} padding={"4px 8px"} spacing={"8px"}>
-                    {/* <Box component={"img"} src={chainStore.chain.logo} width={30}/>
-                    <Box className={"fs-18-regular white"}>
-                      {chainStore.chain.symbol}
-                    </Box> */}
-                    <Button
+                    <Box component={"img"} src={currentSupportChain?.native?.logo} width={30} />
+                    <Box className={"fs-18-regular white"}>{currentSupportChain?.native?.symbol}</Box>
+                    {/* <Button
                       id="basic-button"
                       aria-controls={open ? "basic-menu" : undefined}
                       aria-haspopup="true"
@@ -272,9 +244,9 @@ const WalletSend = () => {
                         <Box>
                           <img src={""} width={30} />
                         </Box>
-                        <Box className="fs-18-regular white">{""}</Box>
+                        <Box className="fs-18-regular white">{"asdf"}</Box>
                       </Stack>
-                    </Button>
+                    </Button> */}
                     {/* <Menu
                         id="basic-menu"
                         anchorEl={anchorEl}
@@ -313,7 +285,7 @@ const WalletSend = () => {
                   }}
                   onAddressButtonClick={() => setAddressBookView(true)}
                 />
-                {Number(amount) > 0 && address !== "" && (Number(walletSettingStore?.feeUSD) > 0 || currentSupportChain?.native?.symbol !== "SXP") && (
+                {Number(amount) > 0 && address !== "" && (Number(sxpFee) > 0 || currentSupportChain?.native?.symbol !== "SXP") && (
                   <Button
                     fullWidth
                     className={classname.action_button}
@@ -330,7 +302,7 @@ const WalletSend = () => {
                   <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
                     <Box className={"fs-16-regular light"}>{t("wal-13_trans-fee")}</Box>
                     <Stack direction={"row"} alignItems={"center"} spacing={"8px"}>
-                      <Box className={"fs-16-regular white"}>{walletSettingStore?.feeUSD} USD</Box>
+                      <Box className={"fs-16-regular white"}>{`${sxpFee} ${currentSupportChain?.native?.symbol}`}</Box>
                       <IconButton className="icon-button" onClick={() => setTransactionFeeView(true)}>
                         <EditOutlinedIcon className="icon-button" />
                       </IconButton>
@@ -346,7 +318,7 @@ const WalletSend = () => {
                   false || // pending
                   Number(amount) === 0 ||
                   address === "" ||
-                  (Number(walletSettingStore?.feeUSD) === 0 && currentSupportChain?.native?.symbol === "SXP") ||
+                  (Number(sxpFee) === 0 && currentSupportChain?.native?.symbol === "SXP") ||
                   getKeccak256Hash(password) !== accountStore?.password
                 }
                 className={"red-button fw"}

@@ -7,3 +7,15 @@ export interface IRecipient {
   tokenDecimals?: Number;
   icon?: string;
 }
+
+export interface ISendCoinData {
+  passphrase: string;
+  fee: number;
+  recipients: IRecipient[];
+  vendorField?: string;
+}
+
+export interface ISendCoin {
+  currentTokenSymbol: string;
+  data: ISendCoinData;
+}
