@@ -10,9 +10,9 @@ import chevronleftdouble from "../../assets/main/ChevronLeftDouble.svg";
 import chevronrightdouble from "../../assets/main/ChevronRightDouble.svg";
 import homeStyles from "../../styles/homeStyles";
 // import { getCurrentPage, setCurrentPage } from "../../features/home/Navigation";
-// import { getCurrentLogo, setCurrentLogo } from "../../features/home/Tymtlogo";
+import { getCurrentLogo, setCurrentLogo } from "../../store/TymtLogoSlice";
 // import { PaginationType } from "../../types/homeTypes";
-// import { TymtlogoType } from "../../types/homeTypes";
+import { TymtLogoType } from "../../types/HomeTypes";
 import InstallingProcess from "./InstallingProcess";
 
 const Menu = () => {
@@ -22,41 +22,40 @@ const Menu = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const currentpage: PaginationType = useSelector(getCurrentPage);
-  // const tymtlogo: TymtlogoType = useSelector(getCurrentLogo);
+  const tymtlogo: TymtLogoType = useSelector(getCurrentLogo);
   // const [selectedItem, setSelectedItem] = useState<number>(currentpage.index);
   const selectedItem = 0;
-  // const [isDrawerExpanded, setDrawerExpanded] = useState<boolean>(tymtlogo.isDrawerExpanded);
-  const isDrawerExpanded = false;
+  const [isDrawerExpanded, setDrawerExpanded] = useState<boolean>(tymtlogo.isDrawerExpanded);
 
   const handleChevronClick = () => {
-    // setDrawerExpanded((prevExpanded) => !prevExpanded);
-    // dispatch(
-    //   setCurrentLogo({
-    //     ...tymtlogo,
-    //     isDrawerExpanded: !tymtlogo.isDrawerExpanded,
-    //   })
-    // );
+    setDrawerExpanded((prevExpanded) => !prevExpanded);
+    dispatch(
+      setCurrentLogo({
+        ...tymtlogo,
+        isDrawerExpanded: !tymtlogo.isDrawerExpanded,
+      })
+    );
   };
 
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     if (window.innerWidth < 1400) {
-  //       setDrawerExpanded(false);
-  //       dispatch(setCurrentLogo({ ...tymtlogo, isDrawerExpanded: false }));
-  //     } else {
-  //       setDrawerExpanded(true);
-  //       dispatch(setCurrentLogo({ ...tymtlogo, isDrawerExpanded: true }));
-  //     }
-  //   };
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1400) {
+        setDrawerExpanded(false);
+        dispatch(setCurrentLogo({ ...tymtlogo, isDrawerExpanded: false }));
+      } else {
+        setDrawerExpanded(true);
+        dispatch(setCurrentLogo({ ...tymtlogo, isDrawerExpanded: true }));
+      }
+    };
 
-  //   handleResize();
+    handleResize();
 
-  //   window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize);
 
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, []);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   // useEffect(() => {
   //   setSelectedItem(currentpage.index);

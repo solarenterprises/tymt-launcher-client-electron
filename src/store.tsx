@@ -28,6 +28,8 @@ import languageSettingReducer from "./store/LanguageSettingSlice";
 import downloadStatusReducer from "./store/DownloadStatusSlice";
 // ~DownloadStatus
 
+import tymtLogoReducer from "./store/TymtLogoSlice";
+
 // const blacklistActionTypes = ["intercomsupport/setChatMounted", "intercomsupport/setMountedTrue", "intercomsupport/setMountedFalse"];
 const blacklistActionTypes: string[] = [];
 
@@ -65,6 +67,8 @@ const store = configureStore({
     // DownloadStatus
     downloadStatus: downloadStatusReducer,
     // ~DownloadStatus
+
+    tymtLogo: tymtLogoReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(stateSyncMiddleware),
 });
