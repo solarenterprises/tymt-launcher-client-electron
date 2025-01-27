@@ -55,10 +55,10 @@ const AddressBookDrawer = ({ view, setView, setAddress }: props) => {
         },
       }}
     >
-      <Box className={classname.collaps_pan}>
+      <Box className={classname.collaps_pan} key={`address-book-drawer-collapse-pan`}>
         <img src={closeImg} className={classname.close_icon} onClick={() => setView(false)} />
       </Box>
-      <Box className={classname.setting_pan}>
+      <Box className={classname.setting_pan} key={`address-book-drawer-setting-pan`}>
         <Stack direction={"row"} alignItems={"center"} spacing={"16px"} padding={"18px 16px"}>
           <IconButton
             className="icon-button"
@@ -89,7 +89,7 @@ const AddressBookDrawer = ({ view, setView, setAddress }: props) => {
                 setAddress(data.address);
                 setView(false);
               }}
-              key={`${index}-${index}`}
+              key={`address-book-drawer-data-${index}`}
             >
               <Stack padding={"16px"} width={"100%"}>
                 <Box className="fs-18-regular white t-left">{data.name}</Box>

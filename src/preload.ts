@@ -4,7 +4,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { IAccount } from "./types/AccountTypes";
 import { IVotingData, IWalletAddresses } from "./types/WalletTypes";
-import { IWalletSetting } from "./types/SettingTypes";
+import { IRecipient } from "./types/TransactionTypes";
 
 contextBridge.exposeInMainWorld("electronAPI", {
   onSysInfo: (callback: (sysInfo: { cpuArch: string; cpuType: string; osType: string }) => void) => {
@@ -47,6 +47,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   sxpVote: (accountStore: IAccount, walletStore: IWalletAddresses, sxpFee: number, password: string, voteAsset: IVotingData) => {
     return ipcRenderer.invoke("sxp-vote", accountStore, walletStore, sxpFee, password, voteAsset);
+  },
+
+  transferCoin: (passphrase: string, tx: { recipients: IRecipient[]; fee: string }) => {
+    return ipcRenderer.invoke("transfer-coin", passphrase, tx);
   },
 
   fetchBalanceList: (walletStore: IWalletAddresses) => {

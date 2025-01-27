@@ -52,8 +52,6 @@ const WalletSend = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const currentTokenStore: ICurrentToken = useSelector(getCurrentToken);
-
   const {
     sxpFee,
     currentCurrencyReserve,
@@ -63,6 +61,8 @@ const WalletSend = () => {
     currentChainNativeBalance,
     currentChainNativePrice,
     currentNativeOrToken,
+    transferCoin,
+    fetchBalanceList,
   } = useWallet();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -116,15 +116,11 @@ const WalletSend = () => {
   }, [draft, setDraft, address, amount, currentSupportChain, currentNativeOrToken]);
 
   const handleTransfer = useCallback(async () => {
-    let params: ISendCoinData = {
-      passphrase: password,
-      fee: sxpFee,
-      recipients: draft,
-    };
-    if (draft.length > 0) {
-      params.recipients = draft;
+    let recipients: IRecipient[] = [];
+    if (draft?.length > 0) {
+      recipients = draft;
     } else {
-      params.recipients = [
+      recipients = [
         {
           address: address,
           amount: amount,
@@ -135,25 +131,15 @@ const WalletSend = () => {
           icon: currentNativeOrToken?.logo,
         },
       ];
-      const temp: ISendCoin = {
-        currentTokenSymbol: currentTokenStore?.token,
-        data: params,
-      };
-      // dispatch(sendCoinAsync(temp)).then((action) => {
-      // if (action.type.endsWith("/fulfilled")) {
-      // if ((action.payload as INotification).status === "success") {
-      // setDraft([]);
-      // setAmount("");
-      // setAddress("");
-      // setPassword("");
-      // }
-      // dispatch(fetchBalanceListAsync(walletStore));
-      // dispatch(fetchPriceListAsync());
-      // dispatch(fetchReserveListAsync());
-      // }
-      // });
     }
-  }, [sxpFee, draft, address, dispatch, password, currentNativeOrToken, currentSupportChain, accountStore]);
+    const res = await transferCoin(recipients, sxpFee.toString());
+    // if (res.success) {
+    //   setTimeout(() => {
+    //     fetchBalanceList();
+    //   }, 3000);
+    // }
+    console.log("handleTransfer", res);
+  }, [sxpFee, draft, address, amount, password, currentNativeOrToken, currentSupportChain, dispatch]);
 
   const removeDraft = useCallback(
     (deleteId: number) => {

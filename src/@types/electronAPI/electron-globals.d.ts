@@ -42,6 +42,8 @@ interface Window {
       voteAsset: IVotingData
     ) => Promise<{ success: boolean; error?: string }>;
 
+    transferCoin: (passphrase: string, tx: { recipients: IRecipient[]; fee: string }) => Promise<{ success: boolean; message?: string; error?: string }>;
+
     fetchBalanceList: (walletStore: IWalletAddresses) => Promise<IBalance[]>;
   };
 }

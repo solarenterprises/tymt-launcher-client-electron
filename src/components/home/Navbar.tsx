@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Grid, Button, TextField, InputAdornment, Stack, Box, Tooltip } from "@mui/material";
 
+import { useWallet } from "../../providers/WalletProvider";
+
 import Avatar from "./Avatar";
 import Back from "./Back";
 import Settings from "../../pages/settings";
@@ -41,6 +43,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { currentChainWalletAddress } = useWallet();
 
   const currentlogo = { isDrawerExpanded: true };
   const myInfoStore = {
@@ -325,8 +328,8 @@ const Navbar = () => {
                 <Box className={"fs-16-regular white"}>
                   {myInfoStore?.nickName?.length > 11 ? `${accountStore?.nickName?.substring(0, 10)}...` : accountStore?.nickName}
                 </Box>
-                <Box className={"fs-14-regular light"}>{`${walletStore?.solar.substring(0, 5)}...${walletStore?.solar.substring(
-                  walletStore?.solar.length - 4
+                <Box className={"fs-14-regular light"}>{`${currentChainWalletAddress?.substring(0, 5)}...${currentChainWalletAddress?.substring(
+                  currentChainWalletAddress?.length - 4
                 )}`}</Box>
               </Stack>
             </Stack>
