@@ -51,7 +51,7 @@ export const getGameReleaseNative = async (game: IGame) => {
 
 export const getGameDownloadSize = async (game: IGame) => {
   try {
-    let res: string = "";
+    let res = "";
     if (game?.projectMeta?.type === "browser") {
       return res;
     }
@@ -66,7 +66,7 @@ export const getGameDownloadSize = async (game: IGame) => {
 
 export const getGameInstallSize = async (game: IGame) => {
   try {
-    let res: string = "";
+    let res = "";
     if (game?.projectMeta?.type === "browser") {
       return res;
     }

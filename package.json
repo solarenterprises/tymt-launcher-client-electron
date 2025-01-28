@@ -97,6 +97,7 @@
     "keccak": "^3.0.4",
     "lodash": "^4.17.21",
     "multicoin-address-validator": "^0.5.22",
+    "node-fetch": "^3.3.2",
     "numeral": "^2.0.6",
     "os": "^0.1.2",
     "os-browserify": "^0.3.0",

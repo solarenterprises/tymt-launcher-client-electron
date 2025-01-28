@@ -10,7 +10,7 @@ import StoreGameCard from "../game/StoreGameCard";
 
 // import { isInstalled } from "../../lib/helper/DownloadHelper";
 
-import NoGamePng from "../../assets/main/nogames.png";
+import NoGamePng from "../../assets/main/NoGames.png";
 
 import { IGame } from "../../types/GameTypes";
 import { useSelector } from "react-redux";

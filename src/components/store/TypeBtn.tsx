@@ -5,7 +5,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Box, MenuItem, FormControl, Select } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-// import { FilterOptionNames } from "../../consts/FilterOptionNames";
+import { FilterOptionNames } from "../../const/FilterOptionNames";
 
 const MenuProps = {
   MenuListProps: {
@@ -53,10 +53,10 @@ const theme = createTheme({
   },
 });
 
-const Types: any[] = [
-  // FilterOptionNames.TYPE_ALL,
-  // FilterOptionNames.TYPE_NATIVE,
-  // FilterOptionNames.TYPE_BROWSER,
+const Types = [
+  FilterOptionNames.TYPE_ALL,
+  FilterOptionNames.TYPE_NATIVE,
+  FilterOptionNames.TYPE_BROWSER,
 ];
 
 const selectedshow = false;
