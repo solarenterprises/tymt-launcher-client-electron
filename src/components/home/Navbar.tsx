@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { debounce } from "lodash";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Grid, Button, TextField, InputAdornment, Stack, Box, Tooltip } from "@mui/material";
@@ -15,10 +16,12 @@ import CardModal from "../modal/CardModal";
 import { getAccount } from "../../store/AccountSlice";
 import { getWallet } from "../../store/WalletSlice";
 import { getNotificationSetting } from "../../store/NotificationSettingSlice";
+import { getCurrentLogo } from "../../store/TymtLogoSlice";
 
 import { IAccount } from "../../types/AccountTypes";
 import { IWalletAddresses } from "../../types/WalletTypes";
 import { INotificationSetting } from "../../types/SettingTypes";
+import { TymtLogoType } from "../../types/HomeTypes";
 
 import newlogo from "../../assets/main/NewLogo.png";
 import newlogohead from "../../assets/main/NewLogoHead.png";
@@ -42,17 +45,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const currentlogo = { isDrawerExpanded: true };
-  const myInfoStore = {
-    userid: "123",
-    username: "test",
-    avatar: "test.png",
-    onlineStatus: "online",
-    ischain: false,
-    status: "active",
-    nickName: "test",
-  };
-
+  const currentlogo: TymtLogoType = useSelector(getCurrentLogo);
   const accountStore: IAccount = useSelector(getAccount);
   const walletStore: IWalletAddresses = useSelector(getWallet);
   const notificationSettingStore: INotificationSetting = useSelector(getNotificationSetting);
@@ -63,6 +56,15 @@ const Navbar = () => {
   const [value, setValue] = useState<string>("");
   const [cardModalOpen, setCardModalOpen] = useState<boolean>(false);
   const [coming, setComing] = useState<boolean>(false);
+
+  const handleChange = useCallback(
+    (value: string) => {
+      navigate(`/store?key=${value}`);
+    },
+    [setValue, navigate]
+  );
+
+  const debouncedChangeHandler = useCallback(debounce(handleChange, 1000), [handleChange]);
 
   const setView = useCallback(
     (view: boolean) => {
@@ -153,8 +155,8 @@ const Navbar = () => {
                 style: { color: "#FFFFFF" },
               }}
               onChange={(e) => {
-                // if (setValue) setValue(e.target.value);
-                // debouncedChangeHandler(e.target.value);
+                if (setValue) setValue(e.target.value);
+                debouncedChangeHandler(e.target.value);
               }}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
@@ -320,10 +322,10 @@ const Navbar = () => {
           </Tooltip>
           <Button className="button_navbar_profile" onClick={() => setShowSetting(!showSetting)}>
             <Stack direction={"row"} alignItems={"center"} marginLeft={"0px"} justifyContent={"left"} spacing={"8px"} height={"32px"}>
-              <Avatar url={myInfoStore?.avatar} size={32} isChain={true} onlineStatus={true} status={notificationSettingStore?.status} />
+              <Avatar url={accountStore?.avatar} size={32} isChain={true} onlineStatus={true} status={notificationSettingStore?.status} />
               <Stack direction={"column"} width={"110px"} alignItems={"flex-start"}>
                 <Box className={"fs-16-regular white"}>
-                  {myInfoStore?.nickName?.length > 11 ? `${accountStore?.nickName?.substring(0, 10)}...` : accountStore?.nickName}
+                  {accountStore?.nickName?.length > 11 ? `${accountStore?.nickName?.substring(0, 10)}...` : accountStore?.nickName}
                 </Box>
                 <Box className={"fs-14-regular light"}>{`${walletStore?.solar.substring(0, 5)}...${walletStore?.solar.substring(
                   walletStore?.solar.length - 4

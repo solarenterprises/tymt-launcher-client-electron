@@ -34,6 +34,10 @@ import Wallet from "./pages/wallet/Wallet";
 import WalletVote from "./pages/wallet/WalletVote";
 //~Wallet
 
+//Store
+import Store from "./pages/main/Store";
+//~Store
+
 import { Buffer } from "buffer";
 window.Buffer = Buffer;
 
@@ -58,6 +62,7 @@ root.render(
             <Route path="/game/:gameid" element={<GameOverview />} />
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/wallet/vote" element={<WalletVote />} />
+            <Route path="/store" element={<Store />} />
           </Route>
         </Routes>
       </HashRouter>
