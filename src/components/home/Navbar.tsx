@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-// import { debounce } from "lodash";
+import { debounce } from "lodash";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Grid, Button, TextField, InputAdornment, Stack, Box, Tooltip } from "@mui/material";
@@ -57,14 +57,14 @@ const Navbar = () => {
   const [cardModalOpen, setCardModalOpen] = useState<boolean>(false);
   const [coming, setComing] = useState<boolean>(false);
 
-  // const handleChange = useCallback(
-  //   (value: string) => {
-  //     navigate(`/store?key=${value}`);
-  //   },
-  //   [setValue, navigate]
-  // );
+  const handleChange = useCallback(
+    (value: string) => {
+      navigate(`/store?key=${value}`);
+    },
+    [setValue, navigate]
+  );
 
-  // const debouncedChangeHandler = useCallback(debounce(handleChange, 1000), [handleChange]);
+  const debouncedChangeHandler = useCallback(debounce(handleChange, 1000), [handleChange]);
 
   const setView = useCallback(
     (view: boolean) => {
@@ -156,13 +156,13 @@ const Navbar = () => {
               }}
               onChange={(e) => {
                 if (setValue) setValue(e.target.value);
-                // debouncedChangeHandler(e.target.value);
+                debouncedChangeHandler(e.target.value);
               }}
-              // onKeyDown={(event) => {
-              //   if (event.key === "Enter") {
-              //     navigate(`/store?key=${value}`);
-              //   }
-              // }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  navigate(`/store?key=${value}`);
+                }
+              }}
             />
           </ThemeProvider>
         </Stack>

@@ -23,8 +23,7 @@ const Menu = () => {
   const navigate = useNavigate();
   // const currentpage: PaginationType = useSelector(getCurrentPage);
   const tymtlogo: TymtLogoType = useSelector(getCurrentLogo);
-  // const [selectedItem, setSelectedItem] = useState<number>(currentpage.index);
-  const selectedItem = 0;
+  const [selectedItem, setSelectedItem] = useState<number>(0);
   const [isDrawerExpanded, setDrawerExpanded] = useState<boolean>(tymtlogo.isDrawerExpanded);
 
   const handleChevronClick = () => {
@@ -57,41 +56,11 @@ const Menu = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   setSelectedItem(currentpage.index);
-  // });
-  // useEffect(() => {
-  //   {
-  //     location.pathname === "/home" &&
-  //       dispatch(
-  //         setCurrentPage({
-  //           ...currentpage,
-  //           index: 0,
-  //           page: "home",
-  //         })
-  //       );
-  //   }
-  //   {
-  //     location.pathname.startsWith("/store") &&
-  //       dispatch(
-  //         setCurrentPage({
-  //           ...currentpage,
-  //           index: 1,
-  //           page: "store",
-  //         })
-  //       );
-  //   }
-  //   {
-  //     location.pathname === "/library" &&
-  //       dispatch(
-  //         setCurrentPage({
-  //           ...currentpage,
-  //           index: 2,
-  //           page: "library",
-  //         })
-  //       );
-  //   }
-  // }, [location]);
+  useEffect(() => {
+    location.pathname === "/home" && setSelectedItem(0);
+    location.pathname.startsWith("/store") && setSelectedItem(1);
+    location.pathname === "/library" && setSelectedItem(2);
+  }, [location]);
 
   return (
     <Grid
@@ -175,10 +144,10 @@ const Menu = () => {
                       //     page: text?.toLowerCase(),
                       //   })
                       // );
-                      // setSelectedItem(index);
-                      // const path = index % 3 === 0 ? "/home" : index % 3 === 1 ? "/store" : "/library";
+                      setSelectedItem(index);
+                      const path = index % 3 === 0 ? "/home" : index % 3 === 1 ? "/store" : "/library";
 
-                      // navigate(path);
+                      navigate(path);
                     }}
                   >
                     <ListItemIcon

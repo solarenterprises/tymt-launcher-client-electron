@@ -9,6 +9,8 @@ import LinuxIcon from "../../assets/main/LinuxIcon.svg";
 import WinIcon from "../../assets/main/WinIcon.svg";
 import macIcon from "../../assets/main/MacIcon.svg";
 
+import { FilterOptionNames } from "../../const/FilterOptionNames";
+
 const MenuProps = {
   MenuListProps: {
     style: {
@@ -56,9 +58,9 @@ const theme = createTheme({
 });
 
 const Platform = [
-  { platform: "sto-23_windows", icon: WinIcon }, // Windows
-  { platform: "sto-24_macos", icon: macIcon }, // macOS
-  { platform: "sto-25_linux", icon: LinuxIcon }, // Linux
+  { platform: FilterOptionNames.PLATFORM_WINDOWS, icon: WinIcon }, // Windows
+  { platform: FilterOptionNames.PLATFORM_MACOS, icon: macIcon }, // macOS
+  { platform: FilterOptionNames.PLATFORM_LINUX, icon: LinuxIcon }, // Linux
 ];
 
 const selectedshow = false;
