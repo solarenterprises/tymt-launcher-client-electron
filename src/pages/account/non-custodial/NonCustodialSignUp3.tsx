@@ -45,7 +45,7 @@ const NonCustodialSignUp3 = () => {
   const handleNextClick = useCallback(async () => {
     try {
       setLoading(true);
-      navigate("/non-custodial-signup-4", { state: { passphrase: passphrase, password: password } });
+      navigate("/non-custodial-signup-4/signup", { state: { passphrase: passphrase, password: password } });
       setLoading(false);
     } catch (err) {
       console.error("Failed to handleNextClick: ", err);

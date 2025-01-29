@@ -18,7 +18,10 @@ import { setWallet } from "../../store/WalletSlice";
 import { setLogin } from "../../store/LoginSlice";
 import { setMnemonic } from "../../store/MnemonicSlice";
 
+import { AuthAPI } from "../../lib/api/AuthAPI";
+
 import { getKeccak256Hash, encrypt } from "../../lib/helper/EncryptHelper";
+import { getPublicKey } from "../../lib/helper/WalletHelper";
 
 import { IWalletAddresses } from "../../types/WalletTypes";
 import { IAccount, IAccountList } from "../../types/AccountTypes";
@@ -51,8 +54,10 @@ const ConfirmInformation = () => {
 
   const handleSignUp = async () => {
     try {
+      const res = await AuthAPI.signup(nickname, walletAddresses.solar, passphrase);
+
       const newAccount: IAccount = {
-        uid: "",
+        uid: res._id,
         avatar: "",
         nickName: nickname,
         sxpAddress: walletAddresses.solar,
@@ -85,8 +90,9 @@ const ConfirmInformation = () => {
 
   const handleLogin = async () => {
     try {
+      const res = await AuthAPI.login(walletAddresses.solar, passphrase);
       const newAccount: IAccount = {
-        uid: "",
+        uid: res.user?._id,
         avatar: "",
         nickName: nickname,
         sxpAddress: walletAddresses.solar,

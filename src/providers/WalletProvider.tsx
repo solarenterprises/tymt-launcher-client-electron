@@ -24,6 +24,7 @@ import {
   getSupportNativeOrTokenBySymbol,
   getTokenBalanceBySymbol,
   getTokenPriceByCmc,
+  getPublicKey,
 } from "../lib/helper/WalletHelper";
 
 import { ICurrentChain, ISupportChain, ISupportNative, ISupportToken } from "../types/ChainTypes";
@@ -40,6 +41,7 @@ interface WalletContextType {
   sxpBalance: number;
   sxpAddress: string;
   sxpFee: number;
+  publicKey: string;
   currentSupportChain: ISupportChain;
   currentChainWalletAddress: string;
   currentChainExplorerUrl: string;
@@ -77,6 +79,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const sxpPrice = useMemo(() => getNativeTokenPriceByChainName(priceListStore, CONST_CHAIN_NAMES?.SOLAR), [priceListStore]);
   const sxpBalance = useMemo(() => getNativeTokenBalanceByChainName(balanceListStore, CONST_CHAIN_NAMES?.SOLAR), [balanceListStore]);
   const sxpAddress = useMemo(() => walletStore?.solar, [walletStore]);
+  const publicKey = useMemo(() => getPublicKey(passphrase), [passphrase]);
 
   const currentSupportChain = useMemo(() => getSupportChainByName(currentChainStore?.chain), [currentChainStore]);
   const currentChainWalletAddress: string = useMemo(
@@ -193,6 +196,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         sxpBalance,
         sxpAddress,
         sxpFee,
+        publicKey,
         currentSupportChain,
         currentChainWalletAddress,
         currentChainExplorerUrl,

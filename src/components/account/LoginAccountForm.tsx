@@ -30,24 +30,15 @@ const LoginAccountForm = () => {
   }, [accountStore]);
 
   const isGuest: boolean = useMemo(() => {
-    if (
-      accountStore?.nickName === "Guest" &&
-      accountStore?.password === getKeccak256Hash("")
-    )
-      return true;
+    if (accountStore?.nickName === "Guest" && accountStore?.password === getKeccak256Hash("")) return true;
     return false;
   }, [accountStore]);
 
   const handleGuestLogin = useCallback(async () => {
     try {
       const password = "";
-      const decryptedMnemonic = await decrypt(
-        accountStoreRef?.current?.mnemonic,
-        password
-      );
-      const walletAddresses = await getWalletAddressesFromPassphrase(
-        decryptedMnemonic
-      );
+      const decryptedMnemonic = await decrypt(accountStoreRef?.current?.mnemonic, password);
+      const walletAddresses = await getWalletAddressesFromPassphrase(decryptedMnemonic);
       navigate("/confirm-information/login", {
         state: {
           password: password,
@@ -70,36 +61,27 @@ const LoginAccountForm = () => {
         .test("equals", t("cca-60_wrong-password"), (value) => {
           return getKeccak256Hash(value) === accountStoreRef?.current?.password;
         })
-        .test(
-          "password-requirements",
-          t("cca-66_password-must-be"),
-          (value) => {
-            if (!value) {
-              return false;
-            }
-            const checks = [
-              /[a-z]/.test(value), // Check for lowercase letter
-              /[A-Z]/.test(value), // Check for uppercase letter
-              /\d/.test(value), // Check for digit
-              /^[^\s'";\\]+$/.test(value), // Exclude spaces, single quotes, double quotes, semicolons, and backslashes
-              value.length >= 8, // Check for minimum length
-            ];
-            const passedConditions = checks.filter(Boolean).length;
-            return passedConditions >= 4;
+        .test("password-requirements", t("cca-66_password-must-be"), (value) => {
+          if (!value) {
+            return false;
           }
-        )
+          const checks = [
+            /[a-z]/.test(value), // Check for lowercase letter
+            /[A-Z]/.test(value), // Check for uppercase letter
+            /\d/.test(value), // Check for digit
+            /^[^\s'";\\]+$/.test(value), // Exclude spaces, single quotes, double quotes, semicolons, and backslashes
+            value.length >= 8, // Check for minimum length
+          ];
+          const passedConditions = checks.filter(Boolean).length;
+          return passedConditions >= 4;
+        })
         .required(t("cca-63_required")),
     }),
     onSubmit: async () => {
       try {
         const password = formik.values.password;
-        const decryptedMnemonic = await decrypt(
-          accountStoreRef?.current?.mnemonic,
-          password
-        );
-        const walletAddresses = await getWalletAddressesFromPassphrase(
-          decryptedMnemonic
-        );
+        const decryptedMnemonic = await decrypt(accountStoreRef?.current?.mnemonic, password);
+        const walletAddresses = await getWalletAddressesFromPassphrase(decryptedMnemonic);
         navigate("/confirm-information/login", {
           state: {
             password: password,
@@ -129,35 +111,14 @@ const LoginAccountForm = () => {
                   value={formik.values.password}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={
-                    formik.touched.password && formik.errors.password
-                      ? true
-                      : false
-                  }
+                  error={formik.touched.password && formik.errors.password ? true : false}
                 />
-                {formik.touched.password && formik.errors.password && (
-                  <Box className={"fs-16-regular red"}>
-                    {formik.errors.password}
-                  </Box>
-                )}
+                {formik.touched.password && formik.errors.password && <Box className={"fs-16-regular red"}>{formik.errors.password}</Box>}
               </Stack>
-              <AccountNextButton
-                isSubmit={true}
-                text={t("ncca-7_next")}
-                disabled={
-                  formik.touched.password && formik.errors.password
-                    ? true
-                    : false
-                }
-              />
+              <AccountNextButton isSubmit={true} text={t("ncca-7_next")} disabled={formik.touched.password && formik.errors.password ? true : false} />
             </>
           )}
-          {isGuest && (
-            <AccountNextButton
-              text={t("ncca-7_next")}
-              onClick={handleGuestLogin}
-            />
-          )}
+          {isGuest && <AccountNextButton text={t("ncca-7_next")} onClick={handleGuestLogin} />}
         </Stack>
       </form>
     </>

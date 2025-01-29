@@ -18,6 +18,10 @@ export class Solar {
     return Identities.Address.fromPassphrase(mnemonic.normalize("NFD"));
   }
 
+  static getPublicKey(mnemonic: string): string {
+    return Identities.PublicKey.fromPassphrase(mnemonic.normalize("NFD"));
+  }
+
   static async addTxToQueue(body: any, url: string): Promise<AxiosResponse<any, any>> {
     return await axios.post(`${url}/transactions`, body, {
       headers: {
@@ -191,6 +195,14 @@ export class Solar {
         };
       }
     }
+  }
+
+  static async signMessage(message: string, passphrase: string): Promise<string> {
+    return Crypto.Message.sign(message, passphrase.normalize("NFD")).signature;
+  }
+
+  static async verifyMessage(message: string, publicKey: string, signature: string): Promise<boolean> {
+    return Crypto.Message.verify({ message, publicKey, signature });
   }
 }
 

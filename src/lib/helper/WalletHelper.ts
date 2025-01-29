@@ -249,3 +249,7 @@ export const getExplorerUrl = (chain: ISupportChain, walletStore: IWalletAddress
   }
   return url;
 };
+
+export const getPublicKey = (passphrase: string) => {
+  return tymtCore.Blockchains.solar.wallet.getPublicKey(passphrase);
+};
