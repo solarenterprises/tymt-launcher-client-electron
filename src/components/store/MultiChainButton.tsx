@@ -81,7 +81,7 @@ const theme = createTheme({
 
 const selectedshow = false;
 
-const Multichainbtn = () => {
+const MultiChainButton = () => {
   const { t } = useTranslation();
   const [chainName, setChainName] = useState<string[]>([]);
   const handleChange = (event: SelectChangeEvent<typeof chainName>) => {
@@ -194,4 +194,4 @@ const Multichainbtn = () => {
   );
 };
 
-export default Multichainbtn;
+export default MultiChainButton;
