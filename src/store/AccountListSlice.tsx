@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import tymtStorage from "../lib/storage/tymtStorage";
+import TymtStorage from "../lib/storage/TymtStorage";
 import { compareJSONStructure } from "../lib/helper/JSONHelper";
 
 import { IAccount, IAccountList } from "../types/AccountTypes";
@@ -10,9 +10,9 @@ const init: IAccountList = {
 };
 
 const loadAccountList: () => IAccountList = () => {
-  const data = tymtStorage.get(`accountList`);
+  const data = TymtStorage.get(`accountList`);
   if (!data || !compareJSONStructure(JSON.parse(data), init)) {
-    tymtStorage.set(`accountList`, JSON.stringify(init));
+    TymtStorage.set(`accountList`, JSON.stringify(init));
     return init;
   }
   return JSON.parse(data);
@@ -30,20 +30,20 @@ export const accountListSlice = createSlice({
   reducers: {
     setAccountList: (state, action) => {
       state.data.list = action.payload;
-      tymtStorage.set(`accountList`, JSON.stringify(state.data));
+      TymtStorage.set(`accountList`, JSON.stringify(state.data));
     },
     addAccountList: (state, action) => {
       const account = action.payload as IAccount;
       if (!account) return;
       const rest = state.data.list.filter((one) => one.sxpAddress !== account.sxpAddress);
       state.data.list = [...rest, account];
-      tymtStorage.set(`accountList`, JSON.stringify(state.data));
+      TymtStorage.set(`accountList`, JSON.stringify(state.data));
     },
     delAccountList: (state, action) => {
       const account = action.payload as IAccount;
       if (!account) return;
       state.data.list = state.data.list.filter((one) => one.sxpAddress !== account.sxpAddress);
-      tymtStorage.set(`accountList`, JSON.stringify(state.data));
+      TymtStorage.set(`accountList`, JSON.stringify(state.data));
     },
   },
 });

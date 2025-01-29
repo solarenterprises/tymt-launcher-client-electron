@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Grid, Box } from "@mui/material";
 
-import LibrarymodeBtn from "../../components/library/LibraryMode";
+import LibraryModeBtn from "../../components/library/LibraryMode";
 import Multichainbtn from "../../components/store/Multichainbtn";
 import LibraryShow from "../../components/library/LibraryShow";
 import StoreComingGameItems from "../../components/store/StoreComingGameItems";
@@ -16,7 +16,7 @@ const Library = () => {
     <Grid item xs={12} sx={{ display: "flex", flexDirection: "column" }}>
       <Box className={"fs-60-bold white"}>{t("hom-3_library")}</Box>
       <Grid item xs={12} container display={"flex"} marginTop={"48px"} justifyContent={"space-between"}>
-        <LibrarymodeBtn status={status} setStatus={setStatus} />
+        <LibraryModeBtn status={status} setStatus={setStatus} />
         {false && <Multichainbtn />}
       </Grid>
       <Grid item xs={12} marginTop={"32px"}>

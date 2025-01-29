@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import tymtStorage from "../lib/storage/tymtStorage";
+import TymtStorage from "../lib/storage/TymtStorage";
 import { compareJSONStructure } from "../lib/helper/JSONHelper";
 
 import { IAccount } from "../types/AccountTypes";
@@ -16,9 +16,9 @@ const init: IAccount = {
 };
 
 const loadAccount: () => IAccount = () => {
-  const data = tymtStorage.get(`account`);
+  const data = TymtStorage.get(`account`);
   if (!data || !compareJSONStructure(JSON.parse(data), init)) {
-    tymtStorage.set(`account`, JSON.stringify(init));
+    TymtStorage.set(`account`, JSON.stringify(init));
     return init;
   }
   return JSON.parse(data);
@@ -36,7 +36,7 @@ export const accountSlice = createSlice({
   reducers: {
     setAccount: (state, action) => {
       state.data = action.payload;
-      tymtStorage.set(`account`, JSON.stringify(state.data));
+      TymtStorage.set(`account`, JSON.stringify(state.data));
     },
   },
 });

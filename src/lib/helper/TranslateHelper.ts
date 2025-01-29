@@ -1,6 +1,6 @@
 import translate from "translate";
 
-import tymtStorage from "../storage/tymtStorage";
+import TymtStorage from "../storage/TymtStorage";
 
 import { ILanguage } from "../../types/SettingTypes";
 
@@ -11,7 +11,7 @@ export const i18nGoogle: { [key: string]: string } = {
 
 export const translateString = async (origin: string) => {
   try {
-    const languageStore: ILanguage = JSON.parse(await tymtStorage.get(`language`));
+    const languageStore: ILanguage = JSON.parse(await TymtStorage.get(`language`));
     const i18nLang = languageStore.language;
     let translatedMessage: string = "";
     const refinedOrigin = origin.replace(/[&#]/g, " ");

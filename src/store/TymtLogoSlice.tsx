@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import tymtStorage from "../lib/storage/tymtStorage";
+import TymtStorage from "../lib/storage/TymtStorage";
 import { TymtLogoType } from "../types/HomeTypes";
 import { compareJSONStructure } from "../lib/helper/JSONHelper";
 
@@ -8,15 +8,15 @@ const init: TymtLogoType = {
 };
 
 const loadData: () => TymtLogoType = () => {
-  const data = tymtStorage.get(`tymtLogo`);
+  const data = TymtStorage.get(`tymtLogo`);
   if (data === null || data === "" || data === undefined) {
-    tymtStorage.set(`tymtLogo`, JSON.stringify(init));
+    TymtStorage.set(`tymtLogo`, JSON.stringify(init));
     return init;
   } else {
     if (compareJSONStructure(JSON.parse(data), init)) {
       return JSON.parse(data);
     } else {
-      tymtStorage.set(`tymtLogo`, JSON.stringify(init));
+      TymtStorage.set(`tymtLogo`, JSON.stringify(init));
       return init;
     }
   }
@@ -34,7 +34,7 @@ const tymtLogoSlice = createSlice({
   reducers: {
     setCurrentLogo(state, action) {
       state.data = action.payload;
-      tymtStorage.set(`tymtLogo`, JSON.stringify(action.payload));
+      TymtStorage.set(`tymtLogo`, JSON.stringify(action.payload));
     },
   },
 });

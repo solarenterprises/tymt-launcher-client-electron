@@ -1,4 +1,4 @@
-const tymtStorage = {
+const TymtStorage = {
   set(key: string, value: any) {
     if (value === undefined) return;
     const stringify = JSON.stringify(value);
@@ -23,4 +23,4 @@ export const WALLET_ADDRESS = "metamask_address";
 export const METAMASK_CONNECTED = "metamask_connected";
 export const INITIAL_GUNBOT_SETUP_MODE = "initial_gunbot_setup_mode";
 
-export default tymtStorage;
+export default TymtStorage;

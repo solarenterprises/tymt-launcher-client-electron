@@ -96,6 +96,10 @@ export interface IGame {
   __v: number;
 }
 
+export interface IGameList {
+  games: IGame[];
+}
+
 export interface IGameReleaseNative {
   name: string;
   executable: string;

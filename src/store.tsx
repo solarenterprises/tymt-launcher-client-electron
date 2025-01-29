@@ -29,6 +29,7 @@ import downloadStatusReducer from "./store/DownloadStatusSlice";
 // ~DownloadStatus
 
 import tymtLogoReducer from "./store/TymtLogoSlice";
+import gameListReducer from "./store/GameListSlice";
 
 // const blacklistActionTypes = ["intercomsupport/setChatMounted", "intercomsupport/setMountedTrue", "intercomsupport/setMountedFalse"];
 const blacklistActionTypes: string[] = [];
@@ -69,6 +70,7 @@ const store = configureStore({
     // ~DownloadStatus
 
     tymtLogo: tymtLogoReducer,
+    gameList: gameListReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(stateSyncMiddleware),
 });

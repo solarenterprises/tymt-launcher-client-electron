@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { isArray } from "lodash";
 
-import tymtStorage from "../storage/tymtStorage";
+import TymtStorage from "../storage/TymtStorage";
 import { CONFIG_TYMT_BACKEND_URL } from "../../config/MainConfig";
 
 import { ISaltToken } from "../../types/AccountTypes";
@@ -24,7 +24,7 @@ export class PriceAPI {
 
   static async getTokenPrices(): Promise<AxiosResponse<any, any>> {
     try {
-      const saltTokenStore: ISaltToken = JSON.parse(tymtStorage.get(`saltToken`));
+      const saltTokenStore: ISaltToken = JSON.parse(TymtStorage.get(`saltToken`));
       const result = await axios.get(`${CONFIG_TYMT_BACKEND_URL}/token-prices`, {
         headers: {
           "x-token": saltTokenStore.token,
@@ -38,7 +38,7 @@ export class PriceAPI {
 
   static async getTokenPrice(cmc: string): Promise<AxiosResponse<any, any>> {
     try {
-      const saltTokenStore: ISaltToken = JSON.parse(tymtStorage.get(`saltToken`));
+      const saltTokenStore: ISaltToken = JSON.parse(TymtStorage.get(`saltToken`));
       const result = await axios.get(`${CONFIG_TYMT_BACKEND_URL}/token-prices/latest-token-price-by-cmc/${cmc}`, {
         headers: {
           "x-token": saltTokenStore.token,

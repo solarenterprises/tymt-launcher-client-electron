@@ -9,12 +9,12 @@ export interface TymtLogoType {
   isDrawerExpanded: boolean;
 }
 
-export interface propsmodeType {
+export interface IPropsMode {
   status: number;
   setStatus: (status: number) => void;
 }
 
-export interface librarymodeType {
+export interface ILibraryMode {
   mode: number;
 }
 

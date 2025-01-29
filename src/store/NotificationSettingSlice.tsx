@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import tymtStorage from "../lib/storage/tymtStorage";
+import TymtStorage from "../lib/storage/TymtStorage";
 import { compareJSONStructure } from "../lib/helper/JSONHelper";
 import { INotificationSetting } from "../types/SettingTypes";
 
@@ -11,15 +11,15 @@ const init: INotificationSetting = {
 };
 
 const loadNotificationSetting: () => INotificationSetting = () => {
-  const data = tymtStorage.get(`notificationSetting`);
+  const data = TymtStorage.get(`notificationSetting`);
   if (!data) {
-    tymtStorage.set(`notificationSetting`, JSON.stringify(init));
+    TymtStorage.set(`notificationSetting`, JSON.stringify(init));
     return init;
   } else {
     if (compareJSONStructure(JSON.parse(data), init)) {
       return JSON.parse(data);
     } else {
-      tymtStorage.set(`notificationSetting`, JSON.stringify(init));
+      TymtStorage.set(`notificationSetting`, JSON.stringify(init));
       return init;
     }
   }
@@ -37,7 +37,7 @@ export const notificationSettingSlice = createSlice({
   reducers: {
     setNotificationSetting: (state, action) => {
       state.data = action.payload;
-      tymtStorage.set(`notificationSetting`, JSON.stringify(action.payload));
+      TymtStorage.set(`notificationSetting`, JSON.stringify(action.payload));
     },
   },
 });
