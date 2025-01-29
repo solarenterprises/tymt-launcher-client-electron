@@ -27,7 +27,7 @@ import { CONST_GAME_DISTRICT53 } from "../../const/games/district53/District53";
 import { IGame } from "../../types/GameTypes";
 // import { INotificationGameDownloadParams, INotificationParams } from "../../types/NotificationTypes";
 import { IDownloadStatus } from "../../types/HomeTypes";
-import ElectronNotification from "../EelectronNotification";
+import ElectronNotification from "../ElectronNotification";
 // import { ipcRenderer } from "electron";
 
 export interface IPropsInstallButton {

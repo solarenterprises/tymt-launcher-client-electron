@@ -8,7 +8,7 @@ import { IGame } from "../../types/GameTypes";
 
 import closeIcon from "../../assets/setting/XIcon.svg";
 import logo from "../../assets/main/FoxHeadComingSoon.png";
-import ElectronNotification from "../EelectronNotification";
+import ElectronNotification from "../ElectronNotification";
 // import { emit } from "@tauri-apps/api/event";
 // import { TauriEventNames } from "../../consts/TauriEventNames";
 // import { INotificationParams } from "../../types/NotificationTypes";

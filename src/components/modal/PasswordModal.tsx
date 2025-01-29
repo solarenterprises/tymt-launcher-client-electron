@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import numeral from "numeral";
 
-import tymtCore from "../../lib/core/tymtCore";
+import TymtCore from "../../lib/core/TymtCore";
 
 import { CONST_CURRENCY_SYMBOLS } from "../../const/CurrencyConsts";
 
@@ -89,7 +89,7 @@ const PasswordModal = ({ open, setOpen, voteAsset }: IPropsPasswordModal) => {
     try {
       setLoading(true);
       const passphrase: string = await decrypt(accountStore?.mnemonic, password);
-      const res = await tymtCore.Blockchains.solar.wallet.vote(passphrase.normalize("NFD"), walletStore?.solar, voteAsset, walletSettingStore?.feeUSD, 1);
+      const res = await TymtCore.Blockchains.solar.wallet.vote(passphrase.normalize("NFD"), walletStore?.solar, voteAsset, walletSettingStore?.feeUSD, 1);
       if (res.data.data.invalid[0]) {
         const temp = res.data.data.invalid[0];
         const err = res.data.errors[temp].message;

@@ -14,7 +14,7 @@ import {
   CONFIG_BTC_SCAN,
 } from "../../config/MainConfig";
 
-import tymtCore from "../core/tymtCore";
+import TymtCore from "../core/TymtCore";
 
 import { IWalletAddresses } from "../../types/WalletTypes";
 import { IPriceList } from "../../types/PriceTypes";
@@ -53,15 +53,15 @@ export const getMnemonic = (_length: number) => {
 
 export const getWalletAddressesFromPassphrase = async (_passphrase: string) => {
   try {
-    const solarAddr = await tymtCore.Blockchains.solar.wallet.getAddress(_passphrase);
-    const bscAddr = await tymtCore.Blockchains.bsc.wallet.getAddress(_passphrase);
-    const ethereumAddr = await tymtCore.Blockchains.eth.wallet.getAddress(_passphrase);
-    const bitcoinAddr = await tymtCore.Blockchains.btc.wallet.getAddress(_passphrase);
-    const solanaAddr = await tymtCore.Blockchains.solana.wallet.getAddress(_passphrase);
-    const polygonAddr = await tymtCore.Blockchains.polygon.wallet.getAddress(_passphrase);
-    const avalancheAddr = await tymtCore.Blockchains.avalanche.wallet.getAddress(_passphrase);
-    const arbitrumAddr = await tymtCore.Blockchains.arbitrum.wallet.getAddress(_passphrase);
-    const optimismAddr = await tymtCore.Blockchains.op.wallet.getAddress(_passphrase);
+    const solarAddr = await TymtCore.Blockchains.solar.wallet.getAddress(_passphrase);
+    const bscAddr = await TymtCore.Blockchains.bsc.wallet.getAddress(_passphrase);
+    const ethereumAddr = await TymtCore.Blockchains.eth.wallet.getAddress(_passphrase);
+    const bitcoinAddr = await TymtCore.Blockchains.btc.wallet.getAddress(_passphrase);
+    const solanaAddr = await TymtCore.Blockchains.solana.wallet.getAddress(_passphrase);
+    const polygonAddr = await TymtCore.Blockchains.polygon.wallet.getAddress(_passphrase);
+    const avalancheAddr = await TymtCore.Blockchains.avalanche.wallet.getAddress(_passphrase);
+    const arbitrumAddr = await TymtCore.Blockchains.arbitrum.wallet.getAddress(_passphrase);
+    const optimismAddr = await TymtCore.Blockchains.op.wallet.getAddress(_passphrase);
 
     const res: IWalletAddresses = {
       arbitrum: arbitrumAddr,
