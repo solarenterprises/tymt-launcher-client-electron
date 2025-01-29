@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import TymtStorage from "../lib/storage/TymtStorage";
+import tymtStorage from "../lib/storage/tymtStorage";
 import { compareJSONStructure } from "../lib/helper/JSONHelper";
 
 import { ICurrentCurrency } from "../types/CurrencyTypes";
@@ -10,9 +10,9 @@ const init: ICurrentCurrency = {
 };
 
 const loadCurrentCurrency: () => ICurrentCurrency = () => {
-  const data = TymtStorage.get(`currentCurrency`);
+  const data = tymtStorage.get(`currentCurrency`);
   if (!data || !compareJSONStructure(JSON.parse(data), init)) {
-    TymtStorage.set(`currentCurrency`, JSON.stringify(init));
+    tymtStorage.set(`currentCurrency`, JSON.stringify(init));
     return init;
   }
   return JSON.parse(data);
@@ -30,7 +30,7 @@ export const currentCurrencySlice = createSlice({
   reducers: {
     setCurrentCurrency: (state, action) => {
       state.data.currency = action.payload;
-      TymtStorage.set(`currentCurrency`, JSON.stringify(action.payload));
+      tymtStorage.set(`currentCurrency`, JSON.stringify(action.payload));
     },
   },
 });

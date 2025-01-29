@@ -5,7 +5,7 @@ export interface PaginationType {
   page: string;
 }
 
-export interface TymtLogoType {
+export interface tymtLogoType {
   isDrawerExpanded: boolean;
 }
 

@@ -9,7 +9,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { CONST_CURRENCY_SYMBOLS } from "../../const/CurrencyConsts";
 import { CONST_CHAIN_NAMES } from "../../const/ChainConsts";
 
-import TymtCore from "../../lib/core/TymtCore";
+import tymtCore from "../../lib/core/tymtCore";
 
 // import { useNotification } from "../../providers/NotificationProvider";
 
@@ -131,13 +131,13 @@ const WalletSendSXP = () => {
 
     let recipientAddrIsValid: boolean = false;
     if (currentSupportChain?.native?.name === CONST_CHAIN_NAMES.SOLAR) {
-      recipientAddrIsValid = TymtCore.Blockchains.solar.wallet.validateAddress(newItem.address);
+      recipientAddrIsValid = tymtCore.Blockchains.solar.wallet.validateAddress(newItem.address);
     } else if (currentSupportChain?.native?.name === CONST_CHAIN_NAMES.BITCOIN) {
-      recipientAddrIsValid = TymtCore.Blockchains.btc.wallet.validateAddress(newItem.address);
+      recipientAddrIsValid = tymtCore.Blockchains.btc.wallet.validateAddress(newItem.address);
     } else if (currentSupportChain?.native?.name === CONST_CHAIN_NAMES.SOLANA) {
-      recipientAddrIsValid = TymtCore.Blockchains.solana.wallet.validateAddress(newItem.address);
+      recipientAddrIsValid = tymtCore.Blockchains.solana.wallet.validateAddress(newItem.address);
     } else {
-      recipientAddrIsValid = TymtCore.Blockchains.eth.wallet.validateAddress(newItem.address);
+      recipientAddrIsValid = tymtCore.Blockchains.eth.wallet.validateAddress(newItem.address);
     }
     if (!recipientAddrIsValid) {
       // setNotificationStatus("failed");

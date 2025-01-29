@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import TymtStorage from "../lib/storage/TymtStorage";
+import tymtStorage from "../lib/storage/tymtStorage";
 import { compareJSONStructure } from "../lib/helper/JSONHelper";
 
 import { IWalletSetting } from "../types/SettingTypes";
@@ -14,9 +14,9 @@ const init: IWalletSetting = {
 };
 
 const loadWalletSetting: () => IWalletSetting = () => {
-  const data = TymtStorage.get(`walletSetting`);
+  const data = tymtStorage.get(`walletSetting`);
   if (!data || !compareJSONStructure(JSON.parse(data), init)) {
-    TymtStorage.set(`walletSetting`, JSON.stringify(init));
+    tymtStorage.set(`walletSetting`, JSON.stringify(init));
     return init;
   }
   return JSON.parse(data);
@@ -34,7 +34,7 @@ export const walletSettingSlice = createSlice({
   reducers: {
     setWalletSetting: (state, action) => {
       state.data = action.payload;
-      TymtStorage.set(`walletSetting`, JSON.stringify(state.data));
+      tymtStorage.set(`walletSetting`, JSON.stringify(state.data));
     },
   },
 });

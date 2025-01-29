@@ -1,7 +1,7 @@
 import { Box, Button, Divider, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import { CONST_TYMT_LINKS } from "../../const/TymtConsts";
+import { CONST_TYMT_LINKS } from "../../const/tymtConsts";
 
 import { ElectronAPI } from "../../lib/api/ElectronAPI";
 

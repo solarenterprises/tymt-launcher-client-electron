@@ -10,9 +10,9 @@ import chevronleftdouble from "../../assets/main/ChevronLeftDouble.svg";
 import chevronrightdouble from "../../assets/main/ChevronRightDouble.svg";
 import homeStyles from "../../styles/homeStyles";
 // import { getCurrentPage, setCurrentPage } from "../../features/home/Navigation";
-import { getCurrentLogo, setCurrentLogo } from "../../store/TymtLogoSlice";
+import { getCurrentLogo, setCurrentLogo } from "../../store/tymtLogoSlice";
 // import { PaginationType } from "../../types/homeTypes";
-import { TymtLogoType } from "../../types/HomeTypes";
+import { tymtLogoType } from "../../types/HomeTypes";
 import InstallingProcess from "./InstallingProcess";
 
 const Menu = () => {
@@ -22,7 +22,7 @@ const Menu = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const currentpage: PaginationType = useSelector(getCurrentPage);
-  const tymtlogo: TymtLogoType = useSelector(getCurrentLogo);
+  const tymtlogo: tymtLogoType = useSelector(getCurrentLogo);
   const [selectedItem, setSelectedItem] = useState<number>(0);
   const [isDrawerExpanded, setDrawerExpanded] = useState<boolean>(tymtlogo.isDrawerExpanded);
 

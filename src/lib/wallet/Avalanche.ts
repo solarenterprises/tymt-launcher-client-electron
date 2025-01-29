@@ -3,7 +3,7 @@ import * as ethereumjsWallet from "ethereumjs-wallet";
 import * as bip39 from "bip39";
 
 import { CONFIG_AVAX_API_URL, CONFIG_AVAX_RPC_URL, CONFIG_NETWORK_NAME } from "../../config/MainConfig";
-import TymtStorage from "../storage/TymtStorage";
+import tymtStorage from "../storage/tymtStorage";
 
 import { ISupportToken } from "../../types/ChainTypes";
 import { IBalance } from "../../types/WalletTypes";
@@ -64,7 +64,7 @@ export class Avalanche {
   static async getTransactions(addr: string, page: number): Promise<any> {
     if (page === 1) {
       let endpoint = "";
-      TymtStorage.set(`avaxNextToken`, "");
+      tymtStorage.set(`avaxNextToken`, "");
       if (CONFIG_NETWORK_NAME === "mainnet") {
         endpoint = `${CONFIG_AVAX_API_URL}/address/${addr}/erc20-transfers?limit=15`;
       } else {
@@ -73,19 +73,19 @@ export class Avalanche {
       try {
         const res = await (await fetch(endpoint)).json();
         const nextToken: string = res.link.nextToken;
-        TymtStorage.set(`avaxNextToken`, nextToken);
+        tymtStorage.set(`avaxNextToken`, nextToken);
         return res.items;
       } catch (error) {
         // console.error("Error fetching transactions:", error);
         return [];
       }
     } else {
-      const nextToken = TymtStorage.get(`avaxNextToken`);
+      const nextToken = tymtStorage.get(`avaxNextToken`);
       let endpoint = `${CONFIG_AVAX_API_URL}/address/${addr}/erc20-transfers?limit=15&next=${nextToken}`;
       try {
         const res = await (await fetch(endpoint)).json();
         const nextToken: string = res.link.nextToken;
-        TymtStorage.set(`avaxNextToken`, nextToken);
+        tymtStorage.set(`avaxNextToken`, nextToken);
         return res.items;
       } catch (error) {
         // console.error("Error fetching transactions:", error);

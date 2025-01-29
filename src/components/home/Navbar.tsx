@@ -16,12 +16,12 @@ import CardModal from "../modal/CardModal";
 import { getAccount } from "../../store/AccountSlice";
 import { getWallet } from "../../store/WalletSlice";
 import { getNotificationSetting } from "../../store/NotificationSettingSlice";
-import { getCurrentLogo } from "../../store/TymtLogoSlice";
+import { getCurrentLogo } from "../../store/tymtLogoSlice";
 
 import { IAccount } from "../../types/AccountTypes";
 import { IWalletAddresses } from "../../types/WalletTypes";
 import { INotificationSetting } from "../../types/SettingTypes";
-import { TymtLogoType } from "../../types/HomeTypes";
+import { tymtLogoType } from "../../types/HomeTypes";
 
 import newlogo from "../../assets/main/NewLogo.png";
 import newlogohead from "../../assets/main/NewLogoHead.png";
@@ -45,7 +45,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const currentlogo: TymtLogoType = useSelector(getCurrentLogo);
+  const currentlogo: tymtLogoType = useSelector(getCurrentLogo);
   const accountStore: IAccount = useSelector(getAccount);
   const walletStore: IWalletAddresses = useSelector(getWallet);
   const notificationSettingStore: INotificationSetting = useSelector(getNotificationSetting);

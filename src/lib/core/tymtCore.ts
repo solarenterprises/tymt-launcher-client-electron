@@ -13,7 +13,7 @@ import { CONST_CHAIN_SYMBOLS } from "../../const/ChainConsts";
 
 // export type BlockchainKey = "solar" | "bsc" | "eth" | "solana" | "polygon" | "avalanche" | "arbitrum" | "btc" | "op";
 
-const TymtCore = {
+const tymtCore = {
   Blockchains: {
     solar: {
       name: CONST_CHAIN_NAMES.SOLAR,
@@ -81,4 +81,4 @@ const TymtCore = {
   },
 };
 
-export default TymtCore;
+export default tymtCore;

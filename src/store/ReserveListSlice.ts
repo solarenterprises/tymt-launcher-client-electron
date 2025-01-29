@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { CONST_SUPPORT_CHAINS } from "../const/ChainConsts";
 import { CONST_SUPPORT_CURRENCIES } from "../const/CurrencyConsts";
 
-import TymtStorage from "../lib/storage/TymtStorage";
+import tymtStorage from "../lib/storage/tymtStorage";
 
 import { CurrencyAPI } from "../lib/api/CurrencyAPI";
 
@@ -22,9 +22,9 @@ const init: IReserveList = {
 };
 
 const loadReserveList: () => IReserveList = () => {
-  const data = TymtStorage.get(`reserveList`);
+  const data = tymtStorage.get(`reserveList`);
   if (!data || !compareJSONStructure(JSON.parse(data), init)) {
-    TymtStorage.set(`reserveList`, JSON.stringify(init));
+    tymtStorage.set(`reserveList`, JSON.stringify(init));
     return init;
   }
   return JSON.parse(data);
@@ -44,7 +44,7 @@ export const reserveListSlice = createSlice({
   reducers: {
     setReserveList: (state, action) => {
       state.data.list = action.payload;
-      TymtStorage.set(`reserveList`, JSON.stringify(state.data));
+      tymtStorage.set(`reserveList`, JSON.stringify(state.data));
     },
   },
   extraReducers: (builder) => {
@@ -56,7 +56,7 @@ export const reserveListSlice = createSlice({
         const data = action.payload as IReserve[];
         if (!data) return;
         state.data.list = data;
-        TymtStorage.set(`reserveList`, JSON.stringify(state.data));
+        tymtStorage.set(`reserveList`, JSON.stringify(state.data));
         state.status = "reserveList";
       });
   },

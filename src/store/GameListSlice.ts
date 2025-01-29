@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IGameList } from "../types/GameTypes";
-import TymtStorage from "../lib/storage/TymtStorage";
+import tymtStorage from "../lib/storage/tymtStorage";
 import { fetchAllGameList, fetchGameList } from "../lib/api/GameListAPI";
 
 const init: IGameList = {
@@ -8,9 +8,9 @@ const init: IGameList = {
 };
 
 const loadGameList = () => {
-  const data = TymtStorage.get(`gameList`);
+  const data = tymtStorage.get(`gameList`);
   if (!data) {
-    TymtStorage.set(`gameList`, JSON.stringify(init));
+    tymtStorage.set(`gameList`, JSON.stringify(init));
     return init;
   }
   return JSON.parse(data);
@@ -44,7 +44,7 @@ const gameListSlice = createSlice({
           return;
         }
         state.data = action.payload;
-        TymtStorage.set(`gameList`, JSON.stringify(state.data));
+        tymtStorage.set(`gameList`, JSON.stringify(state.data));
         state.status = "fetchGameListAsync";
       })
       .addCase(fetchAllGameListAsync.pending, (state) => {
@@ -56,7 +56,7 @@ const gameListSlice = createSlice({
           return;
         }
         state.data = action.payload;
-        TymtStorage.set(`gameList`, JSON.stringify(state.data));
+        tymtStorage.set(`gameList`, JSON.stringify(state.data));
         state.status = "fetchAllGameListAsync";
       });
   },

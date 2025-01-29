@@ -1,4 +1,4 @@
-import TymtStorage from "../storage/TymtStorage";
+import tymtStorage from "../storage/tymtStorage";
 
 import { CONFIG_LOCAL_SERVER_PORT, CONFIG_PRODUCTION_VERSION, CONFIG_TYMT_VERSION } from "../../config/MainConfig";
 import { CONST_GAME_DISTRICT53 } from "../../const/games/district53/District53";
@@ -67,7 +67,7 @@ export const runD53 = async (serverIp: string, autoMode: boolean) => {
     const fullExePath: string = await getFullExecutablePathNewGame(CONST_GAME_DISTRICT53);
     const d53_server = serverIp.split(":")[0];
     const d53_port = serverIp.split(":")[1];
-    const saltTokenStore: ISaltToken = JSON.parse(TymtStorage.get(`saltToken`));
+    const saltTokenStore: ISaltToken = JSON.parse(tymtStorage.get(`saltToken`));
     const token = saltTokenStore.token;
     const launcherUrl = CONFIG_PRODUCTION_VERSION === "prod" ? `http://${d53_server}:${d53_port}` : `http://localhost:${CONFIG_LOCAL_SERVER_PORT}`;
 
