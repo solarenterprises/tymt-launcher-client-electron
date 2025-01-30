@@ -1,11 +1,9 @@
-// import tymtStorage from "../storage/tymtStorage";
+import tymtStorage from "../storage/tymtStorage";
 
-import {
-  // CONFIG_LOCAL_SERVER_PORT,
-  CONFIG_TYMT_VERSION,
-} from "../../config/MainConfig";
+import { CONFIG_LOCAL_SERVER_PORT, CONFIG_PRODUCTION_VERSION, CONFIG_TYMT_VERSION } from "../../config/MainConfig";
+import { CONST_GAME_DISTRICT53 } from "../../const/games/district53/District53";
 
-// import { ISaltToken } from "../../types/AccountTypes";
+import { ISaltToken } from "../../types/AccountTypes";
 import { IGame, IGameReleaseNative } from "../../types/GameTypes";
 
 export async function runUrlArgs(url: string, args: string[]) {
@@ -14,7 +12,7 @@ export async function runUrlArgs(url: string, args: string[]) {
 
 export async function isInstalled(game: IGame) {
   try {
-    return await window.electronAPI.readDir(`${window.electronAPI.getAppPath()}/v${CONFIG_TYMT_VERSION}/games/${game.project_name}`);
+    return await window.electronAPI.readDir(`${await window.electronAPI.getAppPath()}/v${CONFIG_TYMT_VERSION}/games/${game.project_name}`);
   } catch (error) {
     return false;
   }
@@ -64,16 +62,61 @@ export const runNewGame = async (game: IGame) => {
   }
 };
 
+export const runD53 = async (serverIp: string, autoMode: boolean) => {
+  try {
+    const fullExePath: string = await getFullExecutablePathNewGame(CONST_GAME_DISTRICT53);
+    const d53_server = serverIp.split(":")[0];
+    const d53_port = serverIp.split(":")[1];
+    const saltTokenStore: ISaltToken = JSON.parse(tymtStorage.get(`saltToken`));
+    const token = saltTokenStore.token;
+    const launcherUrl = CONFIG_PRODUCTION_VERSION === "prod" ? `http://${d53_server}:${d53_port}` : `http://localhost:${CONFIG_LOCAL_SERVER_PORT}`;
+
+    if (!fullExePath || !d53_server || !d53_port || !token || !launcherUrl) {
+      // console.log(`Failed to runD53: fullExePath ${fullExePath}, d53_server ${d53_server}, d53_port ${d53_port}, token ${token}, launcherUrl ${launcherUrl}`);
+      return false;
+    }
+
+    const platform = await window.electronAPI.getPlatform();
+    let args: string[] = [];
+
+    switch (platform) {
+      case "linux":
+        args = [`--appimage-extract-and-run`, `--launcher_url`, launcherUrl, `--token`, token];
+        break;
+      case "windows":
+        args = [`--launcher_url`, launcherUrl, `--token`, token];
+        break;
+      case "macos":
+        args = [`--launcher_url`, launcherUrl, `--token`, token];
+        break;
+    }
+    if (autoMode) args.push(`--address`, d53_server, `--port`, d53_port, `--go`);
+
+    switch (platform) {
+      case "linux":
+        await runUrlArgs(fullExePath, args);
+        break;
+      case "win32":
+        await runUrlArgs(fullExePath, args);
+        break;
+      case "darwin":
+        await runUrlArgs("open", ["-a", fullExePath, "--args", ...args]);
+        break;
+    }
+
+    return true;
+  } catch (err) {
+    // console.log("Failed to runD53: ", err);
+    return false;
+  }
+};
+
 export async function openDir() {
-  return window.electronAPI.runUrlArgs("open", [`${window.electronAPI.getAppPath()}`]);
+  return window.electronAPI.openDir(await window.electronAPI.getAppPath());
 }
 
-export async function openLink(url: string) {
-  try {
-    await window.electronAPI.openLink(url);
-  } catch (err) {
-    // console.error("Failed to open link:", err);
-  }
+export function openLink(url: string) {
+  window.electronAPI.openExternalLink(url);
 }
 
 export const checkOnline = async (): Promise<boolean> => {
@@ -92,7 +135,7 @@ export const downloadFileToAppDir = async (game: IGame) => {
     const downloadLink: string = await getDownloadLinkNewGame(game);
     const downloadPath: string = await getDownloadFileFullPath(game);
 
-    console.log("downloadFileToAppDir", downloadLink, downloadPath);
+    // console.log("downloadFileToAppDir", downloadLink, downloadPath);
 
     if (!downloadLink || !downloadPath) return false;
 
@@ -107,14 +150,12 @@ export const downloadFileToAppDir = async (game: IGame) => {
 
 export const installGame = async (game: IGame) => {
   try {
-    console.log("installGame");
-
     const fileLocation: string = await getDownloadFileFullPath(game);
     const installDir: string = await getInstallDir(game);
     if (!fileLocation || !installDir) return false;
 
-    console.log("fileLocation", fileLocation);
-    console.log("installDir", installDir);
+    // console.log("fileLocation", fileLocation);
+    // console.log("installDir", installDir);
 
     const fullExecutablePath = await getFullExecutablePathNewGame(game);
     const sourceExtension = (await getDownloadFileExtension(game))?.toLocaleLowerCase();
@@ -135,7 +176,6 @@ export const installGame = async (game: IGame) => {
       case "win32":
         switch (sourceExtension) {
           case "zip":
-            console.log("unzipFile", fileLocation, installDir);
             await window.electronAPI.unzipFile(fileLocation, installDir);
             break;
         }
@@ -185,6 +225,7 @@ export const getDownloadLinkNewGame = async (game: IGame) => {
 
     const platform = await window.electronAPI.getPlatform();
     const cpu = await window.electronAPI.getArch();
+
     switch (platform) {
       case "linux":
         switch (cpu) {
@@ -464,7 +505,8 @@ export const getGameReleaseBrowser = (game: IGame) => {
 export const getDownloadFileFullPath = async (game: IGame) => {
   try {
     const fileName = await getDownloadFileNameNewGame(game);
-    const res = `${await window.electronAPI.getAppPath()}/${fileName}`;
+    // const res = path.join(await window.electronAPI.getAppPath(), fileName);
+    const res = `${await window.electronAPI.getAppPath()}\\${fileName}`;
     // console.log("getDownloadFileFullPath", res);
     return res;
   } catch (err) {
@@ -510,12 +552,23 @@ export const deleteDownloadFile = async (game: IGame) => {
   try {
     const fullPath = await getDownloadFileFullPath(game);
     // console.log("deleteDownloadFile", fullPath);
-
     await window.electronAPI.deleteFile(fullPath);
 
     return true;
   } catch (err) {
     // console.log("Failed to deleteDownloadFile: ", err);
+    return false;
+  }
+};
+
+export const deleteGame = async (game: IGame) => {
+  try {
+    const dirPath = `${await window.electronAPI.getAppPath()}/v${CONFIG_TYMT_VERSION}/games/${game?.project_name}`;
+    // console.log("deleteGame", dirPath);
+    await window.electronAPI.deleteDir(dirPath);
+    return true;
+  } catch (err) {
+    // console.log("Failed to deleteGame: ", err);
     return false;
   }
 };

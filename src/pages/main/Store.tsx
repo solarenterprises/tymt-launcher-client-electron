@@ -4,13 +4,13 @@ import { useLocation } from "react-router-dom";
 
 import { Grid, Box, Divider } from "@mui/material";
 
-import Multichainbtn from "../../components/store/Multichainbtn";
-import Releasebtn from "../../components/store/Releasebtn";
-import Platformbtn from "../../components/store/Platformbtn";
+import MultiChainButton from "../../components/store/MultiChainButton";
+import ReleaseButton from "../../components/store/ReleaseButton";
+import PlatformButton from "../../components/store/PlatformButton";
 import Genrebtn from "../../components/store/Genre";
-import Rankingbtn from "../../components/store/Ranking";
+import RankingButton from "../../components/store/RankingButton";
+import TypeButton from "../../components/store/TypeButton";
 import StoreGameItems from "../../components/game/StoreGameItems";
-import TypeBtn from "../../components/store/TypeBtn";
 
 const Store = () => {
   const { t } = useTranslation();
@@ -42,12 +42,12 @@ const Store = () => {
             paddingBottom: "24px",
           }}
         >
-          {false && <Releasebtn releaseDate={releaseDate} setReleaseDate={setReleaseDate} />}
-          {false && <Multichainbtn />}
+          {false && <ReleaseButton releaseDate={releaseDate} setReleaseDate={setReleaseDate} />}
+          {false && <MultiChainButton />}
           <Genrebtn genre={genre} setGenre={setGenre} />
-          <Platformbtn platform={platform} setPlatform={setPlatform} />
-          <Rankingbtn rank={rank} setRank={setRank} />
-          <TypeBtn type={type} setType={setType} />
+          <PlatformButton platform={platform} setPlatform={setPlatform} />
+          <RankingButton rank={rank} setRank={setRank} />
+          <TypeButton type={type} setType={setType} />
         </Grid>
         <Divider
           sx={{

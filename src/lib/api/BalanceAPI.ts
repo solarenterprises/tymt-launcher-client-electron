@@ -1,6 +1,6 @@
 import { CONST_CHAIN_NAMES, CONST_SUPPORT_CHAINS } from "../../const/ChainConsts";
 
-import tymtCore from "../../lib/core/tymtCore";
+import tymtCore from "../core/tymtCore";
 
 import { getCurrentChainWalletAddress, getNativeSymbolByChainName, getSupportTokensByChainName } from "../../lib/helper/WalletHelper";
 

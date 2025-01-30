@@ -15,12 +15,9 @@ import { getDownloadStatus, setDownloadStatus } from "../../store/DownloadStatus
 
 import {
   checkOnline,
-  deleteDownloadFile,
   downloadAndInstallNewGame,
-  downloadFileToAppDir,
   getFullExecutablePathNewGame,
   getGameReleaseBrowser,
-  installGame,
   isInstalled,
   openLink,
 } from "../../lib/helper/DownloadHelper";
@@ -30,7 +27,8 @@ import { CONST_GAME_DISTRICT53 } from "../../const/games/district53/District53";
 import { IGame } from "../../types/GameTypes";
 // import { INotificationGameDownloadParams, INotificationParams } from "../../types/NotificationTypes";
 import { IDownloadStatus } from "../../types/HomeTypes";
-import ElectronNotification from "../EelectronNotification";
+import ElectronNotification from "../ElectronNotification";
+// import { ipcRenderer } from "electron";
 
 export interface IPropsInstallButton {
   game: IGame;
@@ -82,7 +80,8 @@ const InstallButton = ({ game }: IPropsInstallButton) => {
     // };
     // emit(TauriEventNames.GAME_DOWNLOAD, noti_1);
     dispatch(setDownloadStatus({ isDownloading: true, game: game }));
-    await downloadFileToAppDir(game);
+    await downloadAndInstallNewGame(game);
+    dispatch(setDownloadStatus({ isDownloading: false, game: game }));
     // if (!success) {
     //   const noti_1: INotificationGameDownloadParams = {
     //     status: "failed",
@@ -124,22 +123,7 @@ const InstallButton = ({ game }: IPropsInstallButton) => {
     window.electronAPI.onDownloadProgress((progress: number) => {
       dispatch(setDownloadStatus({ isDownloading: true, progress: progress, total: 100, game: game }));
     });
-    window.electronAPI.onDownloadComplete(async () => {
-      if (!downloadStatusStore.isDownloading || downloadStatusStore.game._id !== game._id) {
-        return;
-      }
-
-      dispatch(setDownloadStatus({ isDownloading: true, progress: 100, total: 100, game: game }));
-      await installGame(game);
-      await deleteDownloadFile(game);
-      dispatch(setDownloadStatus({ isDownloading: false, game: game }));
-      showNotification(t("alt-7_download-finish"), t("alt-8_now-play-game"));
-    });
-    window.electronAPI.onDownloadFailed(() => {
-      showNotification(t("alt-5_os-not-support"), t("alt-6_os-not-support-intro"));
-      dispatch(setDownloadStatus({ isDownloading: false, game: game }));
-    });
-  }, [downloadStatusStore]);
+  }, []);
 
   return (
     <>

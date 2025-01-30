@@ -1,7 +1,5 @@
 interface Window {
   electronAPI: {
-    onCpuInfo: (callback: (cpuInfo: { arch: string; type: string }) => void) => void;
-
     onSysInfo: (callback: (sysInfo: { cpuArch: string; cpuType: string; osType: string }) => void) => void;
 
     openExternalLink: (url: string) => void;
@@ -16,8 +14,6 @@ interface Window {
     // download file
     downloadFile: (downloadLink: string, downloadPath: string) => Promise<void>;
     onDownloadProgress: (callback: (progress: number) => void) => void;
-    onDownloadComplete: (callback: () => void) => void;
-    onDownloadFailed: (callback: () => void) => void;
 
     // extract & install
     unzipFile: (fileLocation: string, installDir: string) => Promise<void>;
@@ -27,7 +23,11 @@ interface Window {
 
     // delete file
     deleteFile: (filePath: string) => Promise<void>;
-    readDir: (filePath: string) => Promise<boolean>;
+
+    // directory
+    readDir: (dirPath: string) => Promise<boolean>;
+    openDir: (dirPath: string) => Promise<void>;
+    deleteDir: (dirPath: string) => Promise<void>;
 
     // run url args
     runUrlArgs: (url: string, args: string[]) => Promise<void>;
@@ -45,5 +45,8 @@ interface Window {
     transferCoin: (passphrase: string, tx: { recipients: IRecipient[]; fee: string }) => Promise<{ success: boolean; message?: string; error?: string }>;
 
     fetchBalanceList: (walletStore: IWalletAddresses) => Promise<IBalance[]>;
+
+    // fetch
+    fetch: (url: string, init?: RequestInit) => Promise<any>;
   };
 }

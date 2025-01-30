@@ -2,8 +2,14 @@ import { useTranslation } from "react-i18next";
 
 import { SelectChangeEvent } from "@mui/material/Select";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { Box, MenuItem, FormControl, Select } from "@mui/material";
+import { Box, MenuItem, FormControl, Select, Stack } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+import LinuxIcon from "../../assets/main/LinuxIcon.svg";
+import WinIcon from "../../assets/main/WinIcon.svg";
+import macIcon from "../../assets/main/MacIcon.svg";
+
+import { FilterOptionNames } from "../../const/FilterOptionNames";
 
 const MenuProps = {
   MenuListProps: {
@@ -16,7 +22,7 @@ const MenuProps = {
     style: {
       marginTop: "5px",
       maxHeight: "none",
-      width: "160px",
+      width: "120px",
       display: "flex",
       alignItems: "center",
       borderRadius: "16px",
@@ -51,25 +57,24 @@ const theme = createTheme({
   },
 });
 
-const Releasedate = ["sto-6_coming-soon", "sto-7_last-7days", "sto-8_last-30-days", "sto-9_last-60-days", "sto-10_last-90-days"];
+const Platform = [
+  { platform: FilterOptionNames.PLATFORM_WINDOWS, icon: WinIcon }, // Windows
+  { platform: FilterOptionNames.PLATFORM_MACOS, icon: macIcon }, // macOS
+  { platform: FilterOptionNames.PLATFORM_LINUX, icon: LinuxIcon }, // Linux
+];
 
 const selectedshow = false;
 
-export interface IPropsReleasebtn {
-  releaseDate: string;
-  setReleaseDate: (_: string) => void;
+export interface IPropsPlatformButton {
+  platform: string;
+  setPlatform: (_: string) => void;
 }
 
-const Releasebtn = ({ releaseDate, setReleaseDate }: IPropsReleasebtn) => {
+const PlatformButton = ({ platform, setPlatform }: IPropsPlatformButton) => {
   const { t } = useTranslation();
 
   const handleChange = (event: SelectChangeEvent) => {
-    const value = event.target.value;
-    if (value === releaseDate) {
-      setReleaseDate("");
-    } else {
-      setReleaseDate(value);
-    }
+    setPlatform(event.target.value);
   };
 
   return (
@@ -77,19 +82,7 @@ const Releasebtn = ({ releaseDate, setReleaseDate }: IPropsReleasebtn) => {
       <FormControl>
         <ThemeProvider theme={theme}>
           <Select
-            fullWidth
-            disabled
-            displayEmpty
-            value={releaseDate}
-            onChange={handleChange}
-            IconComponent={ExpandMoreIcon}
-            MenuProps={MenuProps}
-            renderValue={(selected) => (
-              <>
-                <Box className={"fs-16 white"}>{t("sto-1_release-date")}</Box>
-                {selectedshow && <span>{selected}</span>}
-              </>
-            )}
+            // disabled
             sx={{
               height: "40px",
               display: "flex",
@@ -110,13 +103,23 @@ const Releasebtn = ({ releaseDate, setReleaseDate }: IPropsReleasebtn) => {
                 color: "var(--Basic-Light, #AFAFAF)",
               },
             }}
+            fullWidth
+            displayEmpty
+            value={platform}
+            onChange={handleChange}
+            IconComponent={ExpandMoreIcon}
+            MenuProps={MenuProps}
+            renderValue={(selected) => (
+              <>
+                <Box className={"fs-16 white"}>{t("sto-4_platform")}</Box>
+                {selectedshow && <span>{selected}</span>}
+              </>
+            )}
           >
-            {Releasedate.map((one) => (
+            {Platform.map((one) => (
               <MenuItem
-                key={one}
-                value={t(`${one}`)}
                 sx={{
-                  width: "180px",
+                  width: "240px",
                   display: "flex",
                   justifyContent: "space-between",
                   borderBottom: "1px solid var(--bg-stroke-white-10-stroke-default, rgba(255, 255, 255, 0.10))",
@@ -132,10 +135,15 @@ const Releasebtn = ({ releaseDate, setReleaseDate }: IPropsReleasebtn) => {
                   },
                   backdropFilter: "blur(10px)",
                 }}
+                key={one.platform}
+                value={t(`${one.platform}`)}
               >
-                <Box className={"fs-16 white"} sx={{ marginLeft: "8px" }}>
-                  {t(`${one}`)}
-                </Box>
+                <Stack flexDirection={"row"} alignItems={"center"}>
+                  <img src={one.icon} width={"30px"} />
+                  <Box className={"fs-16 white"} sx={{ marginLeft: "8px" }}>
+                    {t(`${one.platform}`)}
+                  </Box>
+                </Stack>
               </MenuItem>
             ))}
           </Select>
@@ -145,4 +153,4 @@ const Releasebtn = ({ releaseDate, setReleaseDate }: IPropsReleasebtn) => {
   );
 };
 
-export default Releasebtn;
+export default PlatformButton;

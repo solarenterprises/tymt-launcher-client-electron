@@ -1,5 +1,6 @@
 export const CONFIG_PRODUCTION_VERSION = process.env.APP_PRODUCTION_VERSION;
 export const CONFIG_NETWORK_NAME = process.env.APP_NETWORK_NAME;
+export const CONFIG_LOCAL_SERVER_PORT = process.env.APP_LOCAL_SERVER_PORT;
 
 export const CONFIG_TYMT_BACKEND_URL = process.env.APP_PRODUCTION_VERSION === "prod" ? process.env.APP_TYMT_BACKEND_URL : process.env.APP_TYMT_BACKEND_DEV_URL;
 export const CONFIG_TYMT_SOCKET_BACKEND_URL =

@@ -5,7 +5,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Box, MenuItem, FormControl, Select } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-// import { FilterOptionNames } from "../../consts/FilterOptionNames";
+import { FilterOptionNames } from "../../const/FilterOptionNames";
 
 const MenuProps = {
   MenuListProps: {
@@ -53,21 +53,21 @@ const theme = createTheme({
   },
 });
 
-const Ranking: any[] = [
-  // FilterOptionNames.RANK_ALL,
-  // FilterOptionNames.RANK_10,
-  // FilterOptionNames.RANK_50,
-  // FilterOptionNames.RANK_100,
+const Ranking = [
+  FilterOptionNames.RANK_ALL,
+  FilterOptionNames.RANK_10,
+  FilterOptionNames.RANK_50,
+  FilterOptionNames.RANK_100,
 ];
 
 const selectedshow = false;
 
-export interface IPropsRankingbtn {
+export interface IPropsRankingButton {
   rank: string;
   setRank: (_: string) => void;
 }
 
-const Rankingbtn = ({ rank, setRank }: IPropsRankingbtn) => {
+const RankingButton = ({ rank, setRank }: IPropsRankingButton) => {
   const { t } = useTranslation();
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -154,4 +154,4 @@ const Rankingbtn = ({ rank, setRank }: IPropsRankingbtn) => {
   );
 };
 
-export default Rankingbtn;
+export default RankingButton;

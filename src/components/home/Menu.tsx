@@ -10,9 +10,9 @@ import chevronleftdouble from "../../assets/main/ChevronLeftDouble.svg";
 import chevronrightdouble from "../../assets/main/ChevronRightDouble.svg";
 import homeStyles from "../../styles/homeStyles";
 // import { getCurrentPage, setCurrentPage } from "../../features/home/Navigation";
-// import { getCurrentLogo, setCurrentLogo } from "../../features/home/Tymtlogo";
+import { getCurrentLogo, setCurrentLogo } from "../../store/tymtLogoSlice";
 // import { PaginationType } from "../../types/homeTypes";
-// import { TymtlogoType } from "../../types/homeTypes";
+import { tymtLogoType } from "../../types/HomeTypes";
 import InstallingProcess from "./InstallingProcess";
 
 const Menu = () => {
@@ -22,77 +22,45 @@ const Menu = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const currentpage: PaginationType = useSelector(getCurrentPage);
-  // const tymtlogo: TymtlogoType = useSelector(getCurrentLogo);
-  // const [selectedItem, setSelectedItem] = useState<number>(currentpage.index);
-  const selectedItem = 0;
-  // const [isDrawerExpanded, setDrawerExpanded] = useState<boolean>(tymtlogo.isDrawerExpanded);
-  const isDrawerExpanded = false;
+  const tymtlogo: tymtLogoType = useSelector(getCurrentLogo);
+  const [selectedItem, setSelectedItem] = useState<number>(0);
+  const [isDrawerExpanded, setDrawerExpanded] = useState<boolean>(tymtlogo.isDrawerExpanded);
 
   const handleChevronClick = () => {
-    // setDrawerExpanded((prevExpanded) => !prevExpanded);
-    // dispatch(
-    //   setCurrentLogo({
-    //     ...tymtlogo,
-    //     isDrawerExpanded: !tymtlogo.isDrawerExpanded,
-    //   })
-    // );
+    setDrawerExpanded((prevExpanded) => !prevExpanded);
+    dispatch(
+      setCurrentLogo({
+        ...tymtlogo,
+        isDrawerExpanded: !tymtlogo.isDrawerExpanded,
+      })
+    );
   };
 
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     if (window.innerWidth < 1400) {
-  //       setDrawerExpanded(false);
-  //       dispatch(setCurrentLogo({ ...tymtlogo, isDrawerExpanded: false }));
-  //     } else {
-  //       setDrawerExpanded(true);
-  //       dispatch(setCurrentLogo({ ...tymtlogo, isDrawerExpanded: true }));
-  //     }
-  //   };
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1400) {
+        setDrawerExpanded(false);
+        dispatch(setCurrentLogo({ ...tymtlogo, isDrawerExpanded: false }));
+      } else {
+        setDrawerExpanded(true);
+        dispatch(setCurrentLogo({ ...tymtlogo, isDrawerExpanded: true }));
+      }
+    };
 
-  //   handleResize();
+    handleResize();
 
-  //   window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize);
 
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, []);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
-  // useEffect(() => {
-  //   setSelectedItem(currentpage.index);
-  // });
-  // useEffect(() => {
-  //   {
-  //     location.pathname === "/home" &&
-  //       dispatch(
-  //         setCurrentPage({
-  //           ...currentpage,
-  //           index: 0,
-  //           page: "home",
-  //         })
-  //       );
-  //   }
-  //   {
-  //     location.pathname.startsWith("/store") &&
-  //       dispatch(
-  //         setCurrentPage({
-  //           ...currentpage,
-  //           index: 1,
-  //           page: "store",
-  //         })
-  //       );
-  //   }
-  //   {
-  //     location.pathname === "/library" &&
-  //       dispatch(
-  //         setCurrentPage({
-  //           ...currentpage,
-  //           index: 2,
-  //           page: "library",
-  //         })
-  //       );
-  //   }
-  // }, [location]);
+  useEffect(() => {
+    location.pathname === "/home" && setSelectedItem(0);
+    location.pathname.startsWith("/store") && setSelectedItem(1);
+    location.pathname === "/library" && setSelectedItem(2);
+  }, [location]);
 
   return (
     <Grid
@@ -176,10 +144,10 @@ const Menu = () => {
                       //     page: text?.toLowerCase(),
                       //   })
                       // );
-                      // setSelectedItem(index);
-                      // const path = index % 3 === 0 ? "/home" : index % 3 === 1 ? "/store" : "/library";
+                      setSelectedItem(index);
+                      const path = index % 3 === 0 ? "/home" : index % 3 === 1 ? "/store" : "/library";
 
-                      // navigate(path);
+                      navigate(path);
                     }}
                   >
                     <ListItemIcon

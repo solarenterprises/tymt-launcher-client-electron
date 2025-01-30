@@ -5,7 +5,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Box, MenuItem, FormControl, Select } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-// import { FilterOptionNames } from "../../consts/FilterOptionNames";
+import { FilterOptionNames } from "../../const/FilterOptionNames";
 
 const MenuProps = {
   MenuListProps: {
@@ -53,12 +53,12 @@ const theme = createTheme({
   },
 });
 
-const Genre: any[] = [
-  // FilterOptionNames.GENRE_ALL,
-  // FilterOptionNames.GENRE_ACTION,
-  // FilterOptionNames.GENRE_ADVENTURE,
-  // FilterOptionNames.GENRE_ROLE_PLAYING,
-  // FilterOptionNames.GENRE_SIMULATION,
+const Genre = [
+  FilterOptionNames.GENRE_ALL,
+  FilterOptionNames.GENRE_ACTION,
+  FilterOptionNames.GENRE_ADVENTURE,
+  FilterOptionNames.GENRE_ROLE_PLAYING,
+  FilterOptionNames.GENRE_SIMULATION,
 ];
 
 const selectedshow = false;

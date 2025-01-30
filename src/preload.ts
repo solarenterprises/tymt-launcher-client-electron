@@ -11,22 +11,18 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.on("sys-info", (_, sysInfo) => callback(sysInfo));
   },
 
-  openExternalLink: (url: string) => {
-    ipcRenderer.send("open-external-link", url);
-  },
+  openExternalLink: (url: string) => ipcRenderer.send("open-external-link", url),
 
   // system info
-  getPlatform: () => ipcRenderer.invoke("getPlatform"),
-  getArch: () => ipcRenderer.invoke("getArch"),
+  getPlatform: () => ipcRenderer.invoke("get-platform"),
+  getArch: () => ipcRenderer.invoke("get-arch"),
 
   // get path
-  getAppPath: () => ipcRenderer.invoke("getAppPath"),
+  getAppPath: () => ipcRenderer.invoke("get-app-path"),
 
   // download file
   downloadFile: (downloadLink: string, downloadPath: string) => ipcRenderer.invoke("download-file", { downloadLink, downloadPath }),
   onDownloadProgress: (callback: (progress: number) => void) => ipcRenderer.on("download-progress", (event, progress) => callback(progress)),
-  onDownloadComplete: (callback: () => void) => ipcRenderer.on("download-complete", () => callback()),
-  onDownloadFailed: (callback: () => void) => ipcRenderer.on("download-failed", () => callback()),
 
   // extract & install
   unzipFile: (fileLocation: string, installDir: string) => ipcRenderer.invoke("unzip-file", { fileLocation, installDir }),
@@ -37,10 +33,14 @@ contextBridge.exposeInMainWorld("electronAPI", {
   // delete file
   deleteFile: (filePath: string) => ipcRenderer.invoke("delete-file", filePath),
 
+  // directory
   readDir: (dirPath: string) => ipcRenderer.invoke("read-dir", dirPath),
+  openDir: (dirPath: string) => ipcRenderer.invoke("open-dir", dirPath),
+  deleteDir: (dirPath: string) => ipcRenderer.invoke("delete-dir", dirPath),
 
   // run url args
   runUrlArgs: (url: string, args: string[]) => ipcRenderer.invoke("run-url-args", { url, args }),
+
 
   // open link
   openLink: (url: string) => ipcRenderer.invoke("open-link", url),
@@ -56,4 +56,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   fetchBalanceList: (walletStore: IWalletAddresses) => {
     return ipcRenderer.invoke("fetch-balance-list", walletStore);
   },
+
+  fetch: (url: string, init?: RequestInit) => ipcRenderer.invoke("fetch", { url, init }),
 });

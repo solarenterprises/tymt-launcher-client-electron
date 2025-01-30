@@ -5,8 +5,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Box, MenuItem, FormControl, Select } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-// import { FilterOptionNames } from "../../consts/FilterOptionNames";
-
 const MenuProps = {
   MenuListProps: {
     style: {
@@ -16,9 +14,9 @@ const MenuProps = {
   },
   PaperProps: {
     style: {
-      minWidth: "0px",
       marginTop: "5px",
       maxHeight: "none",
+      width: "160px",
       display: "flex",
       alignItems: "center",
       borderRadius: "16px",
@@ -53,26 +51,25 @@ const theme = createTheme({
   },
 });
 
-const Types: any[] = [
-  // FilterOptionNames.TYPE_ALL,
-  // FilterOptionNames.TYPE_NATIVE,
-  // FilterOptionNames.TYPE_BROWSER,
-];
+const Releasedate = ["sto-6_coming-soon", "sto-7_last-7days", "sto-8_last-30-days", "sto-9_last-60-days", "sto-10_last-90-days"];
 
 const selectedshow = false;
 
-export interface IPropsTypeBtn {
-  type: string;
-  setType: (_: string) => void;
+export interface IPropsReleaseButton {
+  releaseDate: string;
+  setReleaseDate: (_: string) => void;
 }
 
-const TypeBtn = ({ type, setType }: IPropsTypeBtn) => {
+const ReleaseButton = ({ releaseDate, setReleaseDate }: IPropsReleaseButton) => {
   const { t } = useTranslation();
 
   const handleChange = (event: SelectChangeEvent) => {
-    if (type === event.target.value) {
-      setType("");
-    } else setType(event.target.value);
+    const value = event.target.value;
+    if (value === releaseDate) {
+      setReleaseDate("");
+    } else {
+      setReleaseDate(value);
+    }
   };
 
   return (
@@ -80,7 +77,19 @@ const TypeBtn = ({ type, setType }: IPropsTypeBtn) => {
       <FormControl>
         <ThemeProvider theme={theme}>
           <Select
-            // disabled
+            fullWidth
+            disabled
+            displayEmpty
+            value={releaseDate}
+            onChange={handleChange}
+            IconComponent={ExpandMoreIcon}
+            MenuProps={MenuProps}
+            renderValue={(selected) => (
+              <>
+                <Box className={"fs-16 white"}>{t("sto-1_release-date")}</Box>
+                {selectedshow && <span>{selected}</span>}
+              </>
+            )}
             sx={{
               height: "40px",
               display: "flex",
@@ -92,56 +101,39 @@ const TypeBtn = ({ type, setType }: IPropsTypeBtn) => {
               border: "1px solid rgba(82, 225, 242, 0.40)",
               background: "var(--bg-stroke-card-bg, rgba(27, 53, 56, 0.20))",
               "&:hover": {
-                backgroundColor:
-                  "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
+                backgroundColor: "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
               },
               "&:active": {
-                backgroundColor:
-                  "var(--bg-stroke-blue-stroke-default-20, rgba(82, 225, 242, 0.20))",
+                backgroundColor: "var(--bg-stroke-blue-stroke-default-20, rgba(82, 225, 242, 0.20))",
               },
               "& .MuiSelect-icon": {
                 color: "var(--Basic-Light, #AFAFAF)",
               },
             }}
-            fullWidth
-            displayEmpty
-            value={type}
-            onChange={handleChange}
-            MenuProps={MenuProps}
-            IconComponent={ExpandMoreIcon}
-            renderValue={(selected) => (
-              <>
-                <Box className={"fs-16 white"}>{t("sto-48_type")}</Box>
-                {selectedshow && <span>{selected}</span>}
-              </>
-            )}
           >
-            {Types.map((one) => (
+            {Releasedate.map((one) => (
               <MenuItem
+                key={one}
+                value={t(`${one}`)}
                 sx={{
+                  width: "180px",
                   display: "flex",
                   justifyContent: "space-between",
-                  borderBottom:
-                    "1px solid var(--bg-stroke-white-10-stroke-default, rgba(255, 255, 255, 0.10))",
-                  backdropFilter: "blur(10px)",
+                  borderBottom: "1px solid var(--bg-stroke-white-10-stroke-default, rgba(255, 255, 255, 0.10))",
                   "&:hover": {
-                    background:
-                      "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
+                    background: "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
                   },
                   "&.Mui-selected": {
-                    background:
-                      "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
-                    backdropFilter: "blur(10px)",
+                    background: "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
                     "&:hover": {
-                      background:
-                        "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
+                      background: "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
                     },
+                    backdropFilter: "blur(10px)",
                   },
+                  backdropFilter: "blur(10px)",
                 }}
-                key={one}
-                value={one}
               >
-                <Box className={"fs-16 white"} sx={{ margin: "0px 8px" }}>
+                <Box className={"fs-16 white"} sx={{ marginLeft: "8px" }}>
                   {t(`${one}`)}
                 </Box>
               </MenuItem>
@@ -153,4 +145,4 @@ const TypeBtn = ({ type, setType }: IPropsTypeBtn) => {
   );
 };
 
-export default TypeBtn;
+export default ReleaseButton;
