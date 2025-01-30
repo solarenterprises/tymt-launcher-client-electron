@@ -19,3 +19,8 @@ export interface INotificationSetting {
 export interface ILanguageSetting {
   lang: string;
 }
+
+export interface IAddress {
+  name: string;
+  address: string;
+}

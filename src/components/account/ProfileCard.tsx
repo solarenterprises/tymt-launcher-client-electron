@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Button, Stack, Box } from "@mui/material";
+import { Stack, Box } from "@mui/material";
 
 import CompleteButton from "./CompleteButton";
 // import UserAvatar from "../store/UserAvatar";
@@ -31,8 +31,8 @@ const ProfileCard = ({ account }: IPropsProfileCard) => {
   );
 
   const handleClick = useCallback(() => {
-    dispatch(setAccount(account));
     if (account?.uid !== accountStore?.uid) {
+      dispatch(setAccount(account));
       dispatch(setLogin(false));
     }
   }, [accountStore]);

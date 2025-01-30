@@ -63,12 +63,12 @@ const Genre = [
 
 const selectedshow = false;
 
-export interface IPropsGenrebtn {
+export interface IPropsGenreButton {
   genre: string;
   setGenre: (_: string) => void;
 }
 
-const Genrebtn = ({ genre, setGenre }: IPropsGenrebtn) => {
+const GenreButton = ({ genre, setGenre }: IPropsGenreButton) => {
   const { t } = useTranslation();
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -151,4 +151,4 @@ const Genrebtn = ({ genre, setGenre }: IPropsGenrebtn) => {
   );
 };
 
-export default Genrebtn;
+export default GenreButton;

@@ -8,11 +8,11 @@ import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import RedStrokeButton from "../../components/account/RedStrokeButton";
 import ProfileCard from "../../components/account/ProfileCard";
 
-// import { getAccountList } from "../../features/account/AccountListSlice";
+import { getAccountList } from "../../store/AccountListSlice";
+
+import { IAccountList } from "../../types/AccountTypes";
 
 import SettingStyle from "../../styles/SettingStyle";
-
-// import { IAccountList } from "../../types/accountTypes";
 
 export interface IPropsChooseProfile {
   view: string;
@@ -23,10 +23,10 @@ const ChooseProfile = ({ view, setView }: IPropsChooseProfile) => {
   const classname = SettingStyle();
   const navigate = useNavigate();
 
-  // const accountListStore: IAccountList = useSelector(getAccountList);
+  const accountListStore: IAccountList = useSelector(getAccountList);
 
   const handleAddNewProfileButtonClick = () => {
-    navigate("/non-custodial/login/2");
+    navigate("/non-custodial-login-2");
   };
 
   return (
@@ -65,9 +65,9 @@ const ChooseProfile = ({ view, setView }: IPropsChooseProfile) => {
             minHeight={"calc(100% - 110px)"}
           >
             <Stack direction={"column"} gap={"16px"}>
-              {/* {accountListStore?.list?.map((one, index) => (
+              {accountListStore?.list?.map((one, index) => (
                 <ProfileCard account={one} key={index} />
-              ))} */}
+              ))}
             </Stack>
             <Stack mt={"16px"} mb={"16px"}>
               <RedStrokeButton

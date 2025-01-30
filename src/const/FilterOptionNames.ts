@@ -15,6 +15,7 @@ export class FilterOptionNames {
   static TYPE_NATIVE = "sto-46_native";
   static TYPE_BROWSER = "sto-47_browser";
 
+  static PLATFORM_ALL = "sto-40_all";
   static PLATFORM_WINDOWS = "sto-23_windows";
   static PLATFORM_MACOS = "sto-24_macos";
   static PLATFORM_LINUX = "sto-25_linux";

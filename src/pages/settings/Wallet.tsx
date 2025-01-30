@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -17,9 +17,12 @@ import { ICurrentChain } from "../../types/ChainTypes";
 import backIcon from "../../assets/setting/BackIcon.svg";
 import arrowImg from "../../assets/setting/ArrowRight.svg";
 
-type propsType = any;
+interface IPropsWallet {
+  view: string;
+  setView: (panel: string) => void;
+}
 
-const Wallet = ({ view, setView }: propsType) => {
+const Wallet: FC<IPropsWallet> = ({ view, setView }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -138,7 +141,7 @@ const Wallet = ({ view, setView }: propsType) => {
                 </Box>
               </Stack>
             </Button>
-            <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} />
+            <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} /> */}
             <Button className="common-btn" sx={{ padding: "20px" }} onClick={() => setView("address")}>
               <Stack direction={"row"} justifyContent={"space-between"} textAlign={"center"}>
                 <Box className="fs-h4 white">{t("set-32_address-book")}</Box>
@@ -147,7 +150,7 @@ const Wallet = ({ view, setView }: propsType) => {
                 </Box>
               </Stack>
             </Button>
-            <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} /> */}
+            <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} />
           </Stack>
         </Stack>
       )}
