@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { FC, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 // import numeral from "numeral";
@@ -17,11 +17,15 @@ import SettingStyle from "../../styles/SettingStyle";
 
 import backIcon from "../../assets/setting/BackIcon.svg";
 
-// import { IWalletSetting, propsType } from "../../types/settingTypes";
-type propsType = any;
+// import { IWalletSetting } from "../../types/settingTypes";
 // import { ICurrencyList, ICurrentCurrency } from "../../types/walletTypes";
 
-const Fee = ({ view, setView }: propsType) => {
+interface IPropsFee {
+  view: string;
+  setView: (panel: string) => void;
+}
+
+const Fee: FC<IPropsFee> = ({ view, setView }) => {
   const classname = SettingStyle();
   const { t } = useTranslation();
   const dispatch = useDispatch();

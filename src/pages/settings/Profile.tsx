@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useCallback, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 
@@ -17,8 +17,7 @@ import { AppDispatch } from "../../store";
 // import { getMyInfo, setMyInfo } from "../../features/account/MyInfoSlice";
 // import { getAccount, setAccount } from "../../features/account/AccountSlice";
 
-// import { notificationType, propsType } from "../../types/settingTypes";
-type propsType = any;
+// import { notificationType } from "../../types/settingTypes";
 // import { IAccount } from "../../types/accountTypes";
 
 import SettingStyle from "../../styles/SettingStyle";
@@ -29,7 +28,12 @@ import editIcon from "../../assets/setting/EditIcon.svg";
 // import { SyncEventNames } from "../../consts/SyncEventNames";
 // import { IMyInfo } from "../../types/chatTypes";
 
-const Profile = ({ view, setView }: propsType) => {
+interface IPropsProfile {
+  view: string;
+  setView: (panel: string) => void;
+}
+
+const Profile: FC<IPropsProfile> = ({ view, setView }) => {
   const classname = SettingStyle();
   const { t } = useTranslation();
   // const { socket } = useSocket();

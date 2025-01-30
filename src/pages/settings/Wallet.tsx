@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -17,9 +17,12 @@ import { ICurrentChain } from "../../types/ChainTypes";
 import backIcon from "../../assets/setting/BackIcon.svg";
 import arrowImg from "../../assets/setting/ArrowRight.svg";
 
-type propsType = any;
+interface IPropsWallet {
+  view: string;
+  setView: (panel: string) => void;
+}
 
-const Wallet = ({ view, setView }: propsType) => {
+const Wallet: FC<IPropsWallet> = ({ view, setView }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
