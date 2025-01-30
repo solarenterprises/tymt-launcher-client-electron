@@ -7,7 +7,7 @@ import { Grid, Box, Divider } from "@mui/material";
 import MultiChainButton from "../../components/store/MultiChainButton";
 import ReleaseButton from "../../components/store/ReleaseButton";
 import PlatformButton from "../../components/store/PlatformButton";
-import Genrebtn from "../../components/store/Genre";
+import GenreButton from "../../components/store/GenreButton";
 import RankingButton from "../../components/store/RankingButton";
 import TypeButton from "../../components/store/TypeButton";
 import StoreGameItems from "../../components/game/StoreGameItems";
@@ -44,7 +44,7 @@ const Store = () => {
         >
           {false && <ReleaseButton releaseDate={releaseDate} setReleaseDate={setReleaseDate} />}
           {false && <MultiChainButton />}
-          <Genrebtn genre={genre} setGenre={setGenre} />
+          <GenreButton genre={genre} setGenre={setGenre} />
           <PlatformButton platform={platform} setPlatform={setPlatform} />
           <RankingButton rank={rank} setRank={setRank} />
           <TypeButton type={type} setType={setType} />
