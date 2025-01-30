@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 
 import { Grid, Box } from "@mui/material";
 
-import LibraryModeButton from "../../components/library/LibraryMode";
+import LibraryModeButton from "../../components/library/LibraryMode_";
 import MultiChainButton from "../../components/store/MultiChainButton";
-import LibraryShow from "../../components/library/LibraryShow";
+import LibraryShow from "../../components/library/LibraryShow_";
 import StoreComingGameItems from "../../components/store/StoreComingGameItems";
 
 const Library = () => {

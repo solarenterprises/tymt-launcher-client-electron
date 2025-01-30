@@ -18,7 +18,7 @@ import CardModal from "../modal/CardModal";
 import { getAccount } from "../../store/AccountSlice";
 import { getWallet } from "../../store/WalletSlice";
 import { getNotificationSetting } from "../../store/NotificationSettingSlice";
-import { getCurrentLogo } from "../../store/tymtLogoSlice";
+import { getCurrentLogo } from "../../store/tymtLogoSlice_";
 
 import { IAccount } from "../../types/AccountTypes";
 import { IWalletAddresses } from "../../types/WalletTypes";

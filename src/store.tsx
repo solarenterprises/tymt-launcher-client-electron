@@ -29,7 +29,7 @@ import languageSettingReducer from "./store/LanguageSettingSlice";
 import downloadStatusReducer from "./store/DownloadStatusSlice";
 // ~DownloadStatus
 
-import tymtLogoReducer from "./store/tymtLogoSlice";
+import tymtLogoReducer from "./store/tymtLogoSlice_";
 import gameListReducer from "./store/GameListSlice";
 import renderTimeReducer from "./store/RenderTimeSlice";
 

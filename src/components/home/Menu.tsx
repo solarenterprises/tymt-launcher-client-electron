@@ -10,7 +10,7 @@ import chevronleftdouble from "../../assets/main/ChevronLeftDouble.svg";
 import chevronrightdouble from "../../assets/main/ChevronRightDouble.svg";
 import homeStyles from "../../styles/homeStyles";
 // import { getCurrentPage, setCurrentPage } from "../../features/home/Navigation";
-import { getCurrentLogo, setCurrentLogo } from "../../store/tymtLogoSlice";
+import { getCurrentLogo, setCurrentLogo } from "../../store/tymtLogoSlice_";
 // import { PaginationType } from "../../types/homeTypes";
 import { tymtLogoType } from "../../types/HomeTypes";
 import InstallingProcess from "./InstallingProcess";
