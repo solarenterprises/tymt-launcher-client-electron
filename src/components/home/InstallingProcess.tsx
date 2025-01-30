@@ -5,7 +5,7 @@ import { Button, Box, Stack } from "@mui/material";
 import InstallProcessContextMenu from "./InstallProcessContextMenu";
 
 import { getDownloadStatus } from "../../store/DownloadStatusSlice";
-import { getCurrentLogo } from "../../store/tymtLogoSlice_";
+import { getCurrentLogo } from "../../store/tymtLogoSlice";
 
 import downloadbig from "../../assets/main/DownloadBig.svg";
 import downloadsmall from "../../assets/main/DownloadSmall.svg";
