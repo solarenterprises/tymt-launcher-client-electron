@@ -17,6 +17,7 @@ import { addAccountList, getAccountList } from "../../store/AccountListSlice";
 import { setWallet } from "../../store/WalletSlice";
 import { setLogin } from "../../store/LoginSlice";
 import { setMnemonic } from "../../store/MnemonicSlice";
+import { setAuth } from "../../store/AuthSlice";
 
 import { AuthAPI } from "../../lib/api/AuthAPI";
 
@@ -27,6 +28,7 @@ import { IWalletAddresses } from "../../types/WalletTypes";
 import { IAccount, IAccountList } from "../../types/AccountTypes";
 
 import tymt2 from "../../assets/account/tymt2.png";
+import { ref } from "yup";
 
 export interface ILocationStateConfirmInformation {
   passphrase: string;
@@ -55,17 +57,6 @@ const ConfirmInformation = () => {
   const handleSignUp = async () => {
     try {
       const res = await AuthAPI.signup(nickname, walletAddresses.solar, passphrase);
-
-      const newAccount: IAccount = {
-        uid: res._id,
-        avatar: "",
-        nickName: nickname,
-        sxpAddress: walletAddresses.solar,
-        rsaPubKey: "",
-        password: getKeccak256Hash(password),
-        mnemonic: await encrypt(passphrase, password),
-      };
-      dispatch(addAccountList(newAccount));
     } catch (err) {
       console.error("Failed to handleSignUp: ", err);
     }
@@ -94,16 +85,18 @@ const ConfirmInformation = () => {
       const newAccount: IAccount = {
         uid: res.user?._id,
         avatar: "",
-        nickName: nickname,
+        nickName: res.user?.nickname,
         sxpAddress: walletAddresses.solar,
         rsaPubKey: "",
         password: getKeccak256Hash(password),
         mnemonic: await encrypt(passphrase, password),
       };
       dispatch(setAccount(newAccount));
+      dispatch(addAccountList(newAccount));
       dispatch(setWallet(walletAddresses));
       dispatch(setLogin(true));
       dispatch(setMnemonic(passphrase));
+      dispatch(setAuth({ accessToken: res.accessToken, refreshToken: res.refreshToken }));
       navigate("/home");
     } catch (err) {
       console.error("Failed to handleLogin: ", err);

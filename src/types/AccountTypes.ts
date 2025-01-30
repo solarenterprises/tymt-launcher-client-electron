@@ -24,3 +24,8 @@ export interface IMnemonic {
 export interface ILogin {
   isLoggedIn: boolean;
 }
+
+export interface IAuth {
+  accessToken: string;
+  refreshToken: string;
+}
