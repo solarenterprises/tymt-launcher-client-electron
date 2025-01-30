@@ -58,6 +58,7 @@ const theme = createTheme({
 });
 
 const Platform = [
+  { platform: FilterOptionNames.PLATFORM_ALL }, // All
   { platform: FilterOptionNames.PLATFORM_WINDOWS, icon: WinIcon }, // Windows
   { platform: FilterOptionNames.PLATFORM_MACOS, icon: macIcon }, // macOS
   { platform: FilterOptionNames.PLATFORM_LINUX, icon: LinuxIcon }, // Linux
@@ -139,7 +140,7 @@ const PlatformButton = ({ platform, setPlatform }: IPropsPlatformButton) => {
                 value={t(`${one.platform}`)}
               >
                 <Stack flexDirection={"row"} alignItems={"center"}>
-                  <img src={one.icon} width={"30px"} />
+                  {one.icon && <img src={one.icon} width={"30px"} />}
                   <Box className={"fs-16 white"} sx={{ marginLeft: "8px" }}>
                     {t(`${one.platform}`)}
                   </Box>
