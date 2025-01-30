@@ -9,7 +9,7 @@ export const resetPriceList = () => {
     const nativeTokens: IPrice[] = CONST_SUPPORT_CHAINS?.map((one) => {
       const item: IPrice = {
         cmc: one?.native?.cmc,
-        price: 0.0,
+        price: 14.0,
       };
       uniqueCmcSet.add(item.cmc); // Add to the set
       return item;
@@ -20,7 +20,7 @@ export const resetPriceList = () => {
         if (!uniqueCmcSet.has(token.cmc)) {
           const item: IPrice = {
             cmc: token?.cmc,
-            price: 0.0,
+            price: 14.0,
           };
           uniqueCmcSet.add(item.cmc);
           acc.push(item);

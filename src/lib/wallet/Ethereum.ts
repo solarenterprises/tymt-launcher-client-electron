@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import * as ethereumjsWallet from "ethereumjs-wallet";
 import * as bip39 from "bip39";
 import { validate } from "multicoin-address-validator";
+import axios from "axios";
 
 import { CONFIG_ETH_API_URL, CONFIG_ETH_API_KEY, CONFIG_ETH_RPC_URL, CONFIG_NETWORK_NAME } from "../../config/MainConfig";
 
@@ -53,10 +54,17 @@ export class Ethereum {
 
   static async getBalance(addr: string): Promise<number> {
     try {
-      // if (net_name === "testnet") return 0;
-      const result = (await (await fetch(`${CONFIG_ETH_API_URL}?module=account&action=balance&address=${addr}&tag=latest&apikey=${CONFIG_ETH_API_KEY}`)).json())
-        .result;
-      return (result as number) / 1e9 / 1e9;
+      const response = await axios.get(`${CONFIG_ETH_API_URL}`, {
+        params: {
+          module: "account",
+          action: "balance",
+          address: addr,
+          tag: "latest",
+          apikey: CONFIG_ETH_API_KEY,
+        },
+      });
+      const result = response.data.result;
+      return parseFloat(result) / 1e18; // Convert from Wei to ETH
     } catch (err) {
       console.error("Failed Ethereum getBalance: ", err);
       return 0;
@@ -73,17 +81,20 @@ export class Ethereum {
             balance: 0,
           });
         } else {
+          const response = await axios.get(`${CONFIG_ETH_API_URL}`, {
+            params: {
+              module: "account",
+              action: "tokenbalance",
+              contractaddress: tokens[i].address,
+              address: addr,
+              tag: "latest",
+              apikey: CONFIG_ETH_API_KEY,
+            },
+          });
+          const balance = parseFloat(response.data.result) / 10 ** (tokens[i].decimals as number);
           result.push({
             symbol: tokens[i].symbol,
-            balance:
-              ((
-                await (
-                  await fetch(
-                    `${CONFIG_ETH_API_URL}?module=account&action=tokenbalance&contractaddress=${tokens[i].address}&address=${addr}&tag=latest&apikey=${CONFIG_ETH_API_KEY}`
-                  )
-                ).json()
-              ).result as number) /
-              10 ** (tokens[i].decimals as number),
+            balance: balance,
           });
         }
       }

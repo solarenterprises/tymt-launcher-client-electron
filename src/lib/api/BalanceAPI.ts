@@ -10,13 +10,14 @@ import { IParamsFetchChainBalance } from "../../types/APITypes/BalanceAPITypes";
 export class BalanceAPI {
   static fetchBalanceList = async (walletStore: IWalletAddresses) => {
     try {
-      const asyncFunctions = CONST_SUPPORT_CHAINS?.map((one) =>
-        this.fetchChainBalance({
-          walletStore: walletStore,
-          chainName: one?.native?.name,
-        })
-      );
-      const result = await Promise.all(asyncFunctions);
+      // const asyncFunctions = CONST_SUPPORT_CHAINS?.map((one) =>
+      //   this.fetchChainBalance({
+      //     walletStore: walletStore,
+      //     chainName: one?.native?.name,
+      //   })
+      // );
+      const asyncFunctions = this.fetchChainBalance({ walletStore, chainName: CONST_CHAIN_NAMES.SOLAR });
+      const result = await Promise.all([asyncFunctions]);
       const flattenedResult = result?.flat();
       return flattenedResult;
     } catch (err) {

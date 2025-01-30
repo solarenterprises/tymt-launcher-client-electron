@@ -32,6 +32,20 @@ interface Window {
     // run url args
     runUrlArgs: (url: string, args: string[]) => Promise<void>;
 
+    openLink: (url: string) => Promise<void>;
+
+    sxpVote: (
+      accountStore: IAccount,
+      walletStore: IWalletAddresses,
+      sxpFee: number,
+      password: string,
+      voteAsset: IVotingData
+    ) => Promise<{ success: boolean; error?: string }>;
+
+    transferCoin: (passphrase: string, tx: { recipients: IRecipient[]; fee: string }) => Promise<{ success: boolean; message?: string; error?: string }>;
+
+    fetchBalanceList: (walletStore: IWalletAddresses) => Promise<IBalance[]>;
+
     // fetch
     fetch: (url: string, init?: RequestInit) => Promise<any>;
   };

@@ -27,9 +27,23 @@ export interface IPropsInputText {
   error?: boolean;
   onIconButtonClick?: () => void;
   onAddressButtonClick?: () => void;
+  showTooltip?: boolean;
 }
 
-const InputText = ({ id, label, type, name, setValue, value, onChange, onBlur, error, onIconButtonClick, onAddressButtonClick }: IPropsInputText) => {
+const InputText = ({
+  id,
+  label,
+  type,
+  name,
+  setValue,
+  value,
+  onChange,
+  onBlur,
+  error,
+  onIconButtonClick,
+  onAddressButtonClick,
+  showTooltip,
+}: IPropsInputText) => {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [capsLockOn, setCapsLockOn] = useState<boolean>(false);
@@ -157,6 +171,7 @@ const InputText = ({ id, label, type, name, setValue, value, onChange, onBlur, e
       {type === "password" && (
         <>
           <Tooltip
+            open={showTooltip && !value}
             title={
               !value && (
                 <Stack

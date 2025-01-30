@@ -7,7 +7,6 @@ export interface IWalletSetting {
   hideZeroBalance: boolean;
   currentCurrency: string;
   feeLevel: string;
-  feeUSD: string;
 }
 
 export interface INotificationSetting {

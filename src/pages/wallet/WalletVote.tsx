@@ -1,32 +1,22 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
 import numeral from "numeral";
 
 import { Grid, Box, Divider, Stack, Button, Pagination, IconButton, Tooltip } from "@mui/material";
 
-import { CONST_CURRENCY_SYMBOLS } from "../../const/CurrencyConsts";
-import { CONST_CHAIN_NAMES } from "../../const/ChainConsts";
+import { CONFIG_SOLAR_SCAN } from "../../config/MainConfig";
+
+import { useWallet } from "../../providers/WalletProvider";
 
 import AnimatedComponent from "../../components/home/AnimatedComponent";
 import PasswordModal from "../../components/modal/PasswordModal";
 import InputVoteBox from "../../components/wallet/InputVoteBox";
 
-import { getCurrentCurrency } from "../../store/CurrentCurrencySlice";
-import { getWallet } from "../../store/WalletSlice";
-import { getReserveList } from "../../store/ReserveListSlice";
-import { getPriceList } from "../../store/PriceListSlice";
-import { getBalanceList } from "../../store/BalanceListSlice";
-
 import Solar from "../../lib/wallet/Solar";
 import { ElectronAPI } from "../../lib/api/ElectronAPI";
-import { translateString } from "../../lib/helper/TranslateHelper";
 import { compareDictionaries } from "../../lib/helper/JSONHelper";
-import { getNativeTokenBalanceByChainName, getNativeTokenPriceByChainName } from "../../lib/helper/WalletHelper";
 
-import { IPriceList } from "../../types/PriceTypes";
-import { IVotingData, IWalletAddresses, IBalanceList } from "../../types/WalletTypes";
-import { ICurrentCurrency, IReserveList } from "../../types/CurrencyTypes";
+import { IVotingData } from "../../types/WalletTypes";
 
 import accountIcon from "../../assets/wallet/Account.svg";
 import solarIcon from "../../assets/chain/Solar.svg";
@@ -34,17 +24,7 @@ import refreshIcon from "../../assets/wallet/RefreshIcon.svg";
 
 const WalletVote = () => {
   const { t } = useTranslation();
-
-  const currentCurrencyStore: ICurrentCurrency = useSelector(getCurrentCurrency);
-  const walletStore: IWalletAddresses = useSelector(getWallet);
-  const reserveListStore: IReserveList = useSelector(getReserveList);
-  const priceListStore: IPriceList = useSelector(getPriceList);
-  const balanceListStore: IBalanceList = useSelector(getBalanceList);
-
-  const reserve: number = useMemo(() => reserveListStore?.list?.find((one) => one?.currency === currentCurrencyStore?.currency)?.reserve, [reserveListStore]);
-  const currency: string = useMemo(() => CONST_CURRENCY_SYMBOLS[currentCurrencyStore?.currency] ?? "N/A", [currentCurrencyStore]);
-  const sxpPrice = useMemo(() => getNativeTokenPriceByChainName(priceListStore, CONST_CHAIN_NAMES?.SOLAR), [priceListStore]);
-  const sxpBalance = useMemo(() => getNativeTokenBalanceByChainName(balanceListStore, CONST_CHAIN_NAMES?.SOLAR), [balanceListStore]);
+  const { sxpPrice, sxpBalance, sxpAddress, currentCurrencySymbol, currentCurrencyReserve } = useWallet();
 
   const [data, setData] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
@@ -58,19 +38,15 @@ const WalletVote = () => {
   const [totalVoted, setTotalVoted] = useState<number>(0);
   const [totalRewards, setTotalRewards] = useState<number>(0);
 
-  // const { setNotificationStatus, setNotificationTitle, setNotificationDetail, setNotificationOpen, setNotificationLink } = useNotification();
-
   const handleRefreshClick = async () => {
     try {
       setCurrentPage(1);
-
       const [res1, res2, res3, res4] = await Promise.all([
         Solar.get53Delegates(1),
-        Solar.getVotingData(walletStore?.solar),
+        Solar.getVotingData(sxpAddress),
         Solar.getAllDelegates(),
         Solar.getBlockchain(),
       ]);
-
       setData(res1.data.data);
       setTotalPage(res1.data.meta.pageCount);
       if (Array.isArray(res2.data.data) && res2.data.data.length > 0) {
@@ -85,20 +61,8 @@ const WalletVote = () => {
       setTotalVoted(newTotalVoted);
       setTotalRewards(newTotalRewards);
       setLatestBlock(res4.data.data.block.height);
-
-      // setNotificationStatus("success");
-      // setNotificationTitle(t("wal-54_success"));
-      // setNotificationDetail(t("wal-55_block-producers-refreshed"));
-      // setNotificationOpen(true);
-      // setNotificationLink(null);
     } catch (err) {
-      // console.error("Failed to refresh voting page: ", err);
-      const translated = await translateString(err.toString());
-      // setNotificationStatus("failed");
-      // setNotificationTitle(t("wal-53_refresh-vote-failed"));
-      // setNotificationDetail(translated);
-      // setNotificationOpen(true);
-      // setNotificationLink(null);
+      console.error("Failed to refresh voting page: ", err);
     }
   };
 
@@ -124,7 +88,6 @@ const WalletVote = () => {
   useEffect(() => {
     let intervalId;
     let error = false;
-
     const fetchData = async () => {
       if (error) {
       } else {
@@ -137,16 +100,13 @@ const WalletVote = () => {
         }
       }
     };
-
     intervalId = setInterval(fetchData, 4 * 1e3);
-
     return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
     let intervalId;
     let error = false;
-
     const fetchData = async () => {
       if (error) {
       } else {
@@ -162,9 +122,7 @@ const WalletVote = () => {
         }
       }
     };
-
     intervalId = setInterval(fetchData, 120 * 1e3);
-
     return () => clearInterval(intervalId);
   });
 
@@ -210,7 +168,9 @@ const WalletVote = () => {
             <Stack padding={"24px 40px"}>
               <Box className="fs-16-regular light t-center">{t("wal-18_total-voted")}</Box>
               <Box className="fs-34-bold white t-center">{`${numeral(totalVoted).format("0,0")} SXP`}</Box>
-              <Box className="fs-18-regular light t-center">{`${currency} ${numeral(totalVoted * Number(sxpPrice) * Number(reserve)).format("0,0")}`}</Box>
+              <Box className="fs-18-regular light t-center">{`${currentCurrencySymbol} ${numeral(
+                totalVoted * Number(sxpPrice) * Number(currentCurrencyReserve)
+              ).format("0,0")}`}</Box>
             </Stack>
             <Stack padding={"32px 24px"}>
               <Box
@@ -223,7 +183,9 @@ const WalletVote = () => {
             <Stack padding={"24px 40px"}>
               <Box className="fs-16-regular light t-center">{t("wal-19_total-rewards")}</Box>
               <Box className="fs-34-bold beach t-center">{`+${numeral(totalRewards).format("0,0")} SXP`}</Box>
-              <Box className="fs-18-regular light t-center">{`+${currency} ${numeral(totalRewards * Number(sxpPrice) * Number(reserve)).format("0,0")}`}</Box>
+              <Box className="fs-18-regular light t-center">{`+${currentCurrencySymbol} ${numeral(
+                totalRewards * Number(sxpPrice) * Number(currentCurrencyReserve)
+              ).format("0,0")}`}</Box>
             </Stack>
             <Stack padding={"32px 24px"}>
               <Box
@@ -235,7 +197,9 @@ const WalletVote = () => {
             </Stack>
             <Stack padding={"24px 40px"}>
               <Box className="fs-16-regular light t-center">{t("wal-51_sxp-price")}</Box>
-              <Box className="fs-34-bold white t-center">{`${currency} ${numeral(Number(sxpPrice) * Number(reserve)).format("0,0.00")}`}</Box>
+              <Box className="fs-34-bold white t-center">{`${currentCurrencySymbol} ${numeral(Number(sxpPrice) * Number(currentCurrencyReserve)).format(
+                "0,0.00"
+              )}`}</Box>
             </Stack>
           </Grid>
           <Grid item xs={12}>
@@ -344,7 +308,7 @@ const WalletVote = () => {
                       borderLeft: Object.keys(votingData).includes(item.username) && votingData[item.username] !== 0 ? "5px solid #EF4444" : "none",
                     }}
                     onDoubleClick={() => {
-                      ElectronAPI.openExternalLink(`https://solarscan.com/wallet/${item.username}`);
+                      ElectronAPI.openExternalLink(`${CONFIG_SOLAR_SCAN}wallet/${item.username}`);
                     }}
                   >
                     <Stack width={"100%"}>
@@ -410,7 +374,9 @@ const WalletVote = () => {
                             <Stack>
                               <Box className="fs-18-regular white t-left">{`${numeral(item.forged.total ?? 0).format("0,0")} SXP`}</Box>
                               <Box className="fs-12-regular light t-left">
-                                {`${numeral((item.forged.total * Number(sxpPrice) * Number(reserve)) / 1e8).format("0,0.00")} ${currency}`}
+                                {`${numeral((item.forged.total * Number(sxpPrice) * Number(currentCurrencyReserve)) / 1e8).format(
+                                  "0,0.00"
+                                )} ${currentCurrencySymbol}`}
                               </Box>
                             </Stack>
                           </Stack>

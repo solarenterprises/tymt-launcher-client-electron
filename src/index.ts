@@ -253,8 +253,13 @@ ipcMain.handle("run-url-args", async (event, { url, args }: IRunUrlArgs) => {
   await execAsync(commandPath, { cwd: workingDirectory });
 });
 
+ipcMain.handle("open-link", (event, url: string) => shell.openExternal(url));
+
+import "./ipc/ipcWeb3";
+
 ipcMain.handle("fetch", async (event, { url, init }: IFetch) => {
   const res = await fetch(url, init);
   const data = await res.json();
   return data;
 });
+

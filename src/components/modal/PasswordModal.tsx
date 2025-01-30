@@ -1,38 +1,25 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import numeral from "numeral";
 
-import tymtCore from "../../lib/core/tymtCore";
-
-import { CONST_CURRENCY_SYMBOLS } from "../../const/CurrencyConsts";
-
 import { Box, Stack, Modal, Button, TextField, InputAdornment, CircularProgress, Fade } from "@mui/material";
 
-// import { useNotification } from "../../providers/NotificationProvider";
+import tymtCore from "../../lib/core/tymtCore";
+import { useWallet } from "../../providers/WalletProvider";
 
 import InputText from "../account/InputText";
-import FeeSwitchButton from "../FeeSwitchButton";
+import FeeSwitchButton from "../home/FeeSwitchButton";
 
 import { getAccount } from "../../store/AccountSlice";
 import { getWallet } from "../../store/WalletSlice";
-import { getCurrentCurrency } from "../../store/CurrentCurrencySlice";
 import { getWalletSetting } from "../../store/WalletSettingSlice";
-import { getReserveList } from "../../store/ReserveListSlice";
-// import { getCurrentCurrency } from "../../features/wallet/CurrentCurrencySlice";
-// import { getCurrencyList } from "../../features/wallet/CurrencyListSlice";
-// import { getWalletSetting, setWalletSetting } from "../../features/settings/WalletSettingSlice";
-// import { getWallet } from "../../features/wallet/WalletSlice";
-// import { getAccount } from "../../features/account/AccountSlice";
 
-import { translateString } from "../../lib/helper/TranslateHelper";
 import { decrypt, getKeccak256Hash } from "../../lib/helper/EncryptHelper";
 
 import { IAccount } from "../../types/AccountTypes";
 import { IVotingData, IWalletAddresses } from "../../types/WalletTypes";
-import { ICurrentCurrency, IReserveList } from "../../types/CurrencyTypes";
 import { IWalletSetting } from "../../types/SettingTypes";
-// import { IWalletSetting } from "../../types/settingTypes";
 
 import SettingStyle from "../../styles/SettingStyle";
 
@@ -48,32 +35,16 @@ export interface IPropsPasswordModal {
 
 const PasswordModal = ({ open, setOpen, voteAsset }: IPropsPasswordModal) => {
   const classname = SettingStyle();
-
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
-  // const walletSettingStore: IWalletSetting = useSelector(getWalletSetting);
-  // const walletStore: IWallet = useSelector(getWallet);
-  // const currencyListStore: ICurrencyList = useSelector(getCurrencyList);
-  // const currentCurrencyStore: ICurrentCurrency = useSelector(getCurrentCurrency);
-  // const accountStore: IAccount = useSelector(getAccount);
+  const { currentCurrencySymbol, currentCurrencyReserve, sxpFee, sxpVote } = useWallet();
 
   const accountStore: IAccount = useSelector(getAccount);
   const walletStore: IWalletAddresses = useSelector(getWallet);
-  const currentCurrencyStore: ICurrentCurrency = useSelector(getCurrentCurrency);
-  const reserveListStore: IReserveList = useSelector(getReserveList);
   const walletSettingStore: IWalletSetting = useSelector(getWalletSetting);
 
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-
-  const reserve: number = useMemo(
-    () => reserveListStore?.list?.find((one) => one?.currency === currentCurrencyStore?.currency)?.reserve,
-    [reserveListStore, currentCurrencyStore]
-  );
-  const currency: string = useMemo(() => CONST_CURRENCY_SYMBOLS[currentCurrencyStore?.currency] ?? "N/A", [currentCurrencyStore]);
-
-  // const { setNotificationStatus, setNotificationTitle, setNotificationDetail, setNotificationOpen, setNotificationLink } = useNotification();
 
   const modalStyle = {
     display: "flex",
@@ -88,38 +59,19 @@ const PasswordModal = ({ open, setOpen, voteAsset }: IPropsPasswordModal) => {
   const handleVoteClick = useCallback(async () => {
     try {
       setLoading(true);
-      const passphrase: string = await decrypt(accountStore?.mnemonic, password);
-      const res = await tymtCore.Blockchains.solar.wallet.vote(passphrase.normalize("NFD"), walletStore?.solar, voteAsset, walletSettingStore?.feeUSD, 1);
-      if (res.data.data.invalid[0]) {
-        const temp = res.data.data.invalid[0];
-        const err = res.data.errors[temp].message;
-        const translated = await translateString(err);
-        // setNotificationStatus("failed");
-        // setNotificationTitle(t("wal-49_vote-failed"));
-        // setNotificationDetail(translated);
-        // setNotificationOpen(true);
-        // setNotificationLink(null);
+      const res = await sxpVote(accountStore, walletStore, sxpFee, password, voteAsset);
+      if (res.success) {
+        setOpen(false);
+        setPassword("");
       } else {
-        // setNotificationStatus("success");
-        // setNotificationTitle(t("wal-50_congratulations"));
-        // setNotificationDetail(t("wal-48_successfully-voted"));
-        // setNotificationOpen(true);
-        // setNotificationLink(null);
+        console.error("Failed to handleVoteClick: ", res.error);
       }
-      setOpen(false);
-      setPassword("");
       setLoading(false);
     } catch (err) {
       console.error("Failed to handleVoteClick: ", err);
       setOpen(false);
       setPassword("");
       setLoading(false);
-      const translated = await translateString(err.toString());
-      // setNotificationStatus("failed");
-      // setNotificationTitle(t("wal-49_vote-failed"));
-      // setNotificationDetail(translated);
-      // setNotificationOpen(true);
-      // setNotificationLink(null);
     }
   }, [walletStore, accountStore, walletSettingStore, password]);
 
@@ -158,14 +110,14 @@ const PasswordModal = ({ open, setOpen, voteAsset }: IPropsPasswordModal) => {
                     inputMode: "numeric",
                     endAdornment: (
                       <InputAdornment position="end" classes={{ root: classname.adornment }}>
-                        {currency}
+                        {currentCurrencySymbol}
                       </InputAdornment>
                     ),
                     classes: {
                       input: classname.input,
                     },
                   }}
-                  value={numeral(Number(walletSettingStore?.feeUSD) * Number(reserve)).format("0,0.0000")}
+                  value={numeral(Number(sxpFee) * Number(currentCurrencyReserve)).format("0,0.0000")}
                   // onBlur={(e) => {
                   //   dispatch(
                   //     setWallet({

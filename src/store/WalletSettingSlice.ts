@@ -9,8 +9,7 @@ const init: IWalletSetting = {
   pageRefreshed: false,
   hideZeroBalance: false,
   currentCurrency: "USD",
-  feeLevel: "minimum",
-  feeUSD: "0.0183",
+  feeLevel: "minimum", // minimum, average, maximum, input
 };
 
 const loadWalletSetting: () => IWalletSetting = () => {

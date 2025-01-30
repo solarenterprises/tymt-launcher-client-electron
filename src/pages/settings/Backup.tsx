@@ -118,6 +118,7 @@ const Backup = ({ view, setView }: IPropsBackup) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     error={formik.touched.password && formik.errors.password ? true : false}
+                    showTooltip={false}
                   />
                 </Box>
                 {formik.touched.password && formik.errors.password && (

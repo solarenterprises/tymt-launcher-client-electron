@@ -1,5 +1,4 @@
 import type { Configuration } from "webpack";
-
 import { rules } from "./webpack.rules";
 import { plugins } from "./webpack.plugins";
 
@@ -10,6 +9,11 @@ export const mainConfig: Configuration = {
    */
   entry: "./src/index.ts",
   // Put your normal webpack config below here
+  externals: [
+    {
+      bcrypto: "commonjs bcrypto",
+    },
+  ],
   module: {
     rules,
   },

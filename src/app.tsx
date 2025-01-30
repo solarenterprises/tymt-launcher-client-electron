@@ -40,9 +40,11 @@ import Library from "./pages/main/Library";
 //Wallet
 import Wallet from "./pages/wallet/Wallet";
 import WalletVote from "./pages/wallet/WalletVote";
+import WalletSend from "./pages/wallet/WalletSend";
 //~Wallet
 
 import { Buffer } from "buffer";
+import { WalletProvider } from "./providers/WalletProvider";
 window.Buffer = Buffer;
 
 const root = createRoot(document.body);
@@ -50,27 +52,30 @@ const root = createRoot(document.body);
 root.render(
   <React.StrictMode>
     <StoreProvider store={store}>
-      <HashRouter>
-        <Routes>
-          <Route path="/" element={<Splash />} />
-          <Route path="/welcome" element={<Welcome />} />
-          <Route path="/non-custodial-login-1" element={<NonCustodialLogin1 />} />
-          <Route path="/non-custodial-login-2" element={<NonCustodialLogIn2 />} />
-          <Route path="/non-custodial-signup-2" element={<NonCustodialSignUp2 />} />
-          <Route path="/non-custodial-signup-3" element={<NonCustodialSignUp3 />} />
-          <Route path="/non-custodial-signup-4/:mode" element={<NonCustodialSignUp4 />} />
-          <Route path="/non-custodial-import-1/:mode" element={<NonCustodialImport1 />} />
-          <Route path="/confirm-information/:mode" element={<ConfirmInformation />} />
-          <Route path="/" element={<HomeLayout />}>
-            <Route path="/home" element={<Homepage />} />
-            <Route path="/game/:gameid" element={<GameOverview />} />
-            <Route path="/wallet" element={<Wallet />} />
-            <Route path="/wallet/vote" element={<WalletVote />} />
-            <Route path="/store" element={<Store />} />
-            <Route path="/library" element={<Library />} />
-          </Route>
-        </Routes>
-      </HashRouter>
+      <WalletProvider>
+        <HashRouter>
+          <Routes>
+            <Route path="/" element={<Splash />} />
+            <Route path="/welcome" element={<Welcome />} />
+            <Route path="/non-custodial-login-1" element={<NonCustodialLogin1 />} />
+            <Route path="/non-custodial-login-2" element={<NonCustodialLogIn2 />} />
+            <Route path="/non-custodial-signup-2" element={<NonCustodialSignUp2 />} />
+            <Route path="/non-custodial-signup-3" element={<NonCustodialSignUp3 />} />
+            <Route path="/non-custodial-signup-4/:mode" element={<NonCustodialSignUp4 />} />
+            <Route path="/non-custodial-import-1/:mode" element={<NonCustodialImport1 />} />
+            <Route path="/confirm-information/:mode" element={<ConfirmInformation />} />
+            <Route path="/" element={<HomeLayout />}>
+              <Route path="/home" element={<Homepage />} />
+              <Route path="/game/:gameid" element={<GameOverview />} />
+              <Route path="/wallet" element={<Wallet />} />
+              <Route path="/wallet-vote" element={<WalletVote />} />
+              <Route path="/wallet-send" element={<WalletSend />} />
+              <Route path="/store" element={<Store />} />
+              <Route path="/library" element={<Library />} />
+            </Route>
+          </Routes>
+        </HashRouter>
+      </WalletProvider>
     </StoreProvider>
   </React.StrictMode>
 );
