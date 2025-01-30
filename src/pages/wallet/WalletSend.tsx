@@ -76,12 +76,7 @@ const WalletSend = () => {
   const updateDraft = useCallback(() => {
     if (address === "" || amount === "") return;
 
-    let currentToken: {
-      address: string;
-      symbol: string;
-      logo: string;
-      decimals: Number;
-    } = {
+    const currentToken = {
       address: currentNativeOrToken?.address,
       symbol: currentNativeOrToken?.symbol,
       logo: currentNativeOrToken?.logo,
@@ -98,7 +93,7 @@ const WalletSend = () => {
       icon: currentToken.logo,
     };
 
-    let recipientAddrIsValid: boolean = false;
+    let recipientAddrIsValid = false;
     if (currentSupportChain?.native?.name === CONST_CHAIN_NAMES.SOLAR) {
       recipientAddrIsValid = tymtCore.Blockchains.solar.wallet.validateAddress(newItem.address);
     } else if (currentSupportChain?.native?.name === CONST_CHAIN_NAMES.BITCOIN) {
