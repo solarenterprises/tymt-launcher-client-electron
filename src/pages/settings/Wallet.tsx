@@ -141,7 +141,7 @@ const Wallet: FC<IPropsWallet> = ({ view, setView }) => {
                 </Box>
               </Stack>
             </Button>
-            <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} />
+            <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} /> */}
             <Button className="common-btn" sx={{ padding: "20px" }} onClick={() => setView("address")}>
               <Stack direction={"row"} justifyContent={"space-between"} textAlign={"center"}>
                 <Box className="fs-h4 white">{t("set-32_address-book")}</Box>
@@ -150,7 +150,7 @@ const Wallet: FC<IPropsWallet> = ({ view, setView }) => {
                 </Box>
               </Stack>
             </Button>
-            <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} /> */}
+            <Divider variant="fullWidth" sx={{ backgroundColor: "#FFFFFF1A" }} />
           </Stack>
         </Stack>
       )}

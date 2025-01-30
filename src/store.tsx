@@ -23,6 +23,7 @@ import currentTokenReducer from "./store/CurrentTokenSlice";
 import walletSettingReducer from "./store/WalletSettingSlice";
 import notificationSettingReducer from "./store/NotificationSettingSlice";
 import languageSettingReducer from "./store/LanguageSettingSlice";
+import addressReducer from "./store/AddressSlice";
 // ~Setting
 
 // DownloadStatus
@@ -75,6 +76,8 @@ const store = configureStore({
     tymtLogo: tymtLogoReducer,
     gameList: gameListReducer,
     renderTime: renderTimeReducer,
+
+    address: addressReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(stateSyncMiddleware),
 });

@@ -9,9 +9,9 @@ import editIcon from "../../assets/setting/EditIcon.svg";
 import deleteIcon from "../../assets/setting/TrashIcon.svg";
 import InputText from "../../components/account/InputText";
 import emptyImg from "../../assets/setting/EmptyAddress.svg";
-// import { selectAddress, setAddress } from "../../features/settings/AddressSlice";
+import { selectAddress, setAddress } from "../../store/AddressSlice";
 import { FC, useCallback, useState } from "react";
-// import { addressType } from "../../types/settingTypes";
+import { IAddress } from "../../types/SettingTypes";
 
 // import { useNotification } from "../../providers/NotificationProvider";
 
@@ -22,8 +22,7 @@ interface IPropsAddress {
 
 const Address: FC<IPropsAddress> = ({ view, setView }) => {
   const dispatch = useDispatch();
-  // const data: addressType[] = useSelector(selectAddress);
-  const data: any[] = [];
+  const data: IAddress[] = useSelector(selectAddress);
   const [name, setName] = useState("");
   const [info, setInfo] = useState("");
   const [status, setStatus] = useState("normal");
@@ -40,19 +39,19 @@ const Address: FC<IPropsAddress> = ({ view, setView }) => {
   // } = useNotification();
 
   const updateAddress = useCallback(() => {
-    // setStatus("normal");
-    // if (seq == -1) {
-    //   const updatedData = [...data, { name: name, address: info }];
-    //   dispatch(setAddress(updatedData));
-    //   setNotificationTitle(t("set-85_success"));
-    //   setNotificationDetail(t("set-86_wallet-successfully-added"));
-    // } else {
-    //   const updateData = [...data];
-    //   updateData[seq] = { name: name, address: info };
-    //   dispatch(setAddress(updateData));
-    //   setNotificationTitle(t("set-85_success"));
-    //   setNotificationDetail(t("set-87_wallet-successfully-updated"));
-    // }
+    setStatus("normal");
+    if (seq == -1) {
+      const updatedData = [...data, { name: name, address: info }];
+      dispatch(setAddress(updatedData));
+      // setNotificationTitle(t("set-85_success"));
+      // setNotificationDetail(t("set-86_wallet-successfully-added"));
+    } else {
+      const updateData = [...data];
+      updateData[seq] = { name: name, address: info };
+      dispatch(setAddress(updateData));
+      // setNotificationTitle(t("set-85_success"));
+      // setNotificationDetail(t("set-87_wallet-successfully-updated"));
+    }
     // setNotificationStatus("success");
     // setNotificationOpen(true);
     // setNotificationLink(null);
@@ -62,23 +61,24 @@ const Address: FC<IPropsAddress> = ({ view, setView }) => {
     (index: number) => {
       setStatus("edit");
       const { name, address } = data[index];
-      setName(name), setInfo(address);
+      setName(name);
+      setInfo(address);
       setSeq(index);
     },
-    [data, name, info, seq]
+    [data]
   );
 
   const deleteAddress = useCallback(
     (deleteId: number) => {
-      // const updatedData = data.filter((_, index) => index !== deleteId);
-      // dispatch(setAddress(updatedData));
+      const updatedData = data.filter((_, index) => index !== deleteId);
+      dispatch(setAddress(updatedData));
       // setNotificationStatus("success");
       // setNotificationTitle(t("alt-13_delete-wallet"));
       // setNotificationDetail(t("alt-14_delete-wallet-intro"));
       // setNotificationOpen(true);
       // setNotificationLink(null);
     },
-    [data, dispatch, name, info, seq]
+    [data, dispatch]
   );
 
   return (
