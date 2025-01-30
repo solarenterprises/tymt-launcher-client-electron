@@ -7,14 +7,13 @@ import { Box, Grid, Stack } from "@mui/material";
 import StoreGameCard from "../game/StoreGameCard";
 import AnimatedComponent from "../home/AnimatedComponent";
 
-// import { getGameList } from "../../features/store/GameListSlice";
+import { getGameList } from "../../store/GameListSlice";
 
-// import { filterByGenre, filterByKeyword, filterByPlatform, filterByRank, filterByType } from "../../lib/helper/FilterHelper";
+import { filterByGenre, filterByKeyword, filterByPlatform, filterByRank, filterByType } from "../../lib/helper/FilterHelper";
 
 import NoGamePng from "../../assets/main/NoGames.png";
 
-// import { IGame, IGameList } from "../../types/GameTypes";
-type IGame = any;
+import { IGame, IGameList } from "../../types/GameTypes";
 
 export interface IPropsStoreGameItems {
   platform?: string;
@@ -28,29 +27,26 @@ export interface IPropsStoreGameItems {
 const StoreComingGameItems = ({ platform, genre, rank, type, keyword }: IPropsStoreGameItems) => {
   const { t } = useTranslation();
 
-  // const gameListStore: IGameList = useSelector(getGameList);
+  const gameListStore: IGameList = useSelector(getGameList);
 
-  // const comingGameListStore: IGameList = useMemo(() => {
-  //   const data = gameListStore?.games?.filter((one) => one?.visibilityState === "coming soon");
-  //   const res: IGameList = {
-  //     games: data,
-  //   };
-  //   return res;
-  // }, [gameListStore]);
-  const comingGameListStore: { games: IGame[] } = { games: [] };
+  const comingGameListStore: IGameList = useMemo(() => {
+    const data = gameListStore?.games?.filter((one) => one?.visibilityState === "coming soon");
+    const res: IGameList = {
+      games: data,
+    };
+    return res;
+  }, [gameListStore]);
 
-  // const resultGames: IGame[] = useMemo(() => {
-  //   let data = [...comingGameListStore?.games];
-  //   if (platform) data = filterByPlatform(data, platform);
-  //   if (genre) data = filterByGenre(data, genre);
-  //   // if (releaseDate) data = filterByReleaseDate(data, releaseDate);
-  //   if (rank) data = filterByRank(data, rank);
-  //   if (type) data = filterByType(data, type);
-  //   if (keyword) data = filterByKeyword(data, keyword);
-  //   return data;
-  // }, [comingGameListStore, platform, genre, rank, type, keyword]);
-
-  const resultGames: IGame[] = [];
+  const resultGames: IGame[] = useMemo(() => {
+    let data = [...comingGameListStore.games];
+    if (platform) data = filterByPlatform(data, platform);
+    if (genre) data = filterByGenre(data, genre);
+    // if (releaseDate) data = filterByReleaseDate(data, releaseDate);
+    if (rank) data = filterByRank(data, rank);
+    if (type) data = filterByType(data, type);
+    if (keyword) data = filterByKeyword(data, keyword);
+    return data;
+  }, [comingGameListStore, platform, genre, rank, type, keyword]);
 
   return (
     <Grid item xs={12} container spacing={"32px"} sx={{ width: "100%", marginTop: "0px" }}>

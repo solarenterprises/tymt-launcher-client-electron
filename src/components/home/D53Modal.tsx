@@ -10,7 +10,7 @@ import { Box, Stack, Modal, Button, Fade } from "@mui/material";
 import InputText from "../account/InputText";
 
 import closeIcon from "../../assets/setting/XIcon.svg";
-import ElectronNotification from "../EelectronNotification";
+import ElectronNotification from "../ElectronNotification";
 import { runD53 } from "../../lib/helper/DownloadHelper";
 
 interface props {

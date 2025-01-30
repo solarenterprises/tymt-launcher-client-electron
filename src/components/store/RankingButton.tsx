@@ -2,12 +2,8 @@ import { useTranslation } from "react-i18next";
 
 import { SelectChangeEvent } from "@mui/material/Select";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { Box, MenuItem, FormControl, Select, Stack } from "@mui/material";
+import { Box, MenuItem, FormControl, Select } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-import LinuxIcon from "../../assets/main/LinuxIcon.svg";
-import WinIcon from "../../assets/main/WinIcon.svg";
-import macIcon from "../../assets/main/MacIcon.svg";
 
 import { FilterOptionNames } from "../../const/FilterOptionNames";
 
@@ -20,9 +16,9 @@ const MenuProps = {
   },
   PaperProps: {
     style: {
+      minWidth: "0px",
       marginTop: "5px",
       maxHeight: "none",
-      width: "120px",
       display: "flex",
       alignItems: "center",
       borderRadius: "16px",
@@ -57,24 +53,27 @@ const theme = createTheme({
   },
 });
 
-const Platform = [
-  { platform: FilterOptionNames.PLATFORM_WINDOWS, icon: WinIcon }, // Windows
-  { platform: FilterOptionNames.PLATFORM_MACOS, icon: macIcon }, // macOS
-  { platform: FilterOptionNames.PLATFORM_LINUX, icon: LinuxIcon }, // Linux
+const Ranking = [
+  FilterOptionNames.RANK_ALL,
+  FilterOptionNames.RANK_10,
+  FilterOptionNames.RANK_50,
+  FilterOptionNames.RANK_100,
 ];
 
 const selectedshow = false;
 
-export interface IPropsPlatformbtn {
-  platform: string;
-  setPlatform: (_: string) => void;
+export interface IPropsRankingButton {
+  rank: string;
+  setRank: (_: string) => void;
 }
 
-const Platformbtn = ({ platform, setPlatform }: IPropsPlatformbtn) => {
+const RankingButton = ({ rank, setRank }: IPropsRankingButton) => {
   const { t } = useTranslation();
 
   const handleChange = (event: SelectChangeEvent) => {
-    setPlatform(event.target.value);
+    if (rank === event.target.value) {
+      setRank("");
+    } else setRank(event.target.value);
   };
 
   return (
@@ -94,10 +93,12 @@ const Platformbtn = ({ platform, setPlatform }: IPropsPlatformbtn) => {
               border: "1px solid rgba(82, 225, 242, 0.40)",
               background: "var(--bg-stroke-card-bg, rgba(27, 53, 56, 0.20))",
               "&:hover": {
-                backgroundColor: "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
+                backgroundColor:
+                  "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
               },
               "&:active": {
-                backgroundColor: "var(--bg-stroke-blue-stroke-default-20, rgba(82, 225, 242, 0.20))",
+                backgroundColor:
+                  "var(--bg-stroke-blue-stroke-default-20, rgba(82, 225, 242, 0.20))",
               },
               "& .MuiSelect-icon": {
                 color: "var(--Basic-Light, #AFAFAF)",
@@ -105,45 +106,45 @@ const Platformbtn = ({ platform, setPlatform }: IPropsPlatformbtn) => {
             }}
             fullWidth
             displayEmpty
-            value={platform}
+            value={rank}
             onChange={handleChange}
-            IconComponent={ExpandMoreIcon}
             MenuProps={MenuProps}
+            IconComponent={ExpandMoreIcon}
             renderValue={(selected) => (
               <>
-                <Box className={"fs-16 white"}>{t("sto-4_platform")}</Box>
+                <Box className={"fs-16 white"}>{t("sto-5_ranking")}</Box>
                 {selectedshow && <span>{selected}</span>}
               </>
             )}
           >
-            {Platform.map((one) => (
+            {Ranking.map((one) => (
               <MenuItem
                 sx={{
-                  width: "240px",
                   display: "flex",
                   justifyContent: "space-between",
-                  borderBottom: "1px solid var(--bg-stroke-white-10-stroke-default, rgba(255, 255, 255, 0.10))",
+                  borderBottom:
+                    "1px solid var(--bg-stroke-white-10-stroke-default, rgba(255, 255, 255, 0.10))",
+                  backdropFilter: "blur(10px)",
                   "&:hover": {
-                    background: "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
+                    background:
+                      "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
                   },
                   "&.Mui-selected": {
-                    background: "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
-                    "&:hover": {
-                      background: "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
-                    },
+                    background:
+                      "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
                     backdropFilter: "blur(10px)",
+                    "&:hover": {
+                      background:
+                        "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
+                    },
                   },
-                  backdropFilter: "blur(10px)",
                 }}
-                key={one.platform}
-                value={t(`${one.platform}`)}
+                key={one}
+                value={one}
               >
-                <Stack flexDirection={"row"} alignItems={"center"}>
-                  <img src={one.icon} width={"30px"} />
-                  <Box className={"fs-16 white"} sx={{ marginLeft: "8px" }}>
-                    {t(`${one.platform}`)}
-                  </Box>
-                </Stack>
+                <Box className={"fs-16 white"} sx={{ margin: "0px 8px" }}>
+                  {t(`${one}`)}
+                </Box>
               </MenuItem>
             ))}
           </Select>
@@ -153,4 +154,4 @@ const Platformbtn = ({ platform, setPlatform }: IPropsPlatformbtn) => {
   );
 };
 
-export default Platformbtn;
+export default RankingButton;

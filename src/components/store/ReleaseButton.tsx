@@ -55,12 +55,12 @@ const Releasedate = ["sto-6_coming-soon", "sto-7_last-7days", "sto-8_last-30-day
 
 const selectedshow = false;
 
-export interface IPropsReleasebtn {
+export interface IPropsReleaseButton {
   releaseDate: string;
   setReleaseDate: (_: string) => void;
 }
 
-const Releasebtn = ({ releaseDate, setReleaseDate }: IPropsReleasebtn) => {
+const ReleaseButton = ({ releaseDate, setReleaseDate }: IPropsReleaseButton) => {
   const { t } = useTranslation();
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -145,4 +145,4 @@ const Releasebtn = ({ releaseDate, setReleaseDate }: IPropsReleasebtn) => {
   );
 };
 
-export default Releasebtn;
+export default ReleaseButton;

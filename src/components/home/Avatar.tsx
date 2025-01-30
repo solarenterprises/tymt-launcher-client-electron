@@ -7,6 +7,7 @@ import { CONFIG_TYMT_AVATAR_URL } from "../../config/MainConfig";
 import { Tooltip, Stack, Box } from "@mui/material";
 
 import { getCurrentChain } from "../../store/CurrentChainSlice";
+import { getRenderTime } from "../../store/RenderTimeSlice";
 
 import { getSupportChainByName } from "../../lib/helper/WalletHelper";
 
@@ -30,21 +31,24 @@ export interface IPropsAvatar {
 const Avatar = ({ size, url, userid, onlineStatus, isChain, status }: IPropsAvatar) => {
   const { t } = useTranslation();
 
+  const renderTimeStore = useSelector(getRenderTime);
   const currentChainStore: ICurrentChain = useSelector(getCurrentChain);
   const currentSupportChain = useMemo(() => getSupportChainByName(currentChainStore?.chain), [currentChainStore]);
 
-  useEffect(() => {
-    // if (userid) {
-    //   const init = async () => {
-    //     const res = await UserAPI.getUserById(userid);
-    //     if (!res?.data?.result?.data) {
-    //       return;
-    //     }
-    //     setUser(res?.data?.result?.data);
-    //   };
-    //   init();
-    // }
-  }, [userid]);
+  // const [user, setUser] = useState<ICurrentChatroomMember>();
+
+  // useEffect(() => {
+  //   if (userid) {
+  //     const init = async () => {
+  //       const res = await UserAPI.getUserById(userid);
+  //       if (!res?.data?.result?.data) {
+  //         return;
+  //       }
+  //       setUser(res?.data?.result?.data);
+  //     };
+  //     init();
+  //   }
+  // }, [userid]);
 
   return (
     <>
@@ -143,7 +147,11 @@ const Avatar = ({ size, url, userid, onlineStatus, isChain, status }: IPropsAvat
           )}
           <Box
             component={"img"}
-            src=""
+            src={
+              userid
+                ? `${CONFIG_TYMT_AVATAR_URL}/public/upload/avatars/default.png?${renderTimeStore.renderTime}`
+                : `${CONFIG_TYMT_AVATAR_URL}/public/upload/avatars/${url ? url : "default.png"}?${renderTimeStore.renderTime}`
+            }
             sx={{
               position: "absolute",
               top: "50%",

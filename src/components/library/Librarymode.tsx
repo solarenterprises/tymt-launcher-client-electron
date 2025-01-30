@@ -2,10 +2,9 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import storeStyles from "../../styles/StoreStyles";
 import { Stack, Box, Button } from "@mui/material";
-// import { propsmodeType } from "../../types/homeTypes";
-type propsmodeType = any;
+import { IPropsMode } from "../../types/HomeTypes";
 
-const LibrarymodeBtn = ({ status, setStatus }: propsmodeType) => {
+const LibraryModeButton = ({ status, setStatus }: IPropsMode) => {
   const [mode, setMode] = useState(status);
   const { t } = useTranslation();
   const classes = storeStyles();
@@ -66,4 +65,4 @@ const LibrarymodeBtn = ({ status, setStatus }: propsmodeType) => {
   );
 };
 
-export default LibrarymodeBtn;
+export default LibraryModeButton;

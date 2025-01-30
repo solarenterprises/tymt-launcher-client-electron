@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { Routes, Route, BrowserRouter, HashRouter } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import { Provider as StoreProvider } from "react-redux";
 
 import store from "./store";
@@ -29,14 +29,18 @@ import Homepage from "./pages/main/Homepage";
 import GameOverview from "./pages/main/GameOverview";
 // ~Home
 
+//Store
+import Store from "./pages/main/Store";
+//~Store
+
+//Library
+import Library from "./pages/main/Library";
+//~Library
+
 //Wallet
 import Wallet from "./pages/wallet/Wallet";
 import WalletVote from "./pages/wallet/WalletVote";
 //~Wallet
-
-//Store
-import Store from "./pages/main/Store";
-//~Store
 
 import { Buffer } from "buffer";
 window.Buffer = Buffer;
@@ -63,6 +67,7 @@ root.render(
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/wallet/vote" element={<WalletVote />} />
             <Route path="/store" element={<Store />} />
+            <Route path="/library" element={<Library />} />
           </Route>
         </Routes>
       </HashRouter>

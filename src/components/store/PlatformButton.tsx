@@ -2,8 +2,12 @@ import { useTranslation } from "react-i18next";
 
 import { SelectChangeEvent } from "@mui/material/Select";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { Box, MenuItem, FormControl, Select } from "@mui/material";
+import { Box, MenuItem, FormControl, Select, Stack } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+import LinuxIcon from "../../assets/main/LinuxIcon.svg";
+import WinIcon from "../../assets/main/WinIcon.svg";
+import macIcon from "../../assets/main/MacIcon.svg";
 
 import { FilterOptionNames } from "../../const/FilterOptionNames";
 
@@ -16,9 +20,9 @@ const MenuProps = {
   },
   PaperProps: {
     style: {
-      minWidth: "0px",
       marginTop: "5px",
       maxHeight: "none",
+      width: "120px",
       display: "flex",
       alignItems: "center",
       borderRadius: "16px",
@@ -53,26 +57,24 @@ const theme = createTheme({
   },
 });
 
-const Types = [
-  FilterOptionNames.TYPE_ALL,
-  FilterOptionNames.TYPE_NATIVE,
-  FilterOptionNames.TYPE_BROWSER,
+const Platform = [
+  { platform: FilterOptionNames.PLATFORM_WINDOWS, icon: WinIcon }, // Windows
+  { platform: FilterOptionNames.PLATFORM_MACOS, icon: macIcon }, // macOS
+  { platform: FilterOptionNames.PLATFORM_LINUX, icon: LinuxIcon }, // Linux
 ];
 
 const selectedshow = false;
 
-export interface IPropsTypeBtn {
-  type: string;
-  setType: (_: string) => void;
+export interface IPropsPlatformButton {
+  platform: string;
+  setPlatform: (_: string) => void;
 }
 
-const TypeBtn = ({ type, setType }: IPropsTypeBtn) => {
+const PlatformButton = ({ platform, setPlatform }: IPropsPlatformButton) => {
   const { t } = useTranslation();
 
   const handleChange = (event: SelectChangeEvent) => {
-    if (type === event.target.value) {
-      setType("");
-    } else setType(event.target.value);
+    setPlatform(event.target.value);
   };
 
   return (
@@ -92,12 +94,10 @@ const TypeBtn = ({ type, setType }: IPropsTypeBtn) => {
               border: "1px solid rgba(82, 225, 242, 0.40)",
               background: "var(--bg-stroke-card-bg, rgba(27, 53, 56, 0.20))",
               "&:hover": {
-                backgroundColor:
-                  "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
+                backgroundColor: "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
               },
               "&:active": {
-                backgroundColor:
-                  "var(--bg-stroke-blue-stroke-default-20, rgba(82, 225, 242, 0.20))",
+                backgroundColor: "var(--bg-stroke-blue-stroke-default-20, rgba(82, 225, 242, 0.20))",
               },
               "& .MuiSelect-icon": {
                 color: "var(--Basic-Light, #AFAFAF)",
@@ -105,45 +105,45 @@ const TypeBtn = ({ type, setType }: IPropsTypeBtn) => {
             }}
             fullWidth
             displayEmpty
-            value={type}
+            value={platform}
             onChange={handleChange}
-            MenuProps={MenuProps}
             IconComponent={ExpandMoreIcon}
+            MenuProps={MenuProps}
             renderValue={(selected) => (
               <>
-                <Box className={"fs-16 white"}>{t("sto-48_type")}</Box>
+                <Box className={"fs-16 white"}>{t("sto-4_platform")}</Box>
                 {selectedshow && <span>{selected}</span>}
               </>
             )}
           >
-            {Types.map((one) => (
+            {Platform.map((one) => (
               <MenuItem
                 sx={{
+                  width: "240px",
                   display: "flex",
                   justifyContent: "space-between",
-                  borderBottom:
-                    "1px solid var(--bg-stroke-white-10-stroke-default, rgba(255, 255, 255, 0.10))",
-                  backdropFilter: "blur(10px)",
+                  borderBottom: "1px solid var(--bg-stroke-white-10-stroke-default, rgba(255, 255, 255, 0.10))",
                   "&:hover": {
-                    background:
-                      "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
+                    background: "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
                   },
                   "&.Mui-selected": {
-                    background:
-                      "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
-                    backdropFilter: "blur(10px)",
+                    background: "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
                     "&:hover": {
-                      background:
-                        "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
+                      background: "var(--bg-stroke-blue-stroke-default-10, rgba(82, 225, 242, 0.10))",
                     },
+                    backdropFilter: "blur(10px)",
                   },
+                  backdropFilter: "blur(10px)",
                 }}
-                key={one}
-                value={one}
+                key={one.platform}
+                value={t(`${one.platform}`)}
               >
-                <Box className={"fs-16 white"} sx={{ margin: "0px 8px" }}>
-                  {t(`${one}`)}
-                </Box>
+                <Stack flexDirection={"row"} alignItems={"center"}>
+                  <img src={one.icon} width={"30px"} />
+                  <Box className={"fs-16 white"} sx={{ marginLeft: "8px" }}>
+                    {t(`${one.platform}`)}
+                  </Box>
+                </Stack>
               </MenuItem>
             ))}
           </Select>
@@ -153,4 +153,4 @@ const TypeBtn = ({ type, setType }: IPropsTypeBtn) => {
   );
 };
 
-export default TypeBtn;
+export default PlatformButton;

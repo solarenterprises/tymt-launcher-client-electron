@@ -5,9 +5,11 @@ import { Grid } from "@mui/material";
 
 import { CONST_GAME_LIST } from "../../const/games/GameConsts";
 
+import { getGameList } from "../../store/GameListSlice";
+
 import StoreGameCard from "./StoreGameCard";
 import AnimatedComponent from "../home/AnimatedComponent";
-import { IGame } from "../../types/GameTypes";
+import { IGame, IGameList } from "../../types/GameTypes";
 import { filterByPlatform, filterByGenre, filterByRank, filterByType, filterByKeyword } from "../../lib/helper/FilterHelper";
 
 export interface IPropsStoreGameItems {
@@ -20,8 +22,19 @@ export interface IPropsStoreGameItems {
 }
 
 const StoreGameItems = ({ platform, genre, rank, type, keyword }: IPropsStoreGameItems) => {
+  const gameListStore: IGameList = useSelector(getGameList);
+  const comingGameListStore: IGameList = useMemo(() => {
+    const data = gameListStore?.games?.filter((one) => one?.visibilityState === "coming soon");
+    const res: IGameList = {
+      games: data,
+    };
+    return res;
+  }, [gameListStore]);
+
+  const allGames: IGame[] = useMemo(() => [...CONST_GAME_LIST, ...gameListStore.games], [gameListStore]);
+
   const resultGames: IGame[] = useMemo(() => {
-    let data = [...CONST_GAME_LIST];
+    let data = [...allGames];
     if (platform) data = filterByPlatform(data, platform);
     if (genre) data = filterByGenre(data, genre);
     // if (releaseDate) data = filterByReleaseDate(data, releaseDate);
@@ -36,7 +49,7 @@ const StoreGameItems = ({ platform, genre, rank, type, keyword }: IPropsStoreGam
       {resultGames?.map((game, index) => (
         <Grid key={index} item>
           <AnimatedComponent>
-            <StoreGameCard key={`${game?._id}-${index}`} game={game} isComing={CONST_GAME_LIST.some((element) => element._id === game._id)} />
+            <StoreGameCard key={`${game?._id}-${index}`} game={game} isComing={comingGameListStore.games.some((element) => element._id === game._id)} />
           </AnimatedComponent>
         </Grid>
       ))}

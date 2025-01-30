@@ -53,27 +53,26 @@ const theme = createTheme({
   },
 });
 
-const Ranking = [
-  FilterOptionNames.RANK_ALL,
-  FilterOptionNames.RANK_10,
-  FilterOptionNames.RANK_50,
-  FilterOptionNames.RANK_100,
+const Types = [
+  FilterOptionNames.TYPE_ALL,
+  FilterOptionNames.TYPE_NATIVE,
+  FilterOptionNames.TYPE_BROWSER,
 ];
 
 const selectedshow = false;
 
-export interface IPropsRankingbtn {
-  rank: string;
-  setRank: (_: string) => void;
+export interface IPropsTypeButton {
+  type: string;
+  setType: (_: string) => void;
 }
 
-const Rankingbtn = ({ rank, setRank }: IPropsRankingbtn) => {
+const TypeButton = ({ type, setType }: IPropsTypeButton) => {
   const { t } = useTranslation();
 
   const handleChange = (event: SelectChangeEvent) => {
-    if (rank === event.target.value) {
-      setRank("");
-    } else setRank(event.target.value);
+    if (type === event.target.value) {
+      setType("");
+    } else setType(event.target.value);
   };
 
   return (
@@ -106,18 +105,18 @@ const Rankingbtn = ({ rank, setRank }: IPropsRankingbtn) => {
             }}
             fullWidth
             displayEmpty
-            value={rank}
+            value={type}
             onChange={handleChange}
             MenuProps={MenuProps}
             IconComponent={ExpandMoreIcon}
             renderValue={(selected) => (
               <>
-                <Box className={"fs-16 white"}>{t("sto-5_ranking")}</Box>
+                <Box className={"fs-16 white"}>{t("sto-48_type")}</Box>
                 {selectedshow && <span>{selected}</span>}
               </>
             )}
           >
-            {Ranking.map((one) => (
+            {Types.map((one) => (
               <MenuItem
                 sx={{
                   display: "flex",
@@ -154,4 +153,4 @@ const Rankingbtn = ({ rank, setRank }: IPropsRankingbtn) => {
   );
 };
 
-export default Rankingbtn;
+export default TypeButton;

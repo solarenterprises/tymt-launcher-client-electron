@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import tymtStorage from "../lib/storage/tymtStorage";
-import { TymtLogoType } from "../types/HomeTypes";
+import { tymtLogoType } from "../types/HomeTypes";
 import { compareJSONStructure } from "../lib/helper/JSONHelper";
 
-const init: TymtLogoType = {
+const init: tymtLogoType = {
   isDrawerExpanded: true,
 };
 
-const loadData: () => TymtLogoType = () => {
+const loadData: () => tymtLogoType = () => {
   const data = tymtStorage.get(`tymtLogo`);
   if (data === null || data === "" || data === undefined) {
     tymtStorage.set(`tymtLogo`, JSON.stringify(init));

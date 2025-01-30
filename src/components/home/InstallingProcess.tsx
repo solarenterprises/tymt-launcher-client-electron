@@ -5,17 +5,17 @@ import { Button, Box, Stack } from "@mui/material";
 import InstallProcessContextMenu from "./InstallProcessContextMenu";
 
 import { getDownloadStatus } from "../../store/DownloadStatusSlice";
-import { getCurrentLogo } from "../../store/TymtLogoSlice";
+import { getCurrentLogo } from "../../store/tymtLogoSlice";
 
 import downloadbig from "../../assets/main/DownloadBig.svg";
 import downloadsmall from "../../assets/main/DownloadSmall.svg";
 
-import { IDownloadStatus, IPoint, TymtLogoType } from "../../types/HomeTypes";
+import { IDownloadStatus, IPoint, tymtLogoType } from "../../types/HomeTypes";
 import { openDir } from "../../lib/helper/DownloadHelper";
 import numeral from "numeral";
 
 const InstallingProcess = () => {
-  const drawer: TymtLogoType = useSelector(getCurrentLogo);
+  const drawer: tymtLogoType = useSelector(getCurrentLogo);
   const downloadStatusStore: IDownloadStatus = useSelector(getDownloadStatus);
 
   const [showContextMenu, setShowContextMenu] = useState<boolean>(false);

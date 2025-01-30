@@ -28,7 +28,9 @@ import languageSettingReducer from "./store/LanguageSettingSlice";
 import downloadStatusReducer from "./store/DownloadStatusSlice";
 // ~DownloadStatus
 
-import tymtLogoReducer from "./store/TymtLogoSlice";
+import tymtLogoReducer from "./store/tymtLogoSlice";
+import gameListReducer from "./store/GameListSlice";
+import renderTimeReducer from "./store/RenderTimeSlice";
 
 // const blacklistActionTypes = ["intercomsupport/setChatMounted", "intercomsupport/setMountedTrue", "intercomsupport/setMountedFalse"];
 const blacklistActionTypes: string[] = [];
@@ -69,6 +71,8 @@ const store = configureStore({
     // ~DownloadStatus
 
     tymtLogo: tymtLogoReducer,
+    gameList: gameListReducer,
+    renderTime: renderTimeReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(stateSyncMiddleware),
 });
