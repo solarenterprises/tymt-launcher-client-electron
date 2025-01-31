@@ -1,7 +1,10 @@
 import axios from "axios";
 
+import { CONFIG_TYMT_BACKEND_URL } from "../../config/MainConfig";
+import tymtStorage from "../storage/tymtStorage";
+
 const axiosAuth = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: CONFIG_TYMT_BACKEND_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -10,8 +13,9 @@ const axiosAuth = axios.create({
 // Add a request interceptor to attach the Bearer token
 axiosAuth.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
+    const auth = tymtStorage.get("auth");
+    if (auth) {
+      const { accessToken } = JSON.parse(auth);
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
@@ -33,18 +37,18 @@ axiosAuth.interceptors.response.use(
 
       try {
         // Refresh the access token using the refresh token
-        const refreshToken = localStorage.getItem("refreshToken");
-        if (!refreshToken) {
+        const auth = tymtStorage.get("auth");
+        if (!auth) {
           throw new Error("No refresh token found");
         }
+        const { refreshToken } = JSON.parse(auth);
 
-        const response = await axios.post("http://localhost:3001/auth/refresh-token", { refreshToken });
+        const response = await axios.post(`${CONFIG_TYMT_BACKEND_URL}/auth/refresh-token`, { refreshToken });
 
         const { accessToken: newAccessToken } = response.data;
 
         // Update the access token in local storage and headers
-        localStorage.setItem("accessToken", newAccessToken);
-        axiosAuth.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
+        tymtStorage.set("auth", JSON.stringify({ ...JSON.parse(auth), accessToken: newAccessToken }));
 
         // Retry the original request with the new access token
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
@@ -52,8 +56,7 @@ axiosAuth.interceptors.response.use(
       } catch (refreshError) {
         // Handle refresh token failure (e.g., logout the user)
         console.error("Failed to refresh token:", refreshError);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
+        tymtStorage.remove("auth");
         window.location.href = "/login"; // Redirect to login page
         return Promise.reject(refreshError);
       }
