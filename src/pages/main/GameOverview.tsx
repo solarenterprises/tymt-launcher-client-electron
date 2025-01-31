@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
 import { CONST_GAME_LIST } from "../../const/games/GameConsts";
@@ -27,17 +26,33 @@ import GameReview from "../../components/game/GameReview";
 import storeStyles from "../../styles/StoreStyles";
 
 import gradient1 from "../../assets/main/GradientGameOverview.svg";
+import { IGameList } from "../../types/GameTypes";
+import { getGameList } from "../../store/GameListSlice";
+import { useAppSelector } from "../../store";
 
 const GameOverview = () => {
   const { t } = useTranslation();
-  const { gameid } = useParams();
+  const { gameId } = useParams();
 
   const [src, setSrc] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const [currentSwitchIndex, setCurrentSwitchIndex] = useState<number>(0);
 
-  const game = CONST_GAME_LIST.find((game) => game._id == gameid);
+  const gameListStore: IGameList = useAppSelector(getGameList);
+
+  const comingGameListStore: IGameList = useMemo(() => {
+    const data = gameListStore?.games?.filter((one) => one?.visibilityState === "coming soon");
+    const res: IGameList = {
+      games: data,
+    };
+    return res;
+  }, [gameListStore]);
+
+  const game = useMemo(
+    () => [...CONST_GAME_LIST, ...gameListStore.games, ...comingGameListStore.games]?.find((game) => game?._id === gameId),
+    [comingGameListStore, gameListStore]
+  );
 
   const classes = storeStyles();
   const textList: string[] = [t("ga-10_overview"), t("ga-11_review")];

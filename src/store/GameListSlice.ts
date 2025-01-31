@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IGameList } from "../types/GameTypes";
+import { IGame, IGameList } from "../types/GameTypes";
 import tymtStorage from "../lib/storage/tymtStorage";
-import { fetchAllGameList, fetchGameList } from "../lib/api/GameListAPI";
+import { GameAPI } from "../lib/api/GameAPI";
 
 const init: IGameList = {
   games: [],
@@ -22,10 +22,9 @@ const initialState = {
   msg: "",
 };
 
-export const fetchGameListAsync = createAsyncThunk("gameList/fetchGameListAsync", fetchGameList);
-export const fetchAllGameListAsync = createAsyncThunk("gameList/fetchAllGameListAsync", fetchAllGameList);
+export const fetchGameList = createAsyncThunk("gameList/fetchGameList", GameAPI.fetchGameList);
 
-const gameListSlice = createSlice({
+export const gameListSlice = createSlice({
   name: "gameList",
   initialState,
   reducers: {
@@ -33,37 +32,24 @@ const gameListSlice = createSlice({
       state.data = action.payload;
     },
   },
-  extraReducers(builder) {
+  extraReducers: (builder) => {
     builder
-      .addCase(fetchGameListAsync.pending, (state) => {
-        state.status = "pending";
+      .addCase(fetchGameList.pending, (state) => {
+        state.status = "loading";
       })
-      .addCase(fetchGameListAsync.fulfilled, (state, action: PayloadAction<any>) => {
-        if (!action.payload) {
-          // console.error("Failed to fetchGameListAsync: action.payload undefined!");
-          return;
-        }
-        state.data = action.payload;
+      .addCase(fetchGameList.fulfilled, (state, action: PayloadAction<IGame[]>) => {
+        state.data.games = action.payload;
         tymtStorage.set(`gameList`, JSON.stringify(state.data));
-        state.status = "fetchGameListAsync";
+        state.status = "gameList";
       })
-      .addCase(fetchAllGameListAsync.pending, (state) => {
-        state.status = "pending";
-      })
-      .addCase(fetchAllGameListAsync.fulfilled, (state, action: PayloadAction<any>) => {
-        if (!action.payload) {
-          // console.error("Failed to fetchAllGameListAsync: action.payload undefined!");
-          return;
-        }
-        state.data = action.payload;
-        tymtStorage.set(`gameList`, JSON.stringify(state.data));
-        state.status = "fetchAllGameListAsync";
+      .addCase(fetchGameList.rejected, (state) => {
+        state.status = "error";
+        state.msg = "Failed to fetch game list";
       });
   },
 });
 
 export const getGameList = (state: any) => state.gameList.data;
+export const { setGameList } = gameListSlice.actions;
 
 export default gameListSlice.reducer;
-
-export const { setGameList } = gameListSlice.actions;

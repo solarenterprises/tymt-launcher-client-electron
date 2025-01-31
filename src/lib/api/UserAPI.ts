@@ -10,6 +10,7 @@ export const UserAPI = {
     const res = await axios.post<{ data: IUser }>(`${CONFIG_TYMT_BACKEND_URL}/user/update-profile`, profile, {
       headers: {
         Authorization: `Bearer ${token.accessToken}`,
+        "Content-Type": "application/json",
       },
     });
     return res.data.data;

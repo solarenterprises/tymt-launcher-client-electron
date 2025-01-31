@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { useSelector } from "react-redux";
 
 import { Grid } from "@mui/material";
 
 import { CONST_GAME_LIST } from "../../const/games/GameConsts";
 
+import { useAppSelector } from "../../store";
 import { getGameList } from "../../store/GameListSlice";
 
 import StoreGameCard from "./StoreGameCard";
@@ -22,7 +22,8 @@ export interface IPropsStoreGameItems {
 }
 
 const StoreGameItems = ({ platform, genre, rank, type, keyword }: IPropsStoreGameItems) => {
-  const gameListStore: IGameList = useSelector(getGameList);
+  const gameListStore: IGameList = useAppSelector(getGameList);
+
   const comingGameListStore: IGameList = useMemo(() => {
     const data = gameListStore?.games?.filter((one) => one?.visibilityState === "coming soon");
     const res: IGameList = {

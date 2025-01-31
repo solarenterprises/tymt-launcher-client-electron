@@ -24,10 +24,6 @@ export interface IMnemonic {
   mnemonic: string;
 }
 
-export interface ILogin {
-  isLoggedIn: boolean;
-}
-
 export interface IAuth {
   isLoggedIn: boolean;
   accessToken: string;

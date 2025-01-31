@@ -43,9 +43,12 @@ import WalletVote from "./pages/wallet/WalletVote";
 import WalletSend from "./pages/wallet/WalletSend";
 //~Wallet
 
-import { Buffer } from "buffer";
+// Providers
 import { WalletProvider } from "./providers/WalletProvider";
 import { AuthProvider } from "./providers/AuthProvider";
+// ~Providers
+
+import { Buffer } from "buffer";
 window.Buffer = Buffer;
 
 const root = createRoot(document.body);
@@ -68,7 +71,7 @@ root.render(
             <Route element={<AuthProvider />}>
               <Route path="/" element={<HomeLayout />}>
                 <Route path="/home" element={<Homepage />} />
-                <Route path="/game/:gameid" element={<GameOverview />} />
+                <Route path="/game/:gameId" element={<GameOverview />} />
                 <Route path="/wallet" element={<Wallet />} />
                 <Route path="/wallet-vote" element={<WalletVote />} />
                 <Route path="/wallet-send" element={<WalletSend />} />

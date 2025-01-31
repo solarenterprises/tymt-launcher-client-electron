@@ -47,18 +47,19 @@ export const accountSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(updateProfile.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(updateProfile.fulfilled, (state, action: PayloadAction<IUser>) => {
-      state.data = { ...action.payload, uid: action.payload._id, password: state.data.password, mnemonic: state.data.mnemonic };
-      tymtStorage.set(`account`, JSON.stringify(state.data));
-      state.status = "success";
-    });
-    builder.addCase(updateProfile.rejected, (state) => {
-      state.status = "error";
-      state.msg = "Failed to update profile";
-    });
+    builder
+      .addCase(updateProfile.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateProfile.fulfilled, (state, action: PayloadAction<IUser>) => {
+        state.data = { ...action.payload, uid: action.payload._id, password: state.data.password, mnemonic: state.data.mnemonic };
+        tymtStorage.set(`account`, JSON.stringify(state.data));
+        state.status = "account";
+      })
+      .addCase(updateProfile.rejected, (state) => {
+        state.status = "error";
+        state.msg = "Failed to update profile";
+      });
   },
 });
 
