@@ -4,7 +4,6 @@ import { createStateSyncMiddleware, initMessageListener } from "redux-state-sync
 // Auth
 import accountReducer from "./store/AccountSlice";
 import accountListReducer from "./store/AccountListSlice";
-import loginReducer from "./store/LoginSlice";
 import mnemonicReducer from "./store/MnemonicSlice";
 import authReducer from "./store/AuthSlice";
 // ~Auth
@@ -33,6 +32,7 @@ import downloadStatusReducer from "./store/DownloadStatusSlice";
 import tymtLogoReducer from "./store/tymtLogoSlice";
 import gameListReducer from "./store/GameListSlice";
 import renderTimeReducer from "./store/RenderTimeSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 // const blacklistActionTypes = ["intercomsupport/setChatMounted", "intercomsupport/setMountedTrue", "intercomsupport/setMountedFalse"];
 const blacklistActionTypes: string[] = [];
@@ -48,7 +48,6 @@ const store = configureStore({
     // Auth
     account: accountReducer,
     accountList: accountListReducer,
-    login: loginReducer,
     mnemonic: mnemonicReducer,
     auth: authReducer,
     // ~Auth
@@ -85,4 +84,9 @@ const store = configureStore({
 initMessageListener(store);
 
 export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+
+export type RootState = ReturnType<typeof store.getState>;
+export const useAppSelector = useSelector.withTypes<RootState>();
+
 export default store;

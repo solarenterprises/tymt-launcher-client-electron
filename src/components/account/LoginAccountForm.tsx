@@ -30,7 +30,7 @@ const LoginAccountForm = () => {
   }, [accountStore]);
 
   const isGuest: boolean = useMemo(() => {
-    if (accountStore?.nickName === "Guest" && accountStore?.password === getKeccak256Hash("")) return true;
+    if (accountStore?.nickname === "Guest" && accountStore?.password === getKeccak256Hash("")) return true;
     return false;
   }, [accountStore]);
 
@@ -86,7 +86,7 @@ const LoginAccountForm = () => {
           state: {
             password: password,
             walletAddresses: walletAddresses,
-            nickname: accountStoreRef?.current?.nickName,
+            nickname: accountStoreRef?.current?.nickname,
             passphrase: decryptedMnemonic,
           },
         });

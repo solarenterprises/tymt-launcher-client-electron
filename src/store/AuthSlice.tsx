@@ -1,11 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 import tymtStorage from "../lib/storage/tymtStorage";
 import { compareJSONStructure } from "../lib/helper/JSONHelper";
 
 import { IAuth } from "../types/AccountTypes";
+import { AuthAPI } from "../lib/api/AuthAPI";
+import { ILoginResponse } from "../types/APITypes/AuthAPITypes";
 
 const init: IAuth = {
+  isLoggedIn: false,
   accessToken: "",
   refreshToken: "",
 };
@@ -25,6 +28,8 @@ const initialState = {
   msg: "",
 };
 
+export const login = createAsyncThunk("auth/login", AuthAPI.login);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -33,6 +38,22 @@ export const authSlice = createSlice({
       state.data = action.payload;
       tymtStorage.set(`auth`, JSON.stringify(state.data));
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(login.pending, (state, action) => {
+      state.status = "loading";
+    });
+    builder.addCase(login.fulfilled, (state, action: PayloadAction<ILoginResponse>) => {
+      state.status = "success";
+      state.data.accessToken = action.payload.accessToken;
+      state.data.refreshToken = action.payload.refreshToken;
+      state.data.isLoggedIn = true;
+      tymtStorage.set(`auth`, JSON.stringify(state.data));
+    });
+    builder.addCase(login.rejected, (state, action) => {
+      state.status = "error";
+      state.msg = action.error.message;
+    });
   },
 });
 

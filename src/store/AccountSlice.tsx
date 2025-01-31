@@ -1,18 +1,23 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import tymtStorage from "../lib/storage/tymtStorage";
 import { compareJSONStructure } from "../lib/helper/JSONHelper";
+import { UserAPI } from "../lib/api/UserAPI";
 
 import { IAccount } from "../types/AccountTypes";
+import { IUser } from "../types/APITypes/UserAPITypes";
 
 const init: IAccount = {
   uid: "",
   avatar: "",
-  nickName: "",
+  nickname: "",
   password: "",
-  sxpAddress: "",
   mnemonic: "",
-  rsaPubKey: "",
+  publicKey: "",
+  sxpAddress: "",
+  notificationStatus: false,
+  onlineStatus: false,
+  status: 0,
 };
 
 const loadAccount: () => IAccount = () => {
@@ -30,6 +35,8 @@ const initialState = {
   msg: "",
 };
 
+export const updateProfile = createAsyncThunk("account/updateProfile", UserAPI.updateProfile);
+
 export const accountSlice = createSlice({
   name: "account",
   initialState,
@@ -38,6 +45,20 @@ export const accountSlice = createSlice({
       state.data = action.payload;
       tymtStorage.set(`account`, JSON.stringify(state.data));
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(updateProfile.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(updateProfile.fulfilled, (state, action: PayloadAction<IUser>) => {
+      state.data = { ...action.payload, uid: action.payload._id, password: state.data.password, mnemonic: state.data.mnemonic };
+      tymtStorage.set(`account`, JSON.stringify(state.data));
+      state.status = "success";
+    });
+    builder.addCase(updateProfile.rejected, (state) => {
+      state.status = "error";
+      state.msg = "Failed to update profile";
+    });
   },
 });
 

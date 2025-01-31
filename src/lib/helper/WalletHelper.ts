@@ -16,9 +16,8 @@ import {
 
 import tymtCore from "../core/tymtCore";
 
-import { IWalletAddresses } from "../../types/WalletTypes";
+import { IWalletAddresses, IBalanceList } from "../../types/WalletTypes";
 import { IPriceList } from "../../types/PriceTypes";
-import { IBalanceList } from "../../types/WalletTypes";
 import { ISupportChain } from "../../types/ChainTypes";
 
 export const checkMnemonic = (_mnemonic: string) => {
@@ -83,7 +82,7 @@ export const getWalletAddressesFromPassphrase = async (_passphrase: string) => {
 
 export const getCurrentChainWalletAddress = (walletStore: IWalletAddresses, chainName: string) => {
   try {
-    let res: string = "";
+    let res = "";
     switch (chainName) {
       case CONST_CHAIN_NAMES.ARBITRUM:
         res = walletStore?.arbitrum;

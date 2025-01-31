@@ -117,7 +117,7 @@ export interface IFeedback {
   _id: string;
   author: {
     _id: string;
-    nickName: string;
+    nickname: string;
     sxpAddress: string;
   };
   star: number;

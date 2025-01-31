@@ -35,7 +35,7 @@ const ChooseProfileButton = ({ account, onClick }: IPropsChooseProfileButton) =>
           <Stack direction="row" alignItems="center" gap="16px">
             {/* <Avatar url={account?.avatar} size={40} /> */}
             {/* <UserAvatar userId={account?.uid} size={40} /> */}
-            <Box className={"fs-18-regular white"}>{account?.nickName}</Box>
+            <Box className={"fs-18-regular white"}>{account?.nickname}</Box>
           </Stack>
           <Box component={"img"} src={RightArrow} width={"24px"} height={"24px"} />
         </Stack>

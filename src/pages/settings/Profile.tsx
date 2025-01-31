@@ -15,15 +15,16 @@ import { AppDispatch } from "../../store";
 // import { selectNotification } from "../../features/settings/NotificationSlice";
 // import { fileUpload, updateUserNickname } from "../../features/account/AccountApi";
 // import { getMyInfo, setMyInfo } from "../../features/account/MyInfoSlice";
-// import { getAccount, setAccount } from "../../features/account/AccountSlice";
+import { getAccount, updateProfile } from "../../store/AccountSlice";
 
 // import { notificationType } from "../../types/settingTypes";
-// import { IAccount } from "../../types/accountTypes";
+import { IAccount } from "../../types/AccountTypes";
 
 import SettingStyle from "../../styles/SettingStyle";
 
 import backIcon from "../../assets/setting/BackIcon.svg";
 import editIcon from "../../assets/setting/EditIcon.svg";
+import ElectronNotification from "../../components/ElectronNotification";
 // import { ISocketParamsSyncEventsAll } from "../../types/SocketTypes";
 // import { SyncEventNames } from "../../consts/SyncEventNames";
 // import { IMyInfo } from "../../types/chatTypes";
@@ -39,11 +40,11 @@ const Profile: FC<IPropsProfile> = ({ view, setView }) => {
   // const { socket } = useSocket();
   const dispatch = useDispatch<AppDispatch>();
 
-  // const accountStore: IAccount = useSelector(getAccount);
+  const accountStore: IAccount = useSelector(getAccount);
   // const notificationStore: notificationType = useSelector(selectNotification);
   // const myInfoStore: IMyInfo = useSelector(getMyInfo);
 
-  // const [nickname, setNickname] = useState(accountStore?.nickName);
+  const [nickname, setNickname] = useState(accountStore?.nickname);
   const [error, setError] = useState<string>("");
 
   // const {
@@ -53,6 +54,7 @@ const Profile: FC<IPropsProfile> = ({ view, setView }) => {
   //   setNotificationOpen,
   //   setNotificationLink,
   // } = useNotification();
+  const { showNotification } = ElectronNotification();
 
   const validationSchema = Yup.string()
     .required(t("cca-63_required"))
@@ -60,35 +62,36 @@ const Profile: FC<IPropsProfile> = ({ view, setView }) => {
     .max(50, t("ncca-60_too-long"))
     .matches(/^[a-zA-Z0-9_ !@#$%^&*()\-+=,.?]+$/, t("ncca-61_invalid-characters"));
 
-  // const updateAccount = useCallback(async () => {
-  //   try {
-  //     await validationSchema.validate(nickname);
-  //     setError("");
+  const updateAccount = useCallback(async () => {
+    try {
+      await validationSchema.validate(nickname);
+      setError("");
 
-  //     dispatch(setAccount({ ...accountStore, nickName: nickname }));
+      await dispatch(updateProfile({ nickname: nickname, notificationStatus: accountStore.notificationStatus, avatar: accountStore.avatar })).unwrap();
 
-  //     //@ts-ignore
-  //     const res = await updateUserNickname(myInfoStore?._id, nickname);
-  //     // console.log(res.data, "updateUserNickName");
+      showNotification(t("alt-1_nickname-saved"), t("alt-2_nickname-saved-intro"));
 
-  //     setNotificationStatus("success");
-  //     setNotificationTitle(t("alt-1_nickname-saved"));
-  //     setNotificationDetail(t("alt-2_nickname-saved-intro"));
-  //     setNotificationOpen(true);
-  //     setNotificationLink(null);
-  //   } catch (err) {
-  //     if (err instanceof Yup.ValidationError) {
-  //       setError(err.message);
-  //     }
-  //     // console.log(err);
+      // console.log(res.data, "updateUserNickName");
 
-  //     setNotificationStatus("failed");
-  //     setNotificationTitle(t("alt-3_nickname-notsaved"));
-  //     setNotificationDetail(t("alt-4_nickname-notsaved-intro"));
-  //     setNotificationOpen(true);
-  //     setNotificationLink(null);
-  //   }
-  // }, [nickname, accountStore, myInfoStore]);
+      // setNotificationStatus("success");
+      // setNotificationTitle(t("alt-1_nickname-saved"));
+      // setNotificationDetail(t("alt-2_nickname-saved-intro"));
+      // setNotificationOpen(true);
+      // setNotificationLink(null);
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        setError(err.message);
+      }
+      showNotification(t("alt-3_nickname-notsaved"), t("alt-4_nickname-notsaved-intro"));
+      // console.log(err);
+
+      // setNotificationStatus("failed");
+      // setNotificationTitle(t("alt-3_nickname-notsaved"));
+      // setNotificationDetail(t("alt-4_nickname-notsaved-intro"));
+      // setNotificationOpen(true);
+      // setNotificationLink(null);
+    }
+  }, [nickname, accountStore]);
 
   const UploadFile = () => {
     const fileInput = document.getElementById("file-input");
@@ -174,13 +177,7 @@ const Profile: FC<IPropsProfile> = ({ view, setView }) => {
             <Divider variant="middle" sx={{ backgroundColor: "#FFFFFF1A" }} />
             <Stack direction={"column"} justifyContent={"flex-start"} textAlign={"center"} padding={"20px"}>
               <Box className="fs-h4 white">
-                <InputText
-                  id="change-nickname"
-                  label={t("set-69_change-nickname")}
-                  type="text"
-                  // value={nickname}
-                  // setValue={setNickname}
-                />
+                <InputText id="change-nickname" label={t("set-69_change-nickname")} type="text" value={nickname} setValue={setNickname} />
               </Box>
               {error && (
                 <Stack mt={"8px"} padding={"0px 6px"} width={"100%"}>
@@ -192,11 +189,7 @@ const Profile: FC<IPropsProfile> = ({ view, setView }) => {
               </Box>
             </Stack>
             <Box padding={"20px"} width={"90%"} sx={{ position: "absolute", bottom: "30px" }}>
-              <Button
-                fullWidth
-                className={classname.action_button}
-                // onClick={updateAccount}
-              >
+              <Button fullWidth className={classname.action_button} onClick={updateAccount}>
                 {t("set-57_save")}
               </Button>
             </Box>

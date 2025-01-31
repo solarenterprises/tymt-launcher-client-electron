@@ -50,7 +50,7 @@ const NonCustodialSignUp2 = () => {
       //   setTempAccount({
       //     ...tempAccountStore,
       //     mnemonic: passphrase,
-      //     rsaPubKey: newRsaPubKey,
+      //     publicKey: newRsaPubKey,
       //   })
       // );
       setOpen(true);
