@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
-// import { useSelector } from "react-redux";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -13,23 +12,23 @@ import ellipse from "../../assets/main/Ellipse.svg";
 import ComingGameCard from "./ComingGameCard";
 import ComingGameSwiperButtonGroup from "./ComingGameSwiperButtonGroup";
 
-// import { getGameList } from "../../features/store/GameListSlice";
+import { useAppSelector } from "../../store";
+import { getGameList } from "../../store/GameListSlice";
 
-// import { IGameList } from "../../types/GameTypes";
+import { IGameList } from "../../types/GameTypes";
 
 const ComingSoonD53 = () => {
   const { t } = useTranslation();
 
-  // const gameListStore: IGameList = useSelector(getGameList);
+  const gameListStore: IGameList = useAppSelector(getGameList);
 
-  // const comingGameListStore: IGameList = useMemo(() => {
-  //   const data = gameListStore?.games?.filter((one) => one?.visibilityState === "coming soon");
-  //   const res: IGameList = {
-  //     games: data,
-  //   };
-  //   return res;
-  // }, [gameListStore]);
-  const comingGameListStore: { games: any[] } = { games: [] };
+  const comingGameListStore: IGameList = useMemo(() => {
+    const data = gameListStore?.games?.filter((one) => one?.visibilityState === "coming soon");
+    const res: IGameList = {
+      games: data,
+    };
+    return res;
+  }, [gameListStore]);
 
   const swiperRef = useRef<any | null>(null);
 

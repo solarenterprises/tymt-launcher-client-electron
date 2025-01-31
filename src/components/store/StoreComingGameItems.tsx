@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
 import { Box, Grid, Stack } from "@mui/material";
@@ -8,6 +7,7 @@ import StoreGameCard from "../game/StoreGameCard";
 import AnimatedComponent from "../home/AnimatedComponent";
 
 import { getGameList } from "../../store/GameListSlice";
+import { useAppSelector } from "../../store";
 
 import { filterByGenre, filterByKeyword, filterByPlatform, filterByRank, filterByType } from "../../lib/helper/FilterHelper";
 
@@ -27,7 +27,7 @@ export interface IPropsStoreGameItems {
 const StoreComingGameItems = ({ platform, genre, rank, type, keyword }: IPropsStoreGameItems) => {
   const { t } = useTranslation();
 
-  const gameListStore: IGameList = useSelector(getGameList);
+  const gameListStore: IGameList = useAppSelector(getGameList);
 
   const comingGameListStore: IGameList = useMemo(() => {
     const data = gameListStore?.games?.filter((one) => one?.visibilityState === "coming soon");
