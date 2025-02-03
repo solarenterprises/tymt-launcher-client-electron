@@ -115,13 +115,10 @@ export interface IGameReleaseBrowser {
 
 export interface IFeedback {
   _id: string;
-  author: {
-    _id: string;
-    nickname: string;
-    sxpAddress: string;
-  };
-  star: number;
-  title: string;
-  feedback: string;
-  createdAt: string;
+  rating: number;
+  text: string;
+  createdAt: Date;
+  userNickname: string;
+  userAvatar: string;
+  userOnlineStatus: boolean;
 }

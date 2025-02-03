@@ -9,14 +9,14 @@ import ReviewRating from "./ReviewRating";
 import ReviewPagination from "./ReviewPagination";
 import ReviewModal from "../modal/ReviewModal";
 
-// import ReviewAPI from "../../lib/api/ReviewAPI";
+import { FeedbackAPI } from "../../lib/api/FeedbackAPI";
 
 import noreviews from "../../assets/main/NoReviews.png";
 
 import storeStyles from "../../styles/StoreStyles";
 
-import { IGame } from "../../types/GameTypes";
-import { IReviewAPIFetchReviewsByGameIdResponse } from "../../types/APITypes/ReviewAPITypes";
+import { IFeedback, IGame } from "../../types/GameTypes";
+import { IMetaPagination } from "../../types/APITypes/BasicAPITypes";
 
 export interface IPropsGameReview {
   game: IGame;
@@ -29,24 +29,21 @@ const GameReview = ({ game }: IPropsGameReview) => {
 
   const [view, setView] = useState(false);
   const [page, setPage] = useState<number>(1);
-  const [reviewData, setReviewData] = useState<IReviewAPIFetchReviewsByGameIdResponse>(null);
+  const [feedbackList, setFeedbackList] = useState<IFeedback[]>([]);
+  const [meta, setMeta] = useState<IMetaPagination>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const averageStar = useMemo(() => reviewData?.averageStar, [reviewData?.averageStar]);
-  const feedbackList = useMemo(() => reviewData?.feedbacks, [reviewData?.feedbacks]);
-  const totalPage = useMemo(
-    () => Math.ceil(reviewData?.total / parseInt(reviewData?.pageSize)),
-    [Math.ceil(reviewData?.total / parseInt(reviewData?.pageSize))]
-  );
+  const averageStar = 3;
 
-  const fetchReviewData = async (currentPage: number) => {
+  const fetchReviewData = async (currentPage: number = 1) => {
     try {
       setLoading(true);
-      // const data = await ReviewAPI.fetchReviewsByGameId(game?._id, currentPage, 5);
-      // setReviewData(data?.data);
+      const res = await FeedbackAPI.getFeedbacks({ gameId: game?._id, query: { page: currentPage, limit: 5, sort: "-createdAt" } });
+      setFeedbackList(res.data);
+      setMeta(res.meta);
       setLoading(false);
     } catch (err) {
-      // console.log("Failed to fetchReviewData: ", err);
+      console.error("Failed to fetchReviewData: ", err);
       setLoading(false);
     }
   };
@@ -59,18 +56,6 @@ const GameReview = ({ game }: IPropsGameReview) => {
   useEffect(() => {
     fetchReviewData(1);
   }, []);
-
-  // useEffect(() => {
-  //   const unlisten_fetch_review = listen(TauriEventNames.FETCH_REVIEW, (_event) => {
-  //     // console.log("TauriEventNames.FETCH_REVIEW");
-  //     fetchReviewData(1);
-  //     setPage(1);
-  //   });
-
-  //   return () => {
-  //     unlisten_fetch_review.then((unlistenFn) => unlistenFn());
-  //   };
-  // }, []);
 
   return (
     <>
@@ -130,10 +115,10 @@ const GameReview = ({ game }: IPropsGameReview) => {
               <FeedbackCard feedback={one} key={`${index}-${one?._id}`} />
             ))}
           </Stack>
-          <ReviewPagination totalPage={totalPage} page={page} handlePageChange={handlePageChange} />
+          <ReviewPagination totalPage={meta.pagination.pageCount} page={page} handlePageChange={handlePageChange} />
         </>
       )}
-      <ReviewModal open={view} setOpen={setView} game={game} />
+      <ReviewModal open={view} setOpen={setView} game={game} fetchReviewData={fetchReviewData} />
     </>
   );
 };

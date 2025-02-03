@@ -11,7 +11,7 @@ import InputText from "../../components/account/InputText";
 
 import { AppDispatch } from "../../store";
 import { addAccountList } from "../../store/AccountListSlice";
-import { getAccount, setAccount, updateProfile } from "../../store/AccountSlice";
+import { getAccount, setAccount } from "../../store/AccountSlice";
 
 import { UserAPI } from "../../lib/api/UserAPI";
 
@@ -49,10 +49,14 @@ const Profile: FC<IPropsProfile> = ({ view, setView }) => {
       await validationSchema.validate(nickname);
       setError("");
 
-      const updatedUser = await dispatch(
-        updateProfile({ nickname: nickname, notificationStatus: accountStore.notificationStatus, avatar: accountStore.avatar })
-      ).unwrap();
-      dispatch(addAccountList(updatedUser));
+      const updatedUser = await UserAPI.updateProfile({ nickname });
+      const updatedAccount = {
+        ...updatedUser,
+        password: accountStore?.password,
+        mnemonic: accountStore?.mnemonic,
+      };
+      dispatch(setAccount(updatedAccount));
+      dispatch(addAccountList(updatedAccount));
 
       showNotification(t("alt-1_nickname-saved"), t("alt-2_nickname-saved-intro"));
     } catch (err) {
@@ -63,14 +67,14 @@ const Profile: FC<IPropsProfile> = ({ view, setView }) => {
     }
   }, [nickname, accountStore]);
 
-  const UploadFile = () => {
+  const launchUploader = () => {
     const fileInput = document.getElementById("file-input");
     if (fileInput) {
       fileInput.click();
     }
   };
 
-  const uploadImg = useCallback(async () => {
+  const uploadImage = useCallback(async () => {
     try {
       const fileInput = document.getElementById("file-input") as HTMLInputElement;
       const file = fileInput.files ? fileInput.files[0] : null;
@@ -80,7 +84,7 @@ const Profile: FC<IPropsProfile> = ({ view, setView }) => {
       const updatedAccount = {
         ...updatedUser,
         password: accountStore?.password,
-        passphrase: accountStore?.mnemonic,
+        mnemonic: accountStore?.mnemonic,
       };
       dispatch(setAccount(updatedAccount));
       dispatch(addAccountList(updatedAccount));
@@ -93,7 +97,7 @@ const Profile: FC<IPropsProfile> = ({ view, setView }) => {
     <>
       {view === "profile" && (
         <Stack direction={"column"}>
-          <input type="file" id="file-input" onChange={uploadImg} style={{ display: "none" }} />
+          <input type="file" id="file-input" onChange={uploadImage} style={{ display: "none" }} />
           <Stack flexDirection={"row"} justifyContent={"flex-start"} gap={"10px"} alignItems={"center"} textAlign={"center"} sx={{ padding: "20px" }}>
             <Button className={"setting-back-button"} onClick={() => setView("general")}>
               <Box component={"img"} src={backIcon}></Box>
@@ -111,7 +115,7 @@ const Profile: FC<IPropsProfile> = ({ view, setView }) => {
                 <Box className="fs-h5 white">{t("set-68_change-avatar")}</Box>
               </Stack>
               <Box className="center-align">
-                <Box sx={{ display: "flex" }} className="common-btn" onClick={UploadFile}>
+                <Box sx={{ display: "flex" }} className="common-btn" onClick={launchUploader}>
                   <Tooltip title={t("set-82_edit")} classes={{ tooltip: classname.tooltip }}>
                     <img src={editIcon} style={{ cursor: "pointer" }} />
                   </Tooltip>

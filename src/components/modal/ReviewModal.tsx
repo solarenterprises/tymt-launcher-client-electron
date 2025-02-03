@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -10,18 +9,20 @@ import StarLabelPanel from "../game/StarLabelPanel";
 import InputText from "../account/InputText";
 import RedStrokeButton from "../account/RedStrokeButton";
 
+import { FeedbackAPI } from "../../lib/api/FeedbackAPI";
+
 import CloseIcon from "../../assets/setting/XIcon.svg";
 
-import { IReviewAPIAddReviewsRequest } from "../../types/APITypes/ReviewAPITypes";
 import { IGame } from "../../types/GameTypes";
 
 export interface IPropsReviewModal {
   open: boolean;
   setOpen: (_: boolean) => void;
   game: IGame;
+  fetchReviewData: (_: number) => void;
 }
 
-const ReviewModal = ({ open, setOpen, game }: IPropsReviewModal) => {
+const ReviewModal = ({ open, setOpen, game, fetchReviewData }: IPropsReviewModal) => {
   const { t } = useTranslation();
 
   const [star, setStar] = useState<number>(1);
@@ -46,27 +47,23 @@ const ReviewModal = ({ open, setOpen, game }: IPropsReviewModal) => {
 
   const formik = useFormik({
     initialValues: {
-      headline: "",
       review: "",
     },
     validationSchema: Yup.object({
-      headline: Yup.string().required(t("cca-63_required")),
       review: Yup.string().required(t("cca-63_required")),
     }),
     onSubmit: async () => {
       try {
         setLoading(true);
-        const body: IReviewAPIAddReviewsRequest = {
-          // author: myInfoStoreRef?.current?._id, // 6601b44c609740cfa3cebcee
-          author: "",
-          game_id: game?._id,
-          title: formik.values.headline,
-          feedback: formik.values.review,
-          star: starRef.current,
-          isDeleted: false,
+        const res = await FeedbackAPI.createFeedback({
+          gameId: game?._id,
           isAnonymous: anonymousRef.current,
-        };
-        // await ReviewAPI.addReviews(body);
+          rating: starRef.current,
+          text: formik.values.review,
+        });
+        if (res) {
+          fetchReviewData(1);
+        }
         setLoading(false);
         setOpen(false);
       } catch (err) {
@@ -111,19 +108,6 @@ const ReviewModal = ({ open, setOpen, game }: IPropsReviewModal) => {
 
                 <StarLabelPanel value={star} setValue={setStar} />
 
-                <Stack>
-                  <InputText
-                    id="headline"
-                    label={t("ga-32_headline")}
-                    type="text"
-                    name="headline"
-                    value={formik.values.headline}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.headline && formik.errors.headline ? true : false}
-                  />
-                  {formik.touched.headline && formik.errors.headline && <Box className={"fs-16-regular red t-left"}>{formik.errors.headline}</Box>}
-                </Stack>
                 <Stack>
                   <InputText
                     id="review"
