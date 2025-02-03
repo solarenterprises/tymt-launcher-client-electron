@@ -7,11 +7,21 @@ import Navbar from "../components/home/Navbar";
 import Menu from "../components/home/Menu";
 
 import bgblur from "../assets/main/BGblur.svg";
+import { useAppDispatch } from "../store";
+import { fetchGameList } from "../store/GameListSlice";
 
 const HomeLayout = () => {
   const location = useLocation();
   const [background, setBackground] = useState(location.pathname);
   const [display, setDisplay] = useState(location.pathname);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(fetchGameList());
+    };
+  }, []);
 
   useEffect(() => {
     if (location.pathname.indexOf("wallet") !== -1) {

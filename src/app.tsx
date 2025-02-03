@@ -43,8 +43,12 @@ import WalletVote from "./pages/wallet/WalletVote";
 import WalletSend from "./pages/wallet/WalletSend";
 //~Wallet
 
-import { Buffer } from "buffer";
+// Providers
 import { WalletProvider } from "./providers/WalletProvider";
+import { AuthProvider } from "./providers/AuthProvider";
+// ~Providers
+
+import { Buffer } from "buffer";
 window.Buffer = Buffer;
 
 const root = createRoot(document.body);
@@ -64,14 +68,16 @@ root.render(
             <Route path="/non-custodial-signup-4/:mode" element={<NonCustodialSignUp4 />} />
             <Route path="/non-custodial-import-1/:mode" element={<NonCustodialImport1 />} />
             <Route path="/confirm-information/:mode" element={<ConfirmInformation />} />
-            <Route path="/" element={<HomeLayout />}>
-              <Route path="/home" element={<Homepage />} />
-              <Route path="/game/:gameid" element={<GameOverview />} />
-              <Route path="/wallet" element={<Wallet />} />
-              <Route path="/wallet-vote" element={<WalletVote />} />
-              <Route path="/wallet-send" element={<WalletSend />} />
-              <Route path="/store" element={<Store />} />
-              <Route path="/library" element={<Library />} />
+            <Route element={<AuthProvider />}>
+              <Route path="/" element={<HomeLayout />}>
+                <Route path="/home" element={<Homepage />} />
+                <Route path="/game/:gameId" element={<GameOverview />} />
+                <Route path="/wallet" element={<Wallet />} />
+                <Route path="/wallet-vote" element={<WalletVote />} />
+                <Route path="/wallet-send" element={<WalletSend />} />
+                <Route path="/store" element={<Store />} />
+                <Route path="/library" element={<Library />} />
+              </Route>
             </Route>
           </Routes>
         </HashRouter>

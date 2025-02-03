@@ -25,7 +25,7 @@ const Security = ({ view, setView }: IPropsSecurity) => {
 
   const accountStore: IAccount = useSelector(getAccount);
 
-  const isGuest = useMemo(() => accountStore?.nickName === "Guest" && accountStore?.password === getKeccak256Hash(""), [accountStore]);
+  const isGuest = useMemo(() => accountStore?.nickname === "Guest" && accountStore?.password === getKeccak256Hash(""), [accountStore]);
 
   const [coming, setComing] = useState<boolean>(false);
 

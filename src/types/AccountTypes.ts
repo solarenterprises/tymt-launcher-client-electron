@@ -1,11 +1,14 @@
 export interface IAccount {
   uid: string;
   avatar: string;
-  nickName: string;
+  nickname: string;
   password: string;
-  sxpAddress: string;
   mnemonic: string;
-  rsaPubKey: string;
+  sxpAddress: string;
+  publicKey: string;
+  notificationStatus: boolean;
+  onlineStatus: boolean;
+  status: number;
 }
 
 export interface IAccountList {
@@ -21,11 +24,8 @@ export interface IMnemonic {
   mnemonic: string;
 }
 
-export interface ILogin {
-  isLoggedIn: boolean;
-}
-
 export interface IAuth {
+  isLoggedIn: boolean;
   accessToken: string;
   refreshToken: string;
 }

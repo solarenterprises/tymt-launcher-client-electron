@@ -33,7 +33,7 @@ const Welcome = () => {
   const accountListStore: IAccountList = useSelector(getAccountList);
 
   const hasGuest: boolean = useMemo(
-    () => accountListStore?.list?.some((one) => one?.nickName === "Guest" && one?.password === getKeccak256Hash("")),
+    () => accountListStore?.list?.some((one) => one?.nickname === "Guest" && one?.password === getKeccak256Hash("")),
     [accountListStore]
   );
 
@@ -47,7 +47,7 @@ const Welcome = () => {
       setLoading(true);
       const newPassphrase: string = getMnemonic(12);
       const newWalletAddress: IWalletAddresses = await getWalletAddressesFromPassphrase(newPassphrase);
-      const newPassword: string = "";
+      const newPassword = "";
       setLoading(false);
 
       navigate("/confirm-information/signup", {

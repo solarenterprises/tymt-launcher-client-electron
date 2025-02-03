@@ -328,7 +328,7 @@ const Navbar = () => {
               <Avatar url={accountStore?.avatar} size={32} isChain={true} onlineStatus={true} status={notificationSettingStore?.status} />
               <Stack direction={"column"} width={"110px"} alignItems={"flex-start"}>
                 <Box className={"fs-16-regular white"}>
-                  {accountStore?.nickName?.length > 11 ? `${accountStore?.nickName?.substring(0, 10)}...` : accountStore?.nickName}
+                  {accountStore?.nickname?.length > 11 ? `${accountStore?.nickname?.substring(0, 10)}...` : accountStore?.nickname}
                 </Box>
                 <Box className={"fs-14-regular light"}>{`${currentChainWalletAddress?.substring(0, 5)}...${currentChainWalletAddress?.substring(
                   currentChainWalletAddress?.length - 4

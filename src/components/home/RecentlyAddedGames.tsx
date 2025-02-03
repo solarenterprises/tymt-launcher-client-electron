@@ -8,8 +8,17 @@ import { CONST_GAME_LIST } from "../../const/games/GameConsts";
 import AnimatedComponent from "./AnimatedComponent";
 import StoreGameCard from "../game/StoreGameCard";
 
+import { useAppSelector } from "../../store";
+import { getGameList } from "../../store/GameListSlice";
+import { IGameList, IGame } from "../../types/GameTypes";
+
 const RecentlyAddedGames = () => {
   const { t } = useTranslation();
+
+  const gameListStore: IGameList = useAppSelector(getGameList);
+
+  const activeGameList: IGame[] = useMemo(() => gameListStore?.games?.filter((one) => one?.visibilityState === "active"), [gameListStore]);
+  const displayGameList: IGame[] = useMemo(() => [...CONST_GAME_LIST, ...activeGameList], [activeGameList, CONST_GAME_LIST]);
 
   return (
     <>
@@ -20,7 +29,7 @@ const RecentlyAddedGames = () => {
           </Box>
         </Grid>
         <Grid container sx={{ width: "100%", marginTop: "0px" }} spacing={"32px"}>
-          {CONST_GAME_LIST?.map((game, index) => (
+          {displayGameList?.map((game, index) => (
             <Grid item key={index}>
               <AnimatedComponent>
                 <StoreGameCard game={game} isComing={false} />

@@ -1,22 +1,18 @@
-import axios, { AxiosResponse } from "axios";
-import { CONFIG_TYMT_BACKEND_URL } from "../../config/MainConfig";
+import axiosAuth from "../core/AxiosAuth";
+import { IGame } from "../../types/GameTypes";
 
-class GameAPI {
-  static async fetchGameList(page: number): Promise<AxiosResponse<any, any>> {
-    return await axios.get(`${CONFIG_TYMT_BACKEND_URL}/store?page=${page}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  }
+export const GameAPI = {
+  fetchGameList: async (): Promise<IGame[]> => {
+    const res = await axiosAuth.get<{ data: IGame[] }>(`/game/get-games`);
 
-  static async fetchComingGameList(page: number): Promise<AxiosResponse<any, any>> {
-    return await axios.get(`${CONFIG_TYMT_BACKEND_URL}/store/by-visibility-state/coming%20soon?page=${page}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  }
-}
+    return res.data.data;
+  },
+
+  fetchComingGameList: async (page: number): Promise<any> => {
+    const res = await axiosAuth.get<{ data: any }>(`/store/by-visibility-state/coming%20soon?page=${page}`);
+
+    return res.data.data;
+  },
+};
 
 export default GameAPI;

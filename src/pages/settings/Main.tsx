@@ -72,7 +72,7 @@ const Main = ({ view, setView }: IPropsMain) => {
               </Box>
               <Box className="center-align" sx={{ flexDirection: "column", alignItems: "flex-start" }}>
                 <Box className="fs-14-light white">{t("set-1_welcome")}</Box>
-                <Box className="fs-h4 white">{accountStore?.nickName}</Box>
+                <Box className="fs-h4 white">{accountStore?.nickname}</Box>
               </Box>
               <Box component={"img"} src={arrowImg} />
             </Box>

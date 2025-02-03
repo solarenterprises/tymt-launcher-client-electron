@@ -1,9 +1,7 @@
-import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
-
 import { Grid, Box, Stack } from "@mui/material";
 
 import Back from "../../components/account/Back";
@@ -15,20 +13,17 @@ import WalletList from "../../components/account/WalletList";
 import { setAccount } from "../../store/AccountSlice";
 import { addAccountList, getAccountList } from "../../store/AccountListSlice";
 import { setWallet } from "../../store/WalletSlice";
-import { setLogin } from "../../store/LoginSlice";
 import { setMnemonic } from "../../store/MnemonicSlice";
-import { setAuth } from "../../store/AuthSlice";
-
-import { AuthAPI } from "../../lib/api/AuthAPI";
+import { login } from "../../store/AuthSlice";
+import { useAppDispatch, useAppSelector } from "../../store";
 
 import { getKeccak256Hash, encrypt } from "../../lib/helper/EncryptHelper";
-import { getPublicKey } from "../../lib/helper/WalletHelper";
+import { AuthAPI } from "../../lib/api/AuthAPI";
 
 import { IWalletAddresses } from "../../types/WalletTypes";
 import { IAccount, IAccountList } from "../../types/AccountTypes";
 
 import tymt2 from "../../assets/account/tymt2.png";
-import { ref } from "yup";
 
 export interface ILocationStateConfirmInformation {
   passphrase: string;
@@ -40,13 +35,13 @@ export interface ILocationStateConfirmInformation {
 const ConfirmInformation = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { mode } = useParams();
 
   const { passphrase, password, nickname, walletAddresses } = (location.state as ILocationStateConfirmInformation) || {};
 
-  const accountListStore: IAccountList = useSelector(getAccountList);
+  const accountListStore: IAccountList = useAppSelector(getAccountList);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -56,9 +51,9 @@ const ConfirmInformation = () => {
 
   const handleSignUp = async () => {
     try {
-      const res = await AuthAPI.signup(nickname, walletAddresses.solar, passphrase);
-    } catch (err) {
-      console.error("Failed to handleSignUp: ", err);
+      await AuthAPI.signup({ nickname, sxpAddress: walletAddresses.solar, passphrase });
+    } catch (error) {
+      console.error("Failed to handleSignUp: ", error);
     }
   };
 
@@ -67,11 +62,14 @@ const ConfirmInformation = () => {
       const newAccount: IAccount = {
         uid: "",
         avatar: "",
-        nickName: nickname,
-        sxpAddress: walletAddresses.solar,
-        rsaPubKey: "",
+        nickname: nickname,
         password: getKeccak256Hash(password),
         mnemonic: await encrypt(passphrase, password),
+        sxpAddress: walletAddresses.solar,
+        publicKey: "",
+        notificationStatus: false,
+        onlineStatus: false,
+        status: 0,
       };
       dispatch(addAccountList(newAccount));
     } catch (err) {
@@ -81,22 +79,23 @@ const ConfirmInformation = () => {
 
   const handleLogin = async () => {
     try {
-      const res = await AuthAPI.login(walletAddresses.solar, passphrase);
+      const res = await dispatch(login({ sxpAddress: walletAddresses.solar, passphrase })).unwrap();
       const newAccount: IAccount = {
         uid: res.user?._id,
         avatar: "",
-        nickName: res.user?.nickname,
-        sxpAddress: walletAddresses.solar,
-        rsaPubKey: "",
+        nickname: res.user?.nickname,
         password: getKeccak256Hash(password),
         mnemonic: await encrypt(passphrase, password),
+        sxpAddress: res.user?.sxpAddress,
+        publicKey: res.user?.publicKey,
+        notificationStatus: res.user?.notificationStatus,
+        onlineStatus: res.user?.onlineStatus,
+        status: res.user?.status,
       };
       dispatch(setAccount(newAccount));
       dispatch(addAccountList(newAccount));
       dispatch(setWallet(walletAddresses));
-      dispatch(setLogin(true));
       dispatch(setMnemonic(passphrase));
-      dispatch(setAuth({ accessToken: res.accessToken, refreshToken: res.refreshToken }));
       navigate("/home");
     } catch (err) {
       console.error("Failed to handleLogin: ", err);

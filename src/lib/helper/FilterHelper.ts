@@ -4,11 +4,11 @@ import { IGame } from "../../types/GameTypes";
 export const filterByPlatform = (games: IGame[], platform: string) => {
   try {
     let data = games;
-    if (platform === FilterOptionNames.PLATFORM_WINDOWS) {
+    if (platform === "Windows") {
       data = data.filter((game) => game?.releaseMeta?.platforms?.windows_amd64 || game?.releaseMeta?.platforms?.windows_arm64);
-    } else if (platform === FilterOptionNames.PLATFORM_MACOS) {
+    } else if (platform === "macOS") {
       data = data.filter((game) => game?.releaseMeta?.platforms?.darwin_amd64 || game?.releaseMeta?.platforms?.darwin_arm64);
-    } else if (platform === FilterOptionNames.PLATFORM_LINUX) {
+    } else if (platform === "Linux") {
       data = data.filter((game) => game?.releaseMeta?.platforms?.linux_amd64 || game?.releaseMeta?.platforms?.linux_arm64);
     }
     return data;

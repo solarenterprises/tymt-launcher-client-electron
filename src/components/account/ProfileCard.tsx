@@ -8,7 +8,6 @@ import CompleteButton from "./CompleteButton";
 // import Avatar from "../home/Avatar";
 
 import { getAccount, setAccount } from "../../store/AccountSlice";
-import { setLogin } from "../../store/LoginSlice";
 
 import { getKeccak256Hash } from "../../lib/helper/EncryptHelper";
 
@@ -23,17 +22,11 @@ const ProfileCard = ({ account }: IPropsProfileCard) => {
 
   const accountStore: IAccount = useSelector(getAccount);
 
-  const isGuest: boolean = useMemo(
-    () =>
-      account?.nickName === "Guest" &&
-      account?.password === getKeccak256Hash(""),
-    [account]
-  );
+  const isGuest: boolean = useMemo(() => account?.nickname === "Guest" && account?.password === getKeccak256Hash(""), [account]);
 
   const handleClick = useCallback(() => {
     if (account?.uid !== accountStore?.uid) {
       dispatch(setAccount(account));
-      dispatch(setLogin(false));
     }
   }, [accountStore]);
 
@@ -62,10 +55,8 @@ const ProfileCard = ({ account }: IPropsProfileCard) => {
             {/* <Avatar url={account?.avatar} size={64} /> */}
             {/* <UserAvatar userId={account?.uid} size={64} /> */}
             <Stack>
-              <Box className={"fs-16-regular white"}>{account?.nickName}</Box>
-              <Box className={"fs-14-regular light"}>
-                {`non custodial wallet account`}
-              </Box>
+              <Box className={"fs-16-regular white"}>{account?.nickname}</Box>
+              <Box className={"fs-14-regular light"}>{`non custodial wallet account`}</Box>
               <Box className={"fs-12-regular blue"}>{account?.sxpAddress}</Box>
             </Stack>
           </Stack>
