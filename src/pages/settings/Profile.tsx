@@ -5,29 +5,22 @@ import * as Yup from "yup";
 
 import { Box, Button, Divider, Stack, Tooltip } from "@mui/material";
 
-// import { useNotification } from "../../providers/NotificationProvider";
-// import { useSocket } from "../../providers/SocketProvider";
-
+import useNotification from "../../providers/NotificationProvider";
 import Avatar from "../../components/home/Avatar";
 import InputText from "../../components/account/InputText";
 
 import { AppDispatch } from "../../store";
-// import { selectNotification } from "../../features/settings/NotificationSlice";
-// import { fileUpload, updateUserNickname } from "../../features/account/AccountApi";
-// import { getMyInfo, setMyInfo } from "../../features/account/MyInfoSlice";
-import { getAccount, updateProfile } from "../../store/AccountSlice";
+import { addAccountList } from "../../store/AccountListSlice";
+import { getAccount, setAccount, updateProfile } from "../../store/AccountSlice";
 
-// import { notificationType } from "../../types/settingTypes";
+import { UserAPI } from "../../lib/api/UserAPI";
+
 import { IAccount } from "../../types/AccountTypes";
 
 import SettingStyle from "../../styles/SettingStyle";
 
 import backIcon from "../../assets/setting/BackIcon.svg";
 import editIcon from "../../assets/setting/EditIcon.svg";
-import ElectronNotification from "../../components/ElectronNotification";
-// import { ISocketParamsSyncEventsAll } from "../../types/SocketTypes";
-// import { SyncEventNames } from "../../consts/SyncEventNames";
-// import { IMyInfo } from "../../types/chatTypes";
 
 interface IPropsProfile {
   view: string;
@@ -37,24 +30,13 @@ interface IPropsProfile {
 const Profile: FC<IPropsProfile> = ({ view, setView }) => {
   const classname = SettingStyle();
   const { t } = useTranslation();
-  // const { socket } = useSocket();
+  const { showNotification } = useNotification();
   const dispatch = useDispatch<AppDispatch>();
 
   const accountStore: IAccount = useSelector(getAccount);
-  // const notificationStore: notificationType = useSelector(selectNotification);
-  // const myInfoStore: IMyInfo = useSelector(getMyInfo);
 
   const [nickname, setNickname] = useState(accountStore?.nickname);
   const [error, setError] = useState<string>("");
-
-  // const {
-  //   setNotificationStatus,
-  //   setNotificationTitle,
-  //   setNotificationDetail,
-  //   setNotificationOpen,
-  //   setNotificationLink,
-  // } = useNotification();
-  const { showNotification } = ElectronNotification();
 
   const validationSchema = Yup.string()
     .required(t("cca-63_required"))
@@ -67,29 +49,17 @@ const Profile: FC<IPropsProfile> = ({ view, setView }) => {
       await validationSchema.validate(nickname);
       setError("");
 
-      await dispatch(updateProfile({ nickname: nickname, notificationStatus: accountStore.notificationStatus, avatar: accountStore.avatar })).unwrap();
+      const updatedUser = await dispatch(
+        updateProfile({ nickname: nickname, notificationStatus: accountStore.notificationStatus, avatar: accountStore.avatar })
+      ).unwrap();
+      dispatch(addAccountList(updatedUser));
 
       showNotification(t("alt-1_nickname-saved"), t("alt-2_nickname-saved-intro"));
-
-      // console.log(res.data, "updateUserNickName");
-
-      // setNotificationStatus("success");
-      // setNotificationTitle(t("alt-1_nickname-saved"));
-      // setNotificationDetail(t("alt-2_nickname-saved-intro"));
-      // setNotificationOpen(true);
-      // setNotificationLink(null);
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         setError(err.message);
       }
       showNotification(t("alt-3_nickname-notsaved"), t("alt-4_nickname-notsaved-intro"));
-      // console.log(err);
-
-      // setNotificationStatus("failed");
-      // setNotificationTitle(t("alt-3_nickname-notsaved"));
-      // setNotificationDetail(t("alt-4_nickname-notsaved-intro"));
-      // setNotificationOpen(true);
-      // setNotificationLink(null);
     }
   }, [nickname, accountStore]);
 
@@ -100,56 +70,30 @@ const Profile: FC<IPropsProfile> = ({ view, setView }) => {
     }
   };
 
-  // const uploadImg = useCallback(() => {
-  //   const fileInput = document.getElementById("file-input") as HTMLInputElement;
-  //   const file = fileInput.files ? fileInput.files[0] : null;
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-  //   fileUpload(formData)
-  //     .then((res) => {
-  //       dispatch(
-  //         setMyInfo({
-  //           ...myInfoStore,
-  //           avatar: res.data.avatar,
-  //         })
-  //       );
-
-  //       if (socket.current && socket.current.connected) {
-  //         const data: ISocketParamsSyncEventsAll = {
-  //           sender_id: myInfoStore?._id,
-  //           instructions: [SyncEventNames.UPDATE_IMAGE_RENDER_TIME],
-  //           is_to_self: true,
-  //         };
-  //         socket.current.emit("sync-events-all", JSON.stringify(data));
-  //         // console.log("socket.current.emit > sync-events-all", data);
-  //       }
-
-  //       setNotificationStatus("success");
-  //       setNotificationTitle(t("alt-32_avatar-saved"));
-  //       setNotificationDetail(t("alt-33_avatar-saved-intro"));
-  //       setNotificationOpen(true);
-  //       setNotificationLink(null);
-  //     })
-  //     .catch((_err) => {
-  //       // console.log(err);
-  //       setNotificationStatus("failed");
-  //       setNotificationTitle(t("alt-34_avatar-notsaved"));
-  //       setNotificationDetail(t("alt-35_avatar-notsaved-intro"));
-  //       setNotificationOpen(true);
-  //       setNotificationLink(null);
-  //     });
-  // }, [socket.current, myInfoStore]);
+  const uploadImg = useCallback(async () => {
+    try {
+      const fileInput = document.getElementById("file-input") as HTMLInputElement;
+      const file = fileInput.files ? fileInput.files[0] : null;
+      const formData = new FormData();
+      formData.append("avatar", file);
+      const updatedUser = await UserAPI.updateAvatar(formData);
+      const updatedAccount = {
+        ...updatedUser,
+        password: accountStore?.password,
+        passphrase: accountStore?.mnemonic,
+      };
+      dispatch(setAccount(updatedAccount));
+      dispatch(addAccountList(updatedAccount));
+    } catch (err) {
+      console.log(err);
+    }
+  }, [accountStore]);
 
   return (
     <>
       {view === "profile" && (
         <Stack direction={"column"}>
-          <input
-            type="file"
-            id="file-input"
-            // onChange={uploadImg}
-            style={{ display: "none" }}
-          />
+          <input type="file" id="file-input" onChange={uploadImg} style={{ display: "none" }} />
           <Stack flexDirection={"row"} justifyContent={"flex-start"} gap={"10px"} alignItems={"center"} textAlign={"center"} sx={{ padding: "20px" }}>
             <Button className={"setting-back-button"} onClick={() => setView("general")}>
               <Box component={"img"} src={backIcon}></Box>
@@ -162,7 +106,7 @@ const Profile: FC<IPropsProfile> = ({ view, setView }) => {
               <Stack direction={"row"} justifyContent={"center"} textAlign={"right"} alignItems={"center"} gap={"10px"}>
                 <Box className="center-align">
                   {/* <img src={avatar} /> */}
-                  <Avatar onlineStatus={true} url="" size={92} status="active" />
+                  <Avatar onlineStatus={true} url={accountStore?.avatar} size={92} status="active" />
                 </Box>
                 <Box className="fs-h5 white">{t("set-68_change-avatar")}</Box>
               </Stack>

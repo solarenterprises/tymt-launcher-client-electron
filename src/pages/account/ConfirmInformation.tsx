@@ -82,7 +82,7 @@ const ConfirmInformation = () => {
       const res = await dispatch(login({ sxpAddress: walletAddresses.solar, passphrase })).unwrap();
       const newAccount: IAccount = {
         uid: res.user?._id,
-        avatar: "",
+        avatar: res.user?.avatar,
         nickname: res.user?.nickname,
         password: getKeccak256Hash(password),
         mnemonic: await encrypt(passphrase, password),

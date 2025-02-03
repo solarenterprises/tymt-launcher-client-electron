@@ -3,10 +3,9 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { ThreeDots } from "react-loader-spinner";
 
-// import { District53 } from "../../lib/game/district 53/District53";
-// import { TauriEventNames } from "../../consts/TauriEventNames";
-
 import { Button, Stack, Box } from "@mui/material";
+
+import useNotification from "../../providers/NotificationProvider";
 
 import D53Modal from "../home/D53Modal";
 import WarningModalNewGame from "../home/WarningModalNewGame";
@@ -25,10 +24,7 @@ import {
 import { CONST_GAME_DISTRICT53 } from "../../const/games/district53/District53";
 
 import { IGame } from "../../types/GameTypes";
-// import { INotificationGameDownloadParams, INotificationParams } from "../../types/NotificationTypes";
 import { IDownloadStatus } from "../../types/HomeTypes";
-import ElectronNotification from "../ElectronNotification";
-// import { ipcRenderer } from "electron";
 
 export interface IPropsInstallButton {
   game: IGame;
@@ -40,7 +36,7 @@ const InstallButton = ({ game }: IPropsInstallButton) => {
 
   const downloadStatusStore: IDownloadStatus = useSelector(getDownloadStatus);
 
-  const { showNotification } = ElectronNotification();
+  const { showNotification } = useNotification();
 
   const [modalView, setModalView] = useState<boolean>(false);
   const [d53ModalView, setD53ModalView] = useState<boolean>(false);
@@ -63,38 +59,12 @@ const InstallButton = ({ game }: IPropsInstallButton) => {
     if (!id) return;
     const online = await checkOnline();
     if (!online) {
-      // const noti_0: INotificationParams = {
-      //   status: "failed",
-      //   title: t("alt-26_internet-error"),
-      //   message: t("alt-27_you-not-connected"),
-      //   link: null,
-      //   translate: false,
-      // };
-      // emit(TauriEventNames.NOTIFICATION, noti_0);
       showNotification(t("alt-26_internet-error"), t("alt-27_you-not-connected"));
       return;
     }
-    // const noti_1: INotificationGameDownloadParams = {
-    //   status: "started",
-    //   game: game,
-    // };
-    // emit(TauriEventNames.GAME_DOWNLOAD, noti_1);
     dispatch(setDownloadStatus({ isDownloading: true, game: game }));
     await downloadAndInstallNewGame(game);
     dispatch(setDownloadStatus({ isDownloading: false, game: game }));
-    // if (!success) {
-    //   const noti_1: INotificationGameDownloadParams = {
-    //     status: "failed",
-    //     game: game,
-    //   };
-    //   emit(TauriEventNames.GAME_DOWNLOAD, noti_1);
-    // } else {
-    //   const noti_3: INotificationGameDownloadParams = {
-    //     status: "finished",
-    //     game: game,
-    //   };
-    //   emit(TauriEventNames.GAME_DOWNLOAD, noti_3);
-    // }
     setInstalled(await isInstalled(game));
   }, [game, installed]);
 

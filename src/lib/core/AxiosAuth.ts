@@ -57,7 +57,7 @@ axiosAuth.interceptors.response.use(
         // Handle refresh token failure (e.g., logout the user)
         console.error("Failed to refresh token:", refreshError);
         tymtStorage.remove("auth");
-        window.location.href = "/login"; // Redirect to login page
+        window.location.href = "/"; // Redirect to splash page
         return Promise.reject(refreshError);
       }
     }

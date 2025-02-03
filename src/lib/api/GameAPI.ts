@@ -3,7 +3,7 @@ import { IGame } from "../../types/GameTypes";
 
 export const GameAPI = {
   fetchGameList: async (): Promise<IGame[]> => {
-    const res = await axiosAuth.get<{ data: IGame[] }>(`/game/get-games`);
+    const res = await axiosAuth.get<{ data: IGame[] }>(`/game/list`);
 
     return res.data.data;
   },
