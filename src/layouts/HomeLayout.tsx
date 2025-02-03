@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
 
 import { Grid } from "@mui/material";
@@ -6,21 +7,25 @@ import { Grid } from "@mui/material";
 import Navbar from "../components/home/Navbar";
 import Menu from "../components/home/Menu";
 
+import { setGameList } from "../store/GameListSlice";
+
+import GameAPI from "../lib/api/GameAPI";
+
 import bgblur from "../assets/main/BGblur.svg";
-import { useAppDispatch } from "../store";
-import { fetchGameList } from "../store/GameListSlice";
 
 const HomeLayout = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
   const [background, setBackground] = useState(location.pathname);
   const [display, setDisplay] = useState(location.pathname);
 
-  const dispatch = useAppDispatch();
+  const fetchGameList = async () => {
+    const res = await GameAPI.fetchGameList({ page: 1, limit: 200 });
+    dispatch(setGameList(res.data));
+  };
 
   useEffect(() => {
-    return () => {
-      dispatch(fetchGameList());
-    };
+    fetchGameList();
   }, []);
 
   useEffect(() => {

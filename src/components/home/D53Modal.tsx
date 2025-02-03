@@ -5,13 +5,13 @@ import { CONFIG_PRODUCTION_VERSION } from "../../config/MainConfig";
 
 import { Box, Stack, Modal, Button, Fade } from "@mui/material";
 
-// import { useNotification } from "../../providers/NotificationProvider";
+import useNotification from "../../providers/NotificationProvider";
 
 import InputText from "../account/InputText";
 
-import closeIcon from "../../assets/setting/XIcon.svg";
-import ElectronNotification from "../ElectronNotification";
 import { runD53 } from "../../lib/helper/DownloadHelper";
+
+import closeIcon from "../../assets/setting/XIcon.svg";
 
 interface props {
   open: boolean;
@@ -29,7 +29,7 @@ interface IServer {
 }
 
 const D53Modal = ({ open, setOpen }: props) => {
-  const { showNotification } = ElectronNotification();
+  const { showNotification } = useNotification();
   const { t } = useTranslation();
   const [serverList, setServerList] = useState<IServer[]>([]);
   const [serverIp, setServerIp] = useState<string>("");

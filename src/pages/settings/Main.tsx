@@ -68,7 +68,7 @@ const Main = ({ view, setView }: IPropsMain) => {
           >
             <Box sx={{ display: "flex", gap: "10px" }}>
               <Box className="center-align">
-                <Avatar onlineStatus={true} url="" size={60} status={"active"} />
+                <Avatar onlineStatus={true} url={accountStore?.avatar} size={60} status={"active"} />
               </Box>
               <Box className="center-align" sx={{ flexDirection: "column", alignItems: "flex-start" }}>
                 <Box className="fs-14-light white">{t("set-1_welcome")}</Box>

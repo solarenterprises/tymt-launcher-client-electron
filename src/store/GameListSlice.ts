@@ -1,7 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IGame, IGameList } from "../types/GameTypes";
+import { createSlice } from "@reduxjs/toolkit";
+import { IGameList } from "../types/GameTypes";
 import tymtStorage from "../lib/storage/tymtStorage";
-import { GameAPI } from "../lib/api/GameAPI";
 
 const init: IGameList = {
   games: [],
@@ -22,30 +21,14 @@ const initialState = {
   msg: "",
 };
 
-export const fetchGameList = createAsyncThunk("gameList/fetchGameList", GameAPI.fetchGameList);
-
 export const gameListSlice = createSlice({
   name: "gameList",
   initialState,
   reducers: {
     setGameList(state, action) {
-      state.data = action.payload;
+      state.data.games = action.payload;
+      tymtStorage.set(`gameList`, JSON.stringify(state.data));
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchGameList.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchGameList.fulfilled, (state, action: PayloadAction<IGame[]>) => {
-        state.data.games = action.payload;
-        tymtStorage.set(`gameList`, JSON.stringify(state.data));
-        state.status = "gameList";
-      })
-      .addCase(fetchGameList.rejected, (state) => {
-        state.status = "error";
-        state.msg = "Failed to fetch game list";
-      });
   },
 });
 

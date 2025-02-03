@@ -1,7 +1,7 @@
 export interface IUpdateProfile {
-  nickname: string;
-  avatar: string;
-  notificationStatus: boolean;
+  nickname?: string;
+  avatar?: string;
+  notificationStatus?: boolean;
 }
 
 export interface IUser {

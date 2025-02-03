@@ -76,7 +76,7 @@ const StoreGameCard = ({ game, isComing }: IPropsStoreGameCard) => {
             height={"165px"}
             sx={{
               borderRadius: "16px",
-              objectFit: "cover",
+              objectFit: "fill",
             }}
           />
 

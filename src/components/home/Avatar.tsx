@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
-import { CONFIG_TYMT_AVATAR_URL } from "../../config/MainConfig";
+import { CONFIG_TYMT_AVATAR_URL, CONFIG_TYMT_BACKEND_URL } from "../../config/MainConfig";
 
 import { Tooltip, Stack, Box } from "@mui/material";
 
@@ -147,11 +147,7 @@ const Avatar = ({ size, url, userid, onlineStatus, isChain, status }: IPropsAvat
           )}
           <Box
             component={"img"}
-            src={
-              userid
-                ? `${CONFIG_TYMT_AVATAR_URL}/public/upload/avatars/default.png?${renderTimeStore.renderTime}`
-                : `${CONFIG_TYMT_AVATAR_URL}/public/upload/avatars/${url ? url : "default.png"}?${renderTimeStore.renderTime}`
-            }
+            src={`${CONFIG_TYMT_BACKEND_URL}${url}`}
             sx={{
               position: "absolute",
               top: "50%",
