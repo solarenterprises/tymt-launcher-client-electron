@@ -78,9 +78,12 @@ const InputText = ({
               fontSize: "20px",
               fontWeight: "400",
               lineHeight: "24px",
-              color: "#AFAFAF",
+              color: "#AFAFAF", // Default color
               padding: "5px",
               top: "-10px",
+              "&.Mui-focused": {
+                color: "#AFAFAF", // Keep the same color when focused
+              },
             }}
           >
             {label}
@@ -97,6 +100,15 @@ const InputText = ({
               color: "#FFFFFF",
               padding: "5px",
               top: "-10px",
+              "&:before": {
+                borderBottom: "1px solid #FFFFFF16", // Underline color when not focused
+              },
+              "&:after": {
+                borderBottom: "2px solid #AFAFAF", // Underline color when focused
+              },
+              "&:hover:not(.Mui-disabled):before": {
+                borderBottom: "1px solid #AFAFAF", // Underline color on hover
+              },
             }}
             onChange={
               onChange
@@ -121,9 +133,12 @@ const InputText = ({
               fontSize: "20px",
               fontWeight: "400",
               lineHeight: "24px",
-              color: "#AFAFAF",
+              color: "#AFAFAF", // Default color
               padding: "5px",
               top: "-10px",
+              "&.Mui-focused": {
+                color: "#AFAFAF", // Keep the same color when focused
+              },
             }}
           >
             {label}
@@ -160,9 +175,18 @@ const InputText = ({
               fontSize: "20px",
               fontWeight: "400",
               lineHeight: "24px",
-              color: "#FFFFF",
+              color: "#FFFFFF",
               padding: "5px",
               top: "-10px",
+              "&:before": {
+                borderBottom: "1px solid #FFFFFF16", // Underline color when not focused
+              },
+              "&:after": {
+                borderBottom: "2px solid #AFAFAF", // Underline color when focused
+              },
+              "&:hover:not(.Mui-disabled):before": {
+                borderBottom: "1px solid #AFAFAF", // Underline color on hover
+              },
             }}
             autoComplete="off"
           />
@@ -212,9 +236,12 @@ const InputText = ({
                   fontSize: "20px",
                   fontWeight: "400",
                   lineHeight: "24px",
-                  color: "#AFAFAF",
+                  color: "#AFAFAF", // Default color
                   padding: "5px",
                   top: "-10px",
+                  "&.Mui-focused": {
+                    color: "#AFAFAF", // Keep the same color when focused
+                  },
                 }}
               >
                 {label}
@@ -260,6 +287,15 @@ const InputText = ({
                   "& input[type='password']::-ms-clear": {
                     display: "none",
                   },
+                  "&:before": {
+                    borderBottom: "1px solid #FFFFFF16", // Underline color when not focused
+                  },
+                  "&:after": {
+                    borderBottom: "2px solid #AFAFAF", // Underline color when focused
+                  },
+                  "&:hover:not(.Mui-disabled):before": {
+                    borderBottom: "1px solid #AFAFAF", // Underline color on hover
+                  },
                 }}
               />
             </FormControl>
@@ -281,9 +317,12 @@ const InputText = ({
               fontSize: "20px",
               fontWeight: "400",
               lineHeight: "24px",
-              color: "#AFAFAF",
+              color: "#AFAFAF", // Default color
               padding: "5px",
               top: "-10px",
+              "&.Mui-focused": {
+                color: "#AFAFAF", // Keep the same color when focused
+              },
             }}
           >
             {label}
@@ -317,9 +356,18 @@ const InputText = ({
               fontSize: "20px",
               fontWeight: "400",
               lineHeight: "24px",
-              color: "#FFFFF",
+              color: "#FFFFFF",
               padding: "5px",
               top: "-10px",
+              "&:before": {
+                borderBottom: "1px solid #FFFFFF16", // Underline color when not focused
+              },
+              "&:after": {
+                borderBottom: "2px solid #AFAFAF", // Underline color when focused
+              },
+              "&:hover:not(.Mui-disabled):before": {
+                borderBottom: "1px solid #AFAFAF", // Underline color on hover
+              },
             }}
             autoComplete="off"
           />

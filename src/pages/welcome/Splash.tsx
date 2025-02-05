@@ -35,9 +35,7 @@ const Splash = () => {
 
   useEffect(() => {
     if (progress >= 100) {
-      accountListStore?.list?.length
-        ? navigate("/non-custodial-login-1")
-        : navigate("/welcome");
+      accountListStore?.list?.length ? navigate("/non-custodial-login-1") : navigate("/welcome");
     }
   }, [accountListStore, progress]);
 
